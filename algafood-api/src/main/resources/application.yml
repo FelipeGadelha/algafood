@@ -1,0 +1,15 @@
+server:
+  servlet:
+    context-path: /api/algafood
+spring:
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  jpa:
+    open-in-view: false
+  profiles:
+    active: dev
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
