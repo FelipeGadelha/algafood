@@ -1,3 +1,5 @@
+#docker-compose -f stack.yml up
+#mvn sonar:sonar -Dsonar.projectKey=br.com.portfolio:algafood-api -Dsonar.host.url=http://localhost:9000 -Dsonar.login=a47d5a9da8555630554594d6479387cc8cb5d9ac
 server:
   servlet:
     context-path: /api/algafood

@@ -1,11 +1,8 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
 import java.util.List;
-import java.util.Objects;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,68 +15,64 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.portfolio.algafood.api.v1.model.xml.KitchensWrapper;
 import br.com.portfolio.algafood.domain.entity.Kitchen;
-import br.com.portfolio.algafood.infra.repository.KitchenRepositoryImpl;
+import br.com.portfolio.algafood.domain.exception.EntityInUseException;
+import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
+import br.com.portfolio.algafood.domain.service.KitchenService;
 
 @RestController
-@RequestMapping(value = "/v1/kitchens") //produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/kitchens") // produces = MediaType.APPLICATION_JSON_VALUE)
 public class kitchenController {
-	
+
+	private final KitchenService kitchenService;
+
 	@Autowired
-	private KitchenRepositoryImpl repository;
-	
+	public kitchenController(KitchenService kitchenService) {
+		this.kitchenService = kitchenService;
+	}
+
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Kitchen> findAll() {
-		return repository.findAll();
+		return kitchenService.findAll();
 	}
-	
-	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-	public KitchensWrapper findAllXml() {
-		return new KitchensWrapper(repository.findAll());
-	}
-	
+
 	@GetMapping("/{kitchenId}")
 	public ResponseEntity<?> findById(@PathVariable("kitchenId") Long id) {
-		Kitchen kitchen = repository.find(id);
-		if (Objects.nonNull(kitchen)) {
-			return ResponseEntity.ok(kitchen);
-		};
-		return ResponseEntity.notFound().build();
+		try {
+			return ResponseEntity.ok(kitchenService.findById(id));
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
-	
+
 	@PostMapping
 	public Kitchen save(@RequestBody Kitchen kitchen) {
-		return repository.save(kitchen);
+		return kitchenService.save(kitchen);
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Kitchen kitchen) {
-		Kitchen entity = repository.find(id);
-		if (Objects.nonNull(entity)) {
-	//		updated.setName(kitchen.getName());		
-			BeanUtils.copyProperties(kitchen, entity, "id");
-			Kitchen save = repository.save(entity);
+			// updated.setName(kitchen.getName());
+//			BeanUtils.copyProperties(kitchen, entity, "id");
+		try {
+			Kitchen save = kitchenService.update(new Kitchen(id, kitchen.getName()));
 			return ResponseEntity.ok(save);
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.notFound().build();
+
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		try {
-			Kitchen entity = repository.find(id);
-			if (Objects.nonNull(entity)) {
-				repository.remove(entity.getId());
-				return ResponseEntity.noContent().build();
-			}
+			kitchenService.deleteById(id);
+			return ResponseEntity.noContent().build();
+		} catch (EntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
-			
-		} catch (DataIntegrityViolationException e) {
+		} catch (EntityInUseException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
-	
-	
 
 }

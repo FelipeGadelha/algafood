@@ -1,21 +1,27 @@
 package br.com.portfolio.algafood.infra.repository;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.springframework.stereotype.Component;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.util.ProxyUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.portfolio.algafood.domain.repository.Repository;
 
-@Component
+@org.springframework.stereotype.Repository
 public class RepositoryImpl<T> implements Repository<T>{
 	
 	@PersistenceContext
 	private EntityManager manager;
 	private Class<T> clazz;
+	
+	public EntityManager getManager() {
+		return manager;
+	}
 	
 	@Deprecated
 	public RepositoryImpl() {	}
@@ -45,6 +51,7 @@ public class RepositoryImpl<T> implements Repository<T>{
 	@Override
 	public void remove(Long id) {
 		T t = find(id);
+		if (Objects.isNull(t))	throw new EmptyResultDataAccessException(1);
 		manager.remove(t);
 	}
 	

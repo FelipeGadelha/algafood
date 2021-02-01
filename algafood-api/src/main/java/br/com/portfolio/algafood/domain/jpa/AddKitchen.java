@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContext;
 import br.com.portfolio.algafood.AlgafoodApiApplication;
 import br.com.portfolio.algafood.domain.entity.Kitchen;
 import br.com.portfolio.algafood.domain.repository.KitchenRepository;
-import br.com.portfolio.algafood.infra.repository.KitchenRepositoryImpl;
 
 public class AddKitchen {
 	
@@ -16,7 +15,7 @@ public class AddKitchen {
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepositoryImpl.class);
+		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);
 		
 		Kitchen kitchen = new Kitchen(null, "Koreana");
 		Kitchen kitchen1 = new Kitchen(null, "Norte-Americana");

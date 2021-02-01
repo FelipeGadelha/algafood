@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContext;
 import br.com.portfolio.algafood.AlgafoodApiApplication;
 import br.com.portfolio.algafood.domain.entity.Kitchen;
 import br.com.portfolio.algafood.domain.repository.KitchenRepository;
-import br.com.portfolio.algafood.infra.repository.KitchenRepositoryImpl;
 
 public class RemoveKitchen {
 	
@@ -16,10 +15,10 @@ public class RemoveKitchen {
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepositoryImpl.class);		
+		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);		
 		Kitchen kitchen = new Kitchen(1L, null);
 		
-		kitchenRepository.remove(kitchen.getId());
+		kitchenRepository.deleteById(kitchen.getId());
 		
 	}
 

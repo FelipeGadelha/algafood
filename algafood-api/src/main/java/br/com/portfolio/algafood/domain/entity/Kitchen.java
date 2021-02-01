@@ -23,7 +23,7 @@ public class Kitchen implements Serializable{
 	
 //	@JsonIgnore
 //	@JsonProperty("titulo")
-	@Column(nullable = false)
+//	@Column(nullable = false)
 	private String name;
 	
 	@Deprecated

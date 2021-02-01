@@ -2,6 +2,7 @@ package br.com.portfolio.algafood.domain.repository;
 
 import java.util.List;
 
+@org.springframework.stereotype.Repository
 public interface Repository<T> {
 
 	public List<T> findAll();

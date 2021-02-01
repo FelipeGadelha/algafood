@@ -1,11 +1,11 @@
 package br.com.portfolio.algafood.infra.repository;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import br.com.portfolio.algafood.domain.entity.PaymentMethod;
 import br.com.portfolio.algafood.domain.repository.PaymentMethodRepository;
 
-@Component
+@Repository
 public class PaymentMethodRepositoryImpl extends RepositoryImpl<PaymentMethod> implements PaymentMethodRepository{
 	
 	public PaymentMethodRepositoryImpl() {

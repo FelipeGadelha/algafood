@@ -6,7 +6,6 @@ import org.springframework.context.ApplicationContext;
 
 import br.com.portfolio.algafood.AlgafoodApiApplication;
 import br.com.portfolio.algafood.domain.repository.KitchenRepository;
-import br.com.portfolio.algafood.infra.repository.KitchenRepositoryImpl;
 
 public class QueryKitchen {
 	
@@ -15,7 +14,7 @@ public class QueryKitchen {
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepositoryImpl.class);
+		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);
 		kitchenRepository.findAll().forEach(System.out::println);
 		
 //		KitchenRegister register = new KitchenRegister();
