@@ -22,6 +22,9 @@ public class State implements Serializable {
 	
 	private String name;
 
+	@Deprecated
+	public State() { }
+	
 	public State(Long id, String name) {
 		this.id = id;
 		this.name = name;

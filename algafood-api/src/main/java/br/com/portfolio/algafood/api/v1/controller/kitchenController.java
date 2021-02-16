@@ -52,7 +52,7 @@ public class kitchenController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Kitchen kitchen) {
-			// updated.setName(kitchen.getName());
+//			updated.setName(kitchen.getName());
 //			BeanUtils.copyProperties(kitchen, entity, "id");
 		try {
 			Kitchen save = kitchenService.update(new Kitchen(id, kitchen.getName()));

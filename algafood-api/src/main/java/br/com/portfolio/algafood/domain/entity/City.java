@@ -28,6 +28,9 @@ public class City implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "state_id", nullable = false)
 	private State state;
+	
+	@Deprecated
+	public City() {	}
 
 	public City(Long id, String name, State state) {
 		this.id = id;
