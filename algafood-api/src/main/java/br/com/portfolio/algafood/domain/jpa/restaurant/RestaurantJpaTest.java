@@ -5,8 +5,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
 import br.com.portfolio.algafood.AlgafoodApiApplication;
-import br.com.portfolio.algafood.domain.repository.RestaurantRepository;
-import br.com.portfolio.algafood.infra.repository.RestaurantRepositoryImpl;
 
 public class RestaurantJpaTest {
 
@@ -15,13 +13,13 @@ public class RestaurantJpaTest {
 		ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApiApplication.class)
 				.web(WebApplicationType.NONE).run(args);
 
-		RestaurantRepository restaurantRepository = applicationContext.getBean(RestaurantRepositoryImpl.class);
+//		RestaurantRepository restaurantRepository = applicationContext.getBean(RestaurantRepositoryImpl.class);
 		
-		System.out.println("Restaurant: " + restaurantRepository.find(1L));
+//		System.out.println("Restaurant: " + restaurantRepository.find(1L));
 		
 		System.out.println();
 		
-		restaurantRepository.findAll().forEach(System.out::println);
+//		restaurantRepository.findAll().forEach(System.out::println);
 		
 		System.out.println();
 		

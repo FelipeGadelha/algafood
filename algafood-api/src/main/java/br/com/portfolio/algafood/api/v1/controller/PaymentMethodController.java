@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.portfolio.algafood.domain.entity.PaymentMethod;
-import br.com.portfolio.algafood.infra.repository.PaymentMethodRepositoryImpl;
+import br.com.portfolio.algafood.domain.repository.PaymentMethodRepository;
 
 @RestController
 @RequestMapping("/v1/payment-methods")
 public class PaymentMethodController {
 	
 	@Autowired
-	private PaymentMethodRepositoryImpl repository;
+	private PaymentMethodRepository repository;
 	
 	@GetMapping()
 	public List<PaymentMethod> findAll() {
@@ -27,7 +27,7 @@ public class PaymentMethodController {
 	
 	@GetMapping("/{id}")
 	public PaymentMethod findById(@PathVariable Long id) {
-		return repository.find(id);
+		return repository.findById(id).get();
 	}
 	
 	@PostMapping

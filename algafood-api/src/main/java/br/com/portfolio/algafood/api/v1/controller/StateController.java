@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.portfolio.algafood.domain.entity.State;
-import br.com.portfolio.algafood.infra.repository.StateRepositoryImpl;
+import br.com.portfolio.algafood.domain.repository.StateRepository;
 
 @RestController
 @RequestMapping("/v1/states")
 public class StateController {
 	
 	@Autowired
-	private StateRepositoryImpl repository;
+	private StateRepository repository;
 	
 	@GetMapping()
 	public List<State> findAll() {
@@ -25,7 +25,7 @@ public class StateController {
 	
 	@GetMapping("/{id}")
 	public State findById(@PathVariable Long id) {
-		return repository.find(id);
+		return repository.findById(id).get();
 	}
 	
 //	@PostMapping

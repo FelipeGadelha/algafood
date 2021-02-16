@@ -15,16 +15,16 @@ import br.com.portfolio.algafood.domain.entity.Restaurant;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.repository.KitchenRepository;
-import br.com.portfolio.algafood.infra.repository.RestaurantRepositoryImpl;
+import br.com.portfolio.algafood.domain.repository.RestaurantRepository;
 
 @Service
 public class RestaurantService {
 
-	private final RestaurantRepositoryImpl restaurantRepository;
+	private final RestaurantRepository restaurantRepository;
 	private final KitchenRepository kitchenRepository;
 	
 	@Autowired
-	public RestaurantService(RestaurantRepositoryImpl restaurantRepository, KitchenRepository kitchenRepository) {
+	public RestaurantService(RestaurantRepository restaurantRepository, KitchenRepository kitchenRepository) {
 		this.restaurantRepository = restaurantRepository;
 		this.kitchenRepository = kitchenRepository;
 	}
@@ -34,7 +34,7 @@ public class RestaurantService {
 	}
 	
 	public Restaurant findById(Long id) {
-		return restaurantRepository.find(id);
+		return restaurantRepository.findById(id).get();
 	}
 
 	public Restaurant save(Restaurant restaurant) {
@@ -46,7 +46,7 @@ public class RestaurantService {
 	}
 
 	public Restaurant update(Restaurant restaurant) {
-		if (Objects.isNull(restaurantRepository.find(restaurant.getId()))) {
+		if (Objects.isNull(restaurantRepository.findById(restaurant.getId()).get())) {
 			throw new EntityNotFoundException(String.format("Não existe Restaurante com o ID %d", restaurant.getId()));
 		}
 		Long id = restaurant.getKitchen().getId();
@@ -63,7 +63,7 @@ public class RestaurantService {
 
 	public void remove(Long id) {
 		try {
-			restaurantRepository.remove(id);
+			restaurantRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(String.format("Restaurante com o ID %d não existe", id));
 		} catch (DataIntegrityViolationException e) {
