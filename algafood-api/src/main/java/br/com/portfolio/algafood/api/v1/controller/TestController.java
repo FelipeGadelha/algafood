@@ -34,9 +34,15 @@ public class TestController {
 		return restaurantRepository.findByTaxFreightBetween(taxInit, taxFinal);
 	}
 	
+	@GetMapping("/restaurant/by-tax")
+	public List<Restaurant> find(String name, BigDecimal taxInit, BigDecimal taxFinal) {
+		return restaurantRepository.find(name, taxInit, taxFinal);
+	}
+	
 	@GetMapping("/restaurant/by-name")
 	public List<Restaurant> findByNameContainingAndKitchenId(String name, Long kitchenId) {
-		return restaurantRepository.findByNameContainingAndKitchenId(name, kitchenId);
+//		return restaurantRepository.findByNameContainingAndKitchenId(name, kitchenId);
+		return restaurantRepository.findByName(name, kitchenId);
 	}
 	
 	@GetMapping("/restaurant/by-name-first")
@@ -58,6 +64,8 @@ public class TestController {
 	public int count(Long kitchenId) {
 		return restaurantRepository.countByKitchenId(kitchenId);
 	}
+	
+	
 	
 	
 }
