@@ -30,7 +30,7 @@ public class Restaurant implements Serializable{
 	@Column(name = "tax_freight", nullable = false)
 	private BigDecimal taxFreight;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
 	

@@ -34,7 +34,8 @@ public class RestaurantService {
 	}
 	
 	public Restaurant findById(Long id) {
-		return restaurantRepository.findById(id).get();
+		return restaurantRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format("Não existe Restaurante com o ID %d", id)));
 	}
 
 	public Restaurant save(Restaurant restaurant) {

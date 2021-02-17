@@ -64,6 +64,12 @@ public class TestController {
 	public int count(Long kitchenId) {
 		return restaurantRepository.countByKitchenId(kitchenId);
 	}
+
+	@GetMapping("/restaurant/free-freight")
+	public  List<Restaurant> findFreeFreight(String name) {
+		
+		return restaurantRepository.findWithFreeTax(name);
+	}
 	
 	
 	

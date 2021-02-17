@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
+
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -39,6 +41,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				HttpStatus.BAD_REQUEST);
 	}
 	
+	
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<BadRequestExceptionDetails> handleEntityNotFoundException(
+			EntityNotFoundException exception) {
+
+		return new ResponseEntity<>(
+				BadRequestExceptionDetails.builder()
+					.timestamp(OffsetDateTime.now())
+					.status(HttpStatus.BAD_REQUEST.value())
+					.title("Bad Request Exception, Check the Documentation")
+					.details(exception.getMessage())
+					.developerMessage(exception.getClass().getName())
+					.build(),
+				HttpStatus.BAD_REQUEST);
+	}
 //	@ExceptionHandler(IllegalArgumentException.class)
 //	public ResponseEntity<BadRequestExceptionDetails> handleIllegalArgumentException(
 //			IllegalArgumentException exception) {
