@@ -14,14 +14,14 @@ public class UpdateKitchen {
 		ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApiApplication.class)
 				.web(WebApplicationType.NONE)
 				.run(args);
-		
-		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);		
-		Kitchen kitchen = new Kitchen(1L, "Brasileira");
-		
-		Kitchen update = kitchenRepository.save(kitchen);
-		
-		System.out.println("Kitchen: " + update);
-		
+//		
+//		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);		
+//		Kitchen kitchen = new Kitchen(1L, "Brasileira");
+//		
+//		Kitchen update = kitchenRepository.save(kitchen);
+//		
+//		System.out.println("Kitchen: " + update);
+//		
 	}
 
 }

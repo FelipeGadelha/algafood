@@ -15,10 +15,10 @@ public class RemoveKitchen {
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);		
-		Kitchen kitchen = new Kitchen(1L, null);
-		
-		kitchenRepository.deleteById(kitchen.getId());
+//		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);		
+//		Kitchen kitchen = new Kitchen(1L, null);
+//		
+//		kitchenRepository.deleteById(kitchen.getId());
 		
 	}
 

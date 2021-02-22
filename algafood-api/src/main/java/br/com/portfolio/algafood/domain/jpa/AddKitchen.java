@@ -16,16 +16,16 @@ public class AddKitchen {
 				.run(args);
 		
 		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);
-		
-		Kitchen kitchen = new Kitchen(null, "Koreana");
-		Kitchen kitchen1 = new Kitchen(null, "Norte-Americana");
-		
-		Kitchen save = kitchenRepository.save(kitchen);
-		Kitchen save1 = kitchenRepository.save(kitchen1);
-		
-		System.out.println("Kitchen: " + save);
-		System.out.println("Kitchen: " + save1);
-		
+//		
+//		Kitchen kitchen = new Kitchen(null, "Koreana");
+//		Kitchen kitchen1 = new Kitchen(null, "Norte-Americana");
+//		
+//		Kitchen save = kitchenRepository.save(kitchen);
+//		Kitchen save1 = kitchenRepository.save(kitchen1);
+//		
+//		System.out.println("Kitchen: " + save);
+//		System.out.println("Kitchen: " + save1);
+//		
 	}
 
 }

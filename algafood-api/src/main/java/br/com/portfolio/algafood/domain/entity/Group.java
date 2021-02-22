@@ -1,42 +1,65 @@
 package br.com.portfolio.algafood.domain.entity;
 
-import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
-public class State implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+@Table(name = "groups")
+public class Group {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="generator")
-	@SequenceGenerator(name="generator", sequenceName="state_id_seq", allocationSize=1)
-	@Column(name="id")	
+	@SequenceGenerator(name="generator", sequenceName="groups_id_seq", allocationSize=1)
+	@Column(name="id")
 	private Long id;
 	
-	@Column(nullable = false)
 	private String name;
-
-	@Deprecated
-	public State() { }
 	
-	public State(Long id, String name) {
+	@ManyToMany
+	@JoinTable(name = "groups_permission", 
+	joinColumns = 
+		@JoinColumn(name = "group_id"),
+		inverseJoinColumns = @JoinColumn(name = "permission_id")
+		)
+	private List<Permission> permissions;
+	
+	@Deprecated
+	public Group() { }
+
+	public Group(Long id, String name, List<Permission> permissions) {
 		this.id = id;
 		this.name = name;
+		this.permissions = permissions;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<Permission> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(List<Permission> permissions) {
+		this.permissions = permissions;
 	}
 
 	@Override
@@ -55,7 +78,7 @@ public class State implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		State other = (State) obj;
+		Group other = (Group) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -66,7 +89,7 @@ public class State implements Serializable {
 
 	@Override
 	public String toString() {
-		return "State [id=" + id + ", name=" + name + "]";
+		return "Group [id=" + id + ", name=" + name + ", permissions=" + permissions + "]";
 	}
 	
 	

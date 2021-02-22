@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -47,14 +48,14 @@ public class RestaurantService {
 	}
 
 	public Restaurant update(Restaurant restaurant) {
-		if (Objects.isNull(restaurantRepository.findById(restaurant.getId()).get())) {
-			throw new EntityNotFoundException(String.format("Não existe Restaurante com o ID %d", restaurant.getId()));
-		}
+		Restaurant entity = restaurantRepository.findById(restaurant.getId())
+				.orElseThrow(() -> new EntityNotFoundException(String.format("Não existe Restaurante com o ID %d", restaurant.getId())));
 		Long id = restaurant.getKitchen().getId();
-		Optional<Kitchen> kitchen = kitchenRepository.findById(id);
-		if (kitchen.isEmpty()) throw new EntityNotFoundException(String.format("Não existe Cozinha com o ID %d", id));
-		restaurant.setKitchen(kitchen.get());
-		return restaurantRepository.save(restaurant);
+		Kitchen kitchen = kitchenRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format("Não existe Cozinha com o ID %d", id)));
+		restaurant.setKitchen(kitchen);
+		BeanUtils.copyProperties(restaurant, entity, "id", "paymentMethod", "address");
+		return restaurantRepository.save(entity);
 	}
 	
 	public Restaurant patch(Restaurant restaurant) {

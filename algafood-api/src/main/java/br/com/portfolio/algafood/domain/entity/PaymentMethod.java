@@ -39,6 +39,10 @@ public class PaymentMethod implements Serializable{
 	public String getDescription() {
 		return description;
 	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	@Override
 	public int hashCode() {

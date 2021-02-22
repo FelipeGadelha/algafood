@@ -1,5 +1,6 @@
-#docker-compose -f stack.yml up
-#mvn sonar:sonar -Dsonar.projectKey=br.com.portfolio:algafood-api -Dsonar.host.url=http://localhost:9000 -Dsonar.login=a47d5a9da8555630554594d6479387cc8cb5d9ac
+# docker-compose -f stack.yml up
+# mvn sonar:sonar -Dsonar.projectKey=br.com.portfolio:algafood-api -Dsonar.host.url=http://localhost:9000 -Dsonar.login=a47d5a9da8555630554594d6479387cc8cb5d9ac
+# http://localhost:8080/api/algafood/swagger-ui/index.html?configUrl=/api/algafood/v3/api-docs/swagger-config
 server:
   servlet:
     context-path: /api/algafood
@@ -8,8 +9,6 @@ spring:
     jpa:
       repositories:
         enabled: true
-  jpa:
-    open-in-view: false
   profiles:
     active: dev
 springdoc:

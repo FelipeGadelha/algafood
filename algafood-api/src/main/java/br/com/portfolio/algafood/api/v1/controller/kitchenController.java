@@ -55,7 +55,7 @@ public class kitchenController {
 //			updated.setName(kitchen.getName());
 //			BeanUtils.copyProperties(kitchen, entity, "id");
 		try {
-			Kitchen save = kitchenService.update(new Kitchen(id, kitchen.getName()));
+			Kitchen save = kitchenService.update(new Kitchen(id, kitchen.getName(), kitchen.getRestaurants()));
 			return ResponseEntity.ok(save);
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.notFound().build();

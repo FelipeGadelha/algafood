@@ -1,13 +1,19 @@
 package br.com.portfolio.algafood.domain.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //@JsonRootName("gastronomy")
 @Entity
@@ -26,15 +32,20 @@ public class Kitchen implements Serializable{
 //	@Column(nullable = false)
 	private String name;
 	
+	@JsonIgnore
+//	@JsonBackReference
+	@OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL)
+	private List<Restaurant> restaurants = new ArrayList<>();
+	
 	@Deprecated
 	public Kitchen() {	}
 
-	public Kitchen(Long id, String name) {
+	public Kitchen(Long id, String name, List<Restaurant> restaurants) {
+		super();
 		this.id = id;
 		this.name = name;
+		this.restaurants = restaurants;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -45,6 +56,14 @@ public class Kitchen implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public List<Restaurant> getRestaurants() {
+		return restaurants;
+	}
+	
+	public void setRestaurants(List<Restaurant> restaurants) {
+		this.restaurants = restaurants;
 	}
 
 	@Override
@@ -74,9 +93,7 @@ public class Kitchen implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Kitchen [id=" + id + ", name=" + name + "]";
+		return "Kitchen [id=" + id + ", name=" + name + ", restaurants=" + restaurants + "]";
 	}
 
-	
-	
 }
