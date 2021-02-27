@@ -10,7 +10,7 @@ spring:
       repositories:
         enabled: true
   profiles:
-    active: dev
+    active: local
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

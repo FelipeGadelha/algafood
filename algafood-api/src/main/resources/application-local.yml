@@ -14,12 +14,9 @@ spring:
   datasource:
     name: AlgafoodDataSource
     driver-class-name: org.postgresql.Driver    
-#    url: jdbc:postgresql://localhost:5432/algafood-db
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/algafood-db}
-#    password: password
-    password: ${SPRING_DATASOURCE_USERNAME:postgres}
-#    username: postgres
-    username: ${SPRING_DATASOURCE_PASSWORD:password}
+    url: jdbc:postgresql://localhost:5432/algafood-db
+    password: password
+    username: postgres
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       pool-name: algafoodPool

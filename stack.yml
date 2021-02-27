@@ -1,5 +1,23 @@
-version: '3'
+version: '3.8'
 services:
+  api:
+    build:
+      context: ./algafood-api
+      dockerfile: ./Dockerfile
+    image: algafood/api
+    ports:
+      - '8080:8080'
+      - '5005:5005'
+#    networks: 
+#      - algafood-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/algafood-db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - ADDITIONAL_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m
+      - PROFILE=dev
+    links: 
+      - db
   db:
     image: postgres:9.6
     container_name: pg-algafood-db
@@ -9,40 +27,12 @@ services:
       - POSTGRES_PASSWORD=password
     ports:
       - 5432:5432
+#    networks: 
+#      - algafood-network
     volumes:
       - .docker/dev_data:/var/lib/postgresql
-
-  sonarqube:
-    container_name: sonar
-    image: sonarqube:7.9.2-community
-    ports:
-      - "9000:9000"
-    networks:
-      - sonarnet
-    environment:
-      - sonar.jdbc.url=jdbc:postgresql://pg-sonar:5432/sonar
-    depends_on:
-      - pg-sonar
-    volumes:
-      - .docker/sonarqube_conf:/opt/sonarqube/conf
-      - .docker/sonarqube_data:/opt/sonarqube/data
-      - .docker/sonarqube_extensions:/opt/sonarqube/extensions
-      - .docker/sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
-
-  pg-sonar:
-    container_name: pg-sonar
-    image: postgres:9.6
-    networks:
-      - sonarnet
-    environment:
-      - POSTGRES_USER=sonar
-      - POSTGRES_PASSWORD=sonar
-    volumes:
-      - postgresql:/var/lib/postgresql
-      - postgresql_data:/var/lib/postgresql/data
-    
-networks:
-  sonarnet:
-volumes:
-  postgresql:
-  postgresql_data:
+#networks:
+#  algafood-network: 
+#    driver: bridge 
+# volumes:
+#   dev_data:
