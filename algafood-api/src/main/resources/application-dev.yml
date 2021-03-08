@@ -1,4 +1,4 @@
-#gerar script de criacao do banco de dados
+# gerar script de criacao do banco de dados
 #spring.jpa.properties.javax.persistence.schema-generation.create-source=metadata
 #spring.jpa.properties.javax.persistence.schema-generation.scripts.action=create
 #spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target=create.sql
@@ -10,15 +10,16 @@
 # docker-compose -f stack.yml up
 # docker-compose -f stack.yml up --build --force-recreate
 
+# drop schema public cascade;
+
+# create schema public;
+
 spring:
   datasource:
     name: AlgafoodDataSource
     driver-class-name: org.postgresql.Driver    
-#    url: jdbc:postgresql://localhost:5432/algafood-db
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/algafood-db}
-#    password: password
     password: ${SPRING_DATASOURCE_USERNAME:postgres}
-#    username: postgres
     username: ${SPRING_DATASOURCE_PASSWORD:password}
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
