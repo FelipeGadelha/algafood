@@ -20,8 +20,8 @@ public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="generator")
-	@SequenceGenerator(name="generator", sequenceName="product_id_seq", allocationSize=1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="product_id_seq")
+	@SequenceGenerator(name="product_id_seq", sequenceName="product_id_seq", allocationSize=1)
 	@Column(name="id")
 	private Long id;
 	

@@ -1,0 +1,37 @@
+# gerar script de criacao do banco de dados
+#spring.jpa.properties.javax.persistence.schema-generation.create-source=metadata
+#spring.jpa.properties.javax.persistence.schema-generation.scripts.action=create
+#spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target=create.sql
+#spring.jpa.properties.hibernate.hbm2ddl.delimiter=;
+
+# docker-compose up --build --force-recreate
+# docker-compose up 
+# ./mvnw clean package -DskipTests
+# docker-compose -f stack.yml up
+# docker-compose -f stack.yml up --build --force-recreate
+
+# drop schema public cascade;
+
+# create schema public;
+
+spring:
+#  flyway:
+#    locations: classpath:db/migration,classpath:db/data-test
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:algafood-test-db
+    password: sa
+    username: 
+  jpa:
+    open-in-view: true
+#    generate-ddl: true
+#    hibernate:
+#      ddl-auto: update
+    properties:
+      hibernate:
+#        format_sql: true
+    show-sql: true

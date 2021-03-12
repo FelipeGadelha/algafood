@@ -1,7 +1,5 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,8 +30,8 @@ public class kitchenController {
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Kitchen> findAll() {
-		return kitchenService.findAll();
+	public ResponseEntity<?> findAll() {
+		return ResponseEntity.ok(kitchenService.findAll());
 	}
 
 	@GetMapping("/{kitchenId}")
@@ -42,6 +40,7 @@ public class kitchenController {
 			return ResponseEntity.ok(kitchenService.findById(id));
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+			
 		}
 	}
 
