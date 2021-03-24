@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import br.com.portfolio.algafood.domain.entity.City;
 import br.com.portfolio.algafood.domain.entity.Kitchen;
 import br.com.portfolio.algafood.domain.entity.Restaurant;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
@@ -20,13 +21,17 @@ import br.com.portfolio.algafood.domain.repository.RestaurantRepository;
 @Service
 public class RestaurantService {
 
+	private static final String MSG_RESTAURANT_NOT_FOUND = "Não existe Restaurante com o ID %d";
+	
 	private final RestaurantRepository restaurantRepository;
-	private final KitchenRepository kitchenRepository;
+	private final KitchenService kitchenService;
+	private final CityService cityService;
 	
 	@Autowired
-	public RestaurantService(RestaurantRepository restaurantRepository, KitchenRepository kitchenRepository) {
+	public RestaurantService(RestaurantRepository restaurantRepository, KitchenService kitchenService, CityService cityService) {
 		this.restaurantRepository = restaurantRepository;
-		this.kitchenRepository = kitchenRepository;
+		this.kitchenService = kitchenService;
+		this.cityService = cityService;
 	}
 	
 	public List<Restaurant> findAll() {
@@ -35,26 +40,20 @@ public class RestaurantService {
 	
 	public Restaurant findById(Long id) {
 		return restaurantRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException(String.format("Não existe Restaurante com o ID %d", id)));
+				.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_RESTAURANT_NOT_FOUND, id)));
 	}
 
 	public Restaurant save(Restaurant restaurant) {
-		Long id = restaurant.getKitchen().getId();
-		Optional<Kitchen> entity = kitchenRepository.findById(id);
-		if (entity.isEmpty()) throw new EntityNotFoundException(String.format("Não existe Cozinha com o ID %d", id));
-		restaurant.setKitchen(entity.get());
+		Long KitchenId = restaurant.getKitchen().getId();
+		Kitchen kitchen = kitchenService.findById(KitchenId);
+		restaurant.setKitchen(kitchen);
 		return restaurantRepository.save(restaurant);
 	}
 
-	public Restaurant update(Restaurant restaurant) {
-		Restaurant entity = restaurantRepository.findById(restaurant.getId())
-				.orElseThrow(() -> new EntityNotFoundException(String.format("Não existe Restaurante com o ID %d", restaurant.getId())));
-		Long id = restaurant.getKitchen().getId();
-		Kitchen kitchen = kitchenRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException(String.format("Não existe Cozinha com o ID %d", id)));
-		restaurant.setKitchen(kitchen);
-		BeanUtils.copyProperties(restaurant, entity, "id", "paymentMethod", "address");
-		return restaurantRepository.save(entity);
+	public Restaurant update(Long id, Restaurant updated) {
+		Restaurant restaurant = this.findById(id);
+		BeanUtils.copyProperties(updated, restaurant, "id", "paymentMethod", "address");
+		return this.save(restaurant);
 	}
 	
 	public Restaurant patch(Restaurant restaurant) {

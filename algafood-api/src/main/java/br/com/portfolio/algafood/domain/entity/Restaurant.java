@@ -23,17 +23,17 @@ import javax.persistence.SequenceGenerator;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-public class Restaurant implements Serializable{
+public class Restaurant implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="restaurant_id_seq")
-	@SequenceGenerator(name="restaurant_id_seq", sequenceName="restaurant_id_seq", allocationSize=1)
+	@SequenceGenerator(name="restaurant_id_seq", sequenceName="restaurant_id_seq", allocationSize = 1)
 	@Column(name="id")	
 	private Long id;
 	
@@ -43,11 +43,12 @@ public class Restaurant implements Serializable{
 	@Column(name = "tax_freight", nullable = false)
 	private BigDecimal taxFreight;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@Embedded
 	private Address address;
 	
-	@JsonManagedReference
+	
+	@JsonBackReference
 	@ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = { CascadeType.MERGE, CascadeType.ALL })
 //	@JsonIgnoreProperties({"hibernateLazyInitializer"})//, "handler"})
 	@JoinColumn(name = "kitchen_id", nullable = false)
@@ -185,7 +186,6 @@ public class Restaurant implements Serializable{
 	@Override
 	public String toString() {
 		return "Restaurant [id=" + id + ", name=" + name + ", taxFreight=" + taxFreight + ", kitchen=" + kitchen.getId()
-				+ ", paymentMethod=" + paymentMethod + ", address=" + address + ", products=" + products
 				+ ", creationDate=" + creationDate + ", updateDate=" + updateDate + "]";
 	}
 

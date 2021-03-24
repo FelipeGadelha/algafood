@@ -14,44 +14,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.portfolio.algafood.domain.entity.Kitchen;
-import br.com.portfolio.algafood.domain.service.KitchenService;
+import br.com.portfolio.algafood.domain.entity.City;
+import br.com.portfolio.algafood.domain.service.CityService;
 
 @RestController
-@RequestMapping(value = "/v1/kitchens") // produces = MediaType.APPLICATION_JSON_VALUE)
-public class kitchenController {
-
-	private final KitchenService kitchenService;
+@RequestMapping(value = "/v1/cities")
+public class CityController {
+	
+	private final CityService cityService;
 
 	@Autowired
-	public kitchenController(KitchenService kitchenService) {
-		this.kitchenService = kitchenService;
+	public CityController(CityService cityService) {
+		this.cityService = cityService;
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> findAll() {
-		return ResponseEntity.ok(kitchenService.findAll());
+		return ResponseEntity.ok(cityService.findAll());
 	}
 
-	@GetMapping("/{kitchenId}")
-	public ResponseEntity<?> findById(@PathVariable("kitchenId") Long id) {
-		return ResponseEntity.ok(kitchenService.findById(id));
+	@GetMapping("/{id}")
+	public ResponseEntity<?> findById(@PathVariable Long id) {
+		return ResponseEntity.ok(cityService.findById(id));
 	}
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Kitchen kitchen) {
-		return new ResponseEntity<>(kitchenService.save(kitchen), HttpStatus.CREATED);
+	public ResponseEntity<?> save(@RequestBody City city) {
+		return new ResponseEntity<>(cityService.save(city), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Kitchen kitchen) {
-		return ResponseEntity.ok(kitchenService.update(id, kitchen));
+	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody City city) {
+		return ResponseEntity.ok(cityService.update(id, city));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
-		kitchenService.deleteById(id);
+		cityService.deleteById(id);
 	}
-	
+
 }

@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Embeddable
 public class Address implements Serializable{
 	
@@ -25,6 +27,7 @@ public class Address implements Serializable{
 	private String district;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnoreProperties({"hibernateLazyInitializer"})//, "handler"})
 	@JoinColumn(name = "address_city_id")
 	private City city;
 	

@@ -2,8 +2,8 @@ package br.com.portfolio.algafood.domain.service;
 
 
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,6 +18,9 @@ import br.com.portfolio.algafood.domain.repository.KitchenRepository;
 public class KitchenService {
 
 	private final KitchenRepository kitchenRepository;
+	
+	private static final String MSG_KITCHEN_IN_USE = "Cozinha com o ID %d não pode ser removida, pois esta em uso";
+	private static final String MSG_KITCHEN_NOT_FOUND = "Não existe Cozinha com o ID %d";
 
 	@Autowired
 	public KitchenService(KitchenRepository kitchenRepository) {
@@ -29,18 +32,17 @@ public class KitchenService {
 	}
 
 	public Kitchen findById(Long id) {
-		Optional<Kitchen> entity = kitchenRepository.findById(id);
-		if (entity.isEmpty()) throw new EntityNotFoundException(String.format("Não existe Cozinha com o ID %d", id));
-		return entity.get();
+		return kitchenRepository.findById(id)
+			.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id)));
 	}
 
 	public Kitchen save(Kitchen kitchen) {
 		return kitchenRepository.save(kitchen);
 	}
 
-	public Kitchen update(Kitchen kitchen) {
-		Optional<Kitchen> optional = kitchenRepository.findById(kitchen.getId());
-		if (optional.isEmpty()) throw new EntityNotFoundException(String.format("Não existe Cozinha com o ID %d", kitchen.getId()));
+	public Kitchen update(Long id, Kitchen updated) {
+		Kitchen kitchen = this.findById(id);
+		BeanUtils.copyProperties(updated, kitchen, "id");
 		return kitchenRepository.save(kitchen);
 	}
 
@@ -48,9 +50,10 @@ public class KitchenService {
 		try {
 			kitchenRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(String.format("Não existe Cozinha com o ID %d", id));
+			throw new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id));
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Não existe Cozinha com o ID %d", id));
 		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException(String.format("Cozinha com o ID %d não pode ser removida, pois esta em uso", id));
+			throw new EntityInUseException(String.format(MSG_KITCHEN_IN_USE, id));
 		}
 	}
 }

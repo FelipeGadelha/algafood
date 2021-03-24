@@ -4,6 +4,7 @@
 #spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target=create.sql
 #spring.jpa.properties.hibernate.hbm2ddl.delimiter=;
 
+# ./mvnw flyway:repair -Dflyway.configFiles=src/main/resources/flyway.properties
 # docker-compose up --build --force-recreate
 # docker-compose up 
 # ./mvnw clean package -DskipTests

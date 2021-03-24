@@ -19,7 +19,7 @@ public class City implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="city_id_seq")
-	@SequenceGenerator(name="city_id_seq", sequenceName="city_id_seq", allocationSize=1)
+	@SequenceGenerator(name="city_id_seq", sequenceName="city_id_seq", allocationSize = 1)
 	@Column(name="id")	
 	private Long id;
 	
@@ -49,9 +49,17 @@ public class City implements Serializable {
 	public String getName() {
 		return name;
 	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public State getState() {
 		return state;
+	}
+	
+	public void setState(State state) {
+		this.state = state;
 	}
 
 	@Override

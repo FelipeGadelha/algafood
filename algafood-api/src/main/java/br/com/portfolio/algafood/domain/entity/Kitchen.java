@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 //@JsonRootName("gastronomy")
 @Entity
@@ -23,7 +23,7 @@ public class Kitchen implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="kitchen_id_seq")
-	@SequenceGenerator(name="kitchen_id_seq", sequenceName="kitchen_id_seq", allocationSize=1)
+	@SequenceGenerator(name="kitchen_id_seq", sequenceName="kitchen_id_seq", allocationSize = 1)
 	@Column(name="id")	
 	private Long id;
 	
@@ -32,8 +32,8 @@ public class Kitchen implements Serializable{
 //	@Column(nullable = false)
 	private String name;
 	
-	@JsonIgnore
-//	@JsonBackReference
+//	@JsonIgnore
+	@JsonManagedReference
 	@OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL)
 	private List<Restaurant> restaurants = new ArrayList<>();
 	
@@ -93,7 +93,7 @@ public class Kitchen implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Kitchen [id=" + id + ", name=" + name + ", restaurants=" + restaurants + "]";
+		return "Kitchen [id=" + id + ", name=" + name + "]";
 	}
 
 }

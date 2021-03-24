@@ -2,7 +2,6 @@ package br.com.portfolio.algafood.api.handle;
 
 public class BadRequestExceptionDetails extends ExceptionDetails{
 	
-	
 	public BadRequestExceptionDetails(Builder builder) {
 		super(builder);
 	}

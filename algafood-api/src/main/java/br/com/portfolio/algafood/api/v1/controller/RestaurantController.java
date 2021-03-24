@@ -3,7 +3,6 @@ package br.com.portfolio.algafood.api.v1.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.portfolio.algafood.domain.entity.Restaurant;
-import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.service.RestaurantService;
 
 @RestController
@@ -43,42 +41,22 @@ public class RestaurantController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
-		Restaurant entity = restaurantService.findById(id);
-		if (Objects.nonNull(entity))
-			return ResponseEntity.ok(entity);
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(restaurantService.findById(id));
 	}
 
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Restaurant restaurant) {
-		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.save(restaurant));
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.save(restaurant));
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Restaurant restaurant) {
-		try {
-			return ResponseEntity.ok(restaurantService.update(
-					new Restaurant(id, 
-							restaurant.getName(), 
-							restaurant.getTaxFreight(), 
-							restaurant.getKitchen(), 
-							restaurant.getPaymentMethod(), 
-							restaurant.getAddress(), 
-							restaurant.getProducts()
-							)));
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		return ResponseEntity.ok(restaurantService.update(id, restaurant));
 	}
 	
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
 		Restaurant restaurant = restaurantService.findById(id);
-		if (Objects.isNull(restaurant)) return ResponseEntity.notFound().build();
 		merge(fields, restaurant);
 		return update(id, restaurant);
 	}
@@ -99,7 +77,7 @@ public class RestaurantController {
 			Field field = ReflectionUtils.findField(Restaurant.class, propName);
 			field.setAccessible(true);
 			Object newValue = ReflectionUtils.getField(field, converted);
-			System.out.println(propName + " = " + propValue + " = " + newValue);
+//			System.err.println(propName + " = " + propValue + " = " + newValue);
 			ReflectionUtils.setField(field, restaurant, newValue);
 		});
 	}
