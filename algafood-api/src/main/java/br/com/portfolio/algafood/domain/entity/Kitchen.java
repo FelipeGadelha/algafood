@@ -3,7 +3,6 @@ package br.com.portfolio.algafood.domain.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,8 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -51,7 +48,7 @@ public class Kitchen implements Serializable{
 	}
 
 	public Long getId() {
-		Assert.state(Objects.nonNull(id), "Entidade ainda não foi persistida do banco de dados");
+//		Assert.state(Objects.nonNull(id), "Entidade ainda não foi persistida do banco de dados");
 		return id;
 	}
 
