@@ -15,8 +15,8 @@
 # create schema public;
 
 spring:
-#  flyway:
-#    locations: classpath:db/migration,classpath:db/data-test
+  flyway:
+    locations: classpath:db/migration,classpath:db/data-test
   h2:
     console:
       enabled: true

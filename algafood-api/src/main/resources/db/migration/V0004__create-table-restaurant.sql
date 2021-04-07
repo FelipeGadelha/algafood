@@ -1,5 +1,5 @@
 create table restaurant (
-	id BIGINT NOT NULL,  
+	id SERIAL NOT NULL,  
 	kitchen_id BIGINT NOT NULL, 
 	name varchar(100) NOT NULL, 
 	tax_freight numeric(19, 2) NOT NULL, 
@@ -16,7 +16,5 @@ create table restaurant (
 	primary key (id)
 	);
 	
-create sequence restaurant_id_seq start 1 increment 1;
-
 alter table restaurant add constraint FK_restaurant_address_city foreign key (address_city_id) references city (id);
 alter table restaurant add constraint FK_restaurant_kitchen foreign key (kitchen_id) references kitchen (id);

@@ -1,5 +1,5 @@
 CREATE TABLE order_item (
-	id BIGINT NOT NULL, 
+	id SERIAL NOT NULL, 
 	observation VARCHAR(255), 
 	quantity int4 NOT NULL, 
 	total_price NUMERIC(10,2) NOT NULL, 

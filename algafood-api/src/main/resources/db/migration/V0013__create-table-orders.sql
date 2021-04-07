@@ -1,5 +1,5 @@
 create table orders (
-	id BIGINT NOT NULL, 
+	id SERIAL NOT NULL, 
 	subtotal NUMERIC(10,2) NOT NULL,
   	tax_freight NUMERIC(10,2) NOT NULL,
   	total_value NUMERIC(10,2) NOT NULL,
@@ -24,8 +24,6 @@ create table orders (
 	PRIMARY KEY(id)
 	);
 		
-CREATE sequence order_id_seq start 1 increment 1;
-
 ALTER TABLE orders ADD CONSTRAINT FK_orders_address_city FOREIGN KEY (address_city_id) REFERENCES city;
 ALTER TABLE orders ADD CONSTRAINT FK_orders_restaurant FOREIGN KEY (restaurant_id) REFERENCES restaurant;
 ALTER TABLE orders ADD CONSTRAINT FK_orders_user_client FOREIGN KEY (user_client_id) REFERENCES users;
