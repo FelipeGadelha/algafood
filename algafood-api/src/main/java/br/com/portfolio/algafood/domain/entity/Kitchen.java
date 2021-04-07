@@ -3,6 +3,7 @@ package br.com.portfolio.algafood.domain.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.springframework.util.Assert;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 //@JsonRootName("gastronomy")
@@ -22,8 +25,9 @@ public class Kitchen implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="kitchen_id_seq")
-	@SequenceGenerator(name="kitchen_id_seq", sequenceName="kitchen_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="kitchen_id_seq")
+//	@SequenceGenerator(name="kitchen_id_seq", sequenceName="kitchen_id_seq", allocationSize = 1)
 	@Column(name="id")	
 	private Long id;
 	
@@ -48,6 +52,7 @@ public class Kitchen implements Serializable{
 	}
 
 	public Long getId() {
+		Assert.state(Objects.nonNull(id), "Entidade ainda não foi persistida do banco de dados");
 		return id;
 	}
 

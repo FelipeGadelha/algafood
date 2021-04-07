@@ -1,8 +1,6 @@
 package br.com.portfolio.algafood.domain.service;
 
-
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +8,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import br.com.portfolio.algafood.domain.entity.City;
 import br.com.portfolio.algafood.domain.entity.Kitchen;
 import br.com.portfolio.algafood.domain.entity.Restaurant;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
-import br.com.portfolio.algafood.domain.repository.KitchenRepository;
 import br.com.portfolio.algafood.domain.repository.RestaurantRepository;
 
 @Service
@@ -45,7 +41,7 @@ public class RestaurantService {
 
 	public Restaurant save(Restaurant restaurant) {
 		Long KitchenId = restaurant.getKitchen().getId();
-		Kitchen kitchen = kitchenService.findById(KitchenId);
+		Kitchen kitchen = (Kitchen) kitchenService.findById(KitchenId).getData();
 		restaurant.setKitchen(kitchen);
 		return restaurantRepository.save(restaurant);
 	}

@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 
 @Entity
 public class OrderItem implements Serializable {
@@ -18,8 +17,9 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="order_item_id_seq")
-	@SequenceGenerator(name="order_item_id_seq", sequenceName="order_item_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="order_item_id_seq")
+//	@SequenceGenerator(name="order_item_id_seq", sequenceName="order_item_id_seq", allocationSize = 1)
 	@Column(name="id")	
 	private Long id;
 	

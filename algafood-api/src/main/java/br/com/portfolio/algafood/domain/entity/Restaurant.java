@@ -18,7 +18,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -32,8 +31,9 @@ public class Restaurant implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="restaurant_id_seq")
-	@SequenceGenerator(name="restaurant_id_seq", sequenceName="restaurant_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="restaurant_id_seq")
+//	@SequenceGenerator(name="restaurant_id_seq", sequenceName="restaurant_id_seq", allocationSize = 1)
 	@Column(name="id")	
 	private Long id;
 	

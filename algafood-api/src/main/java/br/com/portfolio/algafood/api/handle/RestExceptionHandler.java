@@ -65,7 +65,6 @@ private static final String DOCUMENTATION = ", Check the Documentation";
 		return handleExceptionInternal(ex, exceptionReplace(ex), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
-	
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<Object> handleEntityNotFoundException(
 			EntityNotFoundException ex, WebRequest request) {

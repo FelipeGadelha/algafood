@@ -1,7 +1,6 @@
 package br.com.portfolio.algafood.domain.service;
 
-
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import br.com.portfolio.algafood.domain.entity.Kitchen;
-import br.com.portfolio.algafood.domain.exception.EntityInUseException;
-import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.repository.KitchenRepository;
 
 @Service
@@ -27,33 +24,58 @@ public class KitchenService {
 		this.kitchenRepository = kitchenRepository;
 	}
 	
-	public List<Kitchen> findAll() {
-		return kitchenRepository.findAll();
+	public Result<?> findAll() {
+		return new Result<>(kitchenRepository.findAll());
 	}
 
-	public Kitchen findById(Long id) {
-		return kitchenRepository.findById(id)
-			.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id)));
+	public Result<Kitchen> findById(Long id) {
+		Optional<Kitchen> optional = kitchenRepository.findById(id);
+		return (optional.isPresent()) 
+				? new Result<>(optional.get()) 
+						: this.notFound(id);
+		
+//		return kitchenRepository.findById(id)
+//			.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id)));
 	}
 
-	public Kitchen save(Kitchen kitchen) {
-		return kitchenRepository.save(kitchen);
+	public Result<Kitchen> save(Kitchen kitchen) {
+		return new Result<>(kitchenRepository.save(kitchen));
 	}
 
-	public Kitchen update(Long id, Kitchen updated) {
-		Kitchen kitchen = this.findById(id);
+	public Result<Kitchen> update(Long id, Kitchen updated) {
+		Result<Kitchen> result = this.findById(id);
+		if(result.hasError()) return result;
+		Kitchen kitchen = result.getData();
 		BeanUtils.copyProperties(updated, kitchen, "id");
-		return kitchenRepository.save(kitchen);
+		return new Result<>(kitchenRepository.save(kitchen));
 	}
 
-	public void deleteById(Long id) {
+	public Result<Kitchen> deleteById(Long id) {
 		try {
 			kitchenRepository.deleteById(id);
+			return Result.empty();
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id));
+			return this.notFound(id);
+//			throw new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id));
 //			throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Não existe Cozinha com o ID %d", id));
 		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException(String.format(MSG_KITCHEN_IN_USE, id));
+			return this.inUse(id);
+//			throw new EntityInUseException(String.format(MSG_KITCHEN_IN_USE, id));
 		}
 	}
+	private Result<Kitchen> notFound(Long id) {
+		return new Result.Builder<Kitchen>()
+					.title("Entity Not Found")
+					.details(String.format(MSG_KITCHEN_NOT_FOUND, id))
+					.build();
+				
+	}
+	
+	private Result<Kitchen> inUse(Long id) {
+		return new Result.Builder<Kitchen>()
+					.title("Entity In Use")
+					.details(String.format(MSG_KITCHEN_IN_USE, id))
+					.build();
+	}
+	
 }

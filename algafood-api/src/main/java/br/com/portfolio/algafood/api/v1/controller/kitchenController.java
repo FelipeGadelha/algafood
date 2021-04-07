@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.portfolio.algafood.domain.entity.Kitchen;
 import br.com.portfolio.algafood.domain.service.KitchenService;
+import br.com.portfolio.algafood.domain.service.Result;
 
 @RestController
 @RequestMapping(value = "/v1/kitchens") // produces = MediaType.APPLICATION_JSON_VALUE)
@@ -35,7 +35,10 @@ public class kitchenController {
 
 	@GetMapping("/{kitchenId}")
 	public ResponseEntity<?> findById(@PathVariable("kitchenId") Long id) {
-		return ResponseEntity.ok(kitchenService.findById(id));
+		Result<Kitchen> result = kitchenService.findById(id);
+		return (result.hasError()) 
+				? responseFailDetails(result)
+						: ResponseEntity.ok(result.getData());
 	}
 
 	@PostMapping
@@ -45,13 +48,27 @@ public class kitchenController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Kitchen kitchen) {
-		return ResponseEntity.ok(kitchenService.update(id, kitchen));
+		Result<Kitchen> result = kitchenService.update(id, kitchen);
+		return (result.hasError()) 
+				? responseFailDetails(result)
+						: ResponseEntity.ok(result.getData());
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
-		kitchenService.deleteById(id);
+//	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		Result<Kitchen> result = kitchenService.deleteById(id);
+		return (result.hasError())
+				? responseFailDetails(result) 
+						: ResponseEntity.noContent().build();
 	}
 	
+	private ResponseEntity<?> responseFailDetails(Result<?> fail) {
+		HttpStatus status = (fail.getTitle().equals("Entity Not Found")) 
+				? HttpStatus.NOT_FOUND 
+						: HttpStatus.BAD_REQUEST;
+		return ResponseEntity
+					.status(status)
+					.body(fail);
+	}
 }

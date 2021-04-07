@@ -22,6 +22,7 @@ public class ExceptionDetails{
 		this.timestamp = builder.timestamp;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static Builder<?> builder() {
         return new Builder() {
             @Override

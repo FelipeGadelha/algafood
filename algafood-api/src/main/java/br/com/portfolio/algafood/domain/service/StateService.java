@@ -39,6 +39,7 @@ public class StateService {
 
 	public State update(Long id, State updated) {
 		State state = this.findById(id);
+		System.err.println(state);
 		BeanUtils.copyProperties(updated, state, "id");
 		return stateRepository.save(state);
 	}
