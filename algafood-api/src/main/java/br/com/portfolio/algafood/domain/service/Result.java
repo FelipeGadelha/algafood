@@ -2,6 +2,7 @@ package br.com.portfolio.algafood.domain.service;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -82,6 +83,14 @@ public class Result<T> {
 			return new Result<>(this);
 		}
 	}
+	
+	 public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+	        if (data != null) {
+	            return data;
+	        } else {
+	            throw exceptionSupplier.get();
+	        }
+	    }
 
 	@Override
 	public String toString() {
