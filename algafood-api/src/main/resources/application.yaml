@@ -2,13 +2,18 @@
 # mvn sonar:sonar -Dsonar.projectKey=br.com.portfolio:algafood-api -Dsonar.host.url=http://localhost:9000 -Dsonar.login=a47d5a9da8555630554594d6479387cc8cb5d9ac
 # http://localhost:8080/api/algafood/swagger-ui/index.html?configUrl=/api/algafood/v3/api-docs/swagger-config
 server:
+  port: 8080
   servlet:
     context-path: /api/algafood
 spring:
-  data:
-    jpa:
-      repositories:
-        enabled: true
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+      fail-on-ignored-properties: true
+#  data:
+#    jpa:
+#      repositories:
+#        enabled: true
   profiles:
     active: local
 springdoc:
