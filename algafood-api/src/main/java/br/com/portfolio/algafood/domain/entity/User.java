@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.domain.entity;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -11,16 +12,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
