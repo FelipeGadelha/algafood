@@ -21,7 +21,7 @@ import br.com.portfolio.algafood.domain.service.CityService;
 @RequestMapping(value = "/v1/cities")
 public class CityController {
 	
-	
+
 	private final CityService cityService;
 
 	@Autowired
