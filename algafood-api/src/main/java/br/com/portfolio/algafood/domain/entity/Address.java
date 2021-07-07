@@ -30,8 +30,10 @@ public class Address implements Serializable{
 	@JsonIgnoreProperties({"hibernateLazyInitializer"})//, "handler"})
 	@JoinColumn(name = "address_city_id")
 	private City city;
-	
-	@Deprecated
+	/**
+	 * @deprecated Constructor used by Hibernate;
+	 */
+	@Deprecated//(since = "1.0")
 	public Address() { }
 	
 	public Address(String cep, String place, String number, String complement, String district, City city) {

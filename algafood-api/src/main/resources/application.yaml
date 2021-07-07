@@ -14,6 +14,11 @@ spring:
 #    jpa:
 #      repositories:
 #        enabled: true
+  web:
+    resources:
+      add-mappings: false
+  mvc:
+    throw-exception-if-no-handler-found: true
   profiles:
     active: local
 springdoc:

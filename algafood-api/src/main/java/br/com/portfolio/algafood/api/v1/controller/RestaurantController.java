@@ -4,10 +4,16 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.portfolio.algafood.domain.entity.Groups;
 import br.com.portfolio.algafood.domain.entity.Restaurant;
 import br.com.portfolio.algafood.domain.service.RestaurantService;
 
@@ -45,7 +53,10 @@ public class RestaurantController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Restaurant restaurant) {
+	public ResponseEntity<?> save(
+			@RequestBody 
+			@Validated(value = Groups.RestaurantRegister.class) 
+			Restaurant restaurant) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.save(restaurant));
 	}
 
@@ -55,9 +66,9 @@ public class RestaurantController {
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+	public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 		Restaurant restaurant = restaurantService.findById(id);
-		merge(fields, restaurant);
+		merge(fields, restaurant, request);
 		return update(id, restaurant);
 	}
 
@@ -69,17 +80,27 @@ public class RestaurantController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	private void merge(Map<String, Object> fields, Restaurant restaurant) {
-		ObjectMapper mapper = new ObjectMapper();
-		Restaurant converted = mapper.convertValue(fields, Restaurant.class);
-		
-		fields.forEach((propName, propValue) -> {
-			Field field = ReflectionUtils.findField(Restaurant.class, propName);
-			field.setAccessible(true);
-			Object newValue = ReflectionUtils.getField(field, converted);
+	private void merge(Map<String, Object> fields, Restaurant restaurant, HttpServletRequest request) {
+		ServletServerHttpRequest serHttpRequest = new ServletServerHttpRequest(request);
+		try {
+			
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+			
+			Restaurant converted = mapper.convertValue(fields, Restaurant.class);
+			
+			fields.forEach((propName, propValue) -> {
+				Field field = ReflectionUtils.findField(Restaurant.class, propName);
+				field.setAccessible(true);
+				Object newValue = ReflectionUtils.getField(field, converted);
 //			System.err.println(propName + " = " + propValue + " = " + newValue);
-			ReflectionUtils.setField(field, restaurant, newValue);
-		});
+				ReflectionUtils.setField(field, restaurant, newValue);
+			});
+		} catch (IllegalArgumentException e) {
+			Throwable rootCause = ExceptionUtils.getRootCause(e);
+			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serHttpRequest);
+		}
 	}
 
 }

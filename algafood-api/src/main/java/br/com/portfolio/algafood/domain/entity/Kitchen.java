@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -22,14 +24,14 @@ public class Kitchen implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="kitchen_id_seq")
-//	@SequenceGenerator(name="kitchen_id_seq", sequenceName="kitchen_id_seq", allocationSize = 1)
+	@NotNull(groups = Groups.RestaurantRegister.class)
 	@Column(name="id")	
 	private Long id;
 	
 //	@JsonIgnore
 //	@JsonProperty("titulo")
-//	@Column(nullable = false)
+	@NotBlank
+	@Column(nullable = false)
 	private String name;
 	
 //	@JsonIgnore

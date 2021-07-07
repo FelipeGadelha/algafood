@@ -18,6 +18,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -32,22 +37,26 @@ public class Restaurant implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="restaurant_id_seq")
-//	@SequenceGenerator(name="restaurant_id_seq", sequenceName="restaurant_id_seq", allocationSize = 1)
 	@Column(name="id")	
 	private Long id;
 	
+	@NotNull
+	@NotEmpty
+	@NotBlank(groups = Groups.RestaurantRegister.class)
 	@Column(nullable = false)
 	private String name;
 	
+//	@DecimalMin("1")
+	@PositiveOrZero(groups = Groups.RestaurantRegister.class)
 	@Column(name = "tax_freight", nullable = false)
 	private BigDecimal taxFreight;
 	
-//	@JsonIgnore
+	@JsonIgnore
 	@Embedded
 	private Address address;
 	
-	
+	@Valid
+	@NotNull(groups = Groups.RestaurantRegister.class)
 	@JsonBackReference
 	@ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = { CascadeType.MERGE, CascadeType.ALL })
 //	@JsonIgnoreProperties({"hibernateLazyInitializer"})//, "handler"})
