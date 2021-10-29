@@ -23,7 +23,7 @@ spring:
       path: /h2-console
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:algafood-test-db
+    url: jdbc:h2:mem:algafood-test-db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     password: sa
     username: 
   jpa:
