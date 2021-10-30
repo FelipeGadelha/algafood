@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.portfolio.algafood.domain.entity.Kitchen;
-import br.com.portfolio.algafood.domain.service.Result;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
@@ -27,8 +26,6 @@ public class KitchenControllerTest {
 	
 	@Autowired
 	private TestRestTemplate restTemplate;
-	
-	private static class KitchenResult extends Result<Kitchen> {  }
 	
 //	@Autowired
 //	private KitchenRepository kitchenRepository;
@@ -74,11 +71,11 @@ public class KitchenControllerTest {
 	@Test
 	public void test2() {
 		var kitchen = new Kitchen(null, "Italiano", null);
-		ResponseEntity<KitchenResult> entity = restTemplate.postForEntity(BASE_PATH, kitchen, KitchenResult.class);
+		ResponseEntity<Kitchen> entity = restTemplate.postForEntity(BASE_PATH, kitchen, Kitchen.class);
 		System.err.println("--------------TESTE 2 ---------------- " + entity.getBody());
 		assertThat(entity.getStatusCodeValue()).isEqualTo(201);
-		assertThat(entity.getBody().getData().getName()).isEqualTo("Italiano");
-		assertThat(entity.getBody().getData().getId()).isNotNull();
+		assertThat(entity.getBody().getName()).isEqualTo("Italiano");
+		assertThat(entity.getBody().getId()).isNotNull();
 	}
 	
 	@DisplayName("should successfully update a kitchen")

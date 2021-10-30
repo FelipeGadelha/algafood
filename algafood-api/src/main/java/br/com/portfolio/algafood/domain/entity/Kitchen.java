@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import br.com.portfolio.algafood.core.validation.Groups;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 //@JsonRootName("gastronomy")
@@ -24,7 +25,7 @@ public class Kitchen implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull(groups = Groups.RestaurantRegister.class)
+	@NotNull(groups = Groups.KitchenId.class)
 	@Column(name="id")	
 	private Long id;
 	

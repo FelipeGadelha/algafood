@@ -23,7 +23,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
+import br.com.portfolio.algafood.core.validation.Groups;
+import br.com.portfolio.algafood.core.validation.TaxFreight;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -42,12 +46,13 @@ public class Restaurant implements Serializable {
 	
 	@NotNull
 	@NotEmpty
-	@NotBlank(groups = Groups.RestaurantRegister.class)
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 	
 //	@DecimalMin("1")
-	@PositiveOrZero(groups = Groups.RestaurantRegister.class)
+//	@PositiveOrZero
+	@TaxFreight
 	@Column(name = "tax_freight", nullable = false)
 	private BigDecimal taxFreight;
 	
@@ -56,7 +61,8 @@ public class Restaurant implements Serializable {
 	private Address address;
 	
 	@Valid
-	@NotNull(groups = Groups.RestaurantRegister.class)
+	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
+	@NotNull
 	@JsonBackReference
 	@ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = { CascadeType.MERGE, CascadeType.ALL })
 //	@JsonIgnoreProperties({"hibernateLazyInitializer"})//, "handler"})

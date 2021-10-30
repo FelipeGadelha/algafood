@@ -1,5 +1,7 @@
 package br.com.portfolio.algafood.domain.entity;
 
+import br.com.portfolio.algafood.core.validation.Groups;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -7,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class State implements Serializable {
@@ -14,12 +18,14 @@ public class State implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@NotNull(groups = Groups.StateId.class)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 //	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="state_id_seq")
 //	@SequenceGenerator(name="state_id_seq", sequenceName="state_id_seq", allocationSize = 1)
-	@Column(name="id")	
+	@Column(name="id")
 	private Long id;
-	
+
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 
@@ -72,7 +78,4 @@ public class State implements Serializable {
 	public String toString() {
 		return "State [id=" + id + ", name=" + name + "]";
 	}
-	
-	
-
 }

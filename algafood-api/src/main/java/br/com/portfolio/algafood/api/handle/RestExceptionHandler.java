@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.StaleObjectStateException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +37,11 @@ import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	
-private static final String ERROR_FIELD = "Check the error field(s)";
-private static final String DOCUMENTATION = ", Check the Documentation";
+	private static final String ERROR_FIELD = "Check the error field(s)";
+	private static final String DOCUMENTATION = ", Check the Documentation";
+
+	@Autowired
+	private MessageSource messageSource;
 
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
@@ -143,7 +149,7 @@ private static final String DOCUMENTATION = ", Check the Documentation";
     	List<ObjectError> globalErrors = exception.getBindingResult().getGlobalErrors();
     	
     	Map<String, Set<String>> map = fieldErros.stream().collect(Collectors.groupingBy(FieldError::getField,
-				Collectors.mapping(FieldError::getDefaultMessage, Collectors.toSet())));
+				Collectors.mapping(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()), Collectors.toSet())));
     	
     	if (map.isEmpty()) {
     		map = globalErrors.stream().collect(Collectors.groupingBy(ObjectError::getCode,

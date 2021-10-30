@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.portfolio.algafood.domain.entity.City;
 import br.com.portfolio.algafood.domain.service.CityService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/v1/cities")
 public class CityController {
@@ -40,12 +42,12 @@ public class CityController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody City city) {
+	public ResponseEntity<?> save(@RequestBody @Valid City city) {
 		return new ResponseEntity<>(cityService.save(city), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody City city) {
+	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid City city) {
 		return ResponseEntity.ok(cityService.update(id, city));
 	}
 

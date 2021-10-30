@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import br.com.portfolio.algafood.domain.exception.ValidationException;
 import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.portfolio.algafood.domain.entity.Groups;
 import br.com.portfolio.algafood.domain.entity.Restaurant;
 import br.com.portfolio.algafood.domain.service.RestaurantService;
 
@@ -36,10 +38,12 @@ import br.com.portfolio.algafood.domain.service.RestaurantService;
 public class RestaurantController {
 
 	private final RestaurantService restaurantService;
+	private final SmartValidator smartValidator;
 
 	@Autowired
-	public RestaurantController(RestaurantService restaurantService) {
+	public RestaurantController(RestaurantService restaurantService, SmartValidator smartValidator) {
 		this.restaurantService = restaurantService;
+		this.smartValidator = smartValidator;
 	}
 
 	@GetMapping()
@@ -53,37 +57,38 @@ public class RestaurantController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> save(
-			@RequestBody 
-			@Validated(value = Groups.RestaurantRegister.class) 
-			Restaurant restaurant) {
+	public ResponseEntity<?> save(@RequestBody @Valid Restaurant restaurant) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.save(restaurant));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Restaurant restaurant) {
+	public ResponseEntity<?> update(@PathVariable @Valid Long id, @RequestBody @Valid Restaurant restaurant) {
 		return ResponseEntity.ok(restaurantService.update(id, restaurant));
 	}
 	
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 		Restaurant restaurant = restaurantService.findById(id);
-		merge(fields, restaurant, request);
+		this.merge(fields, restaurant, request);
+		this.validate(restaurant, "restaurant");
 		return update(id, restaurant);
 	}
-
-
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		restaurantService.remove(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
+	private void validate(Restaurant restaurant, String objectName) {
+		var bindingResult = new BeanPropertyBindingResult(restaurant, objectName);
+		smartValidator.validate(restaurant, bindingResult);
+		if (bindingResult.hasErrors()) throw new ValidationException(bindingResult);
+	}
+
 	private void merge(Map<String, Object> fields, Restaurant restaurant, HttpServletRequest request) {
 		ServletServerHttpRequest serHttpRequest = new ServletServerHttpRequest(request);
 		try {
-			
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
