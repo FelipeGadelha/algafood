@@ -1,3 +1,31 @@
+--SET session_replication_role = 'replica';
+set foreign_key_checks = 0;
+
+DELETE FROM city;
+DELETE FROM kitchen;
+DELETE FROM state;
+DELETE FROM payment_method;
+DELETE FROM groups;
+DELETE FROM groups_permission;
+DELETE FROM permission;
+DELETE FROM product;
+DELETE FROM restaurant;
+DELETE FROM restaurant_payment_method;
+DELETE FROM users;
+DELETE FROM users_groups;
+
+set foreign_key_checks = 1;
+--SET session_replication_role = 'origin';
+
+--ALTER SEQUENCE city_id_seq RESTART WITH 1;
+--ALTER SEQUENCE kitchen_id_seq RESTART WITH 1;
+--ALTER SEQUENCE state_id_seq RESTART WITH 1;
+--ALTER SEQUENCE payment_method_id_seq RESTART WITH 1;
+--ALTER SEQUENCE groups_id_seq RESTART WITH 1;
+--ALTER SEQUENCE permission_id_seq RESTART WITH 1;
+--ALTER SEQUENCE product_id_seq RESTART WITH 1;
+--ALTER SEQUENCE restaurant_id_seq RESTART WITH 1;
+--ALTER SEQUENCE users_id_seq RESTART WITH 1;
 
 INSERT INTO kitchen (id, name) VALUES (1, 'Tailandesa');
 INSERT INTO kitchen (id, name) VALUES (2, 'Indiana');

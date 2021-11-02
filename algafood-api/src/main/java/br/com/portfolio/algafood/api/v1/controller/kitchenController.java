@@ -21,7 +21,7 @@ public class kitchenController {
 		this.kitchenService = kitchenService;
 	}
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	public ResponseEntity<?> findAll() {
 		return ResponseEntity.ok(kitchenService.findAll());
 	}

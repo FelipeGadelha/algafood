@@ -24,6 +24,7 @@
 		<springdoc-openapi-ui.version>1.5.11</springdoc-openapi-ui.version>
 		<modelmapper.version>2.4.4</modelmapper.version>
 		<rest-assured.version>4.4.0</rest-assured.version>
+		<groovy.version>3.0.9</groovy.version>
 	</properties>
 
 	<dependencies>
@@ -87,6 +88,14 @@
 			<version>${rest-assured.version}</version>
 			<scope>test</scope>
 		</dependency>
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.codehaus.groovy</groupId>-->
+<!--			<artifactId>groovy-all</artifactId>-->
+<!--			<version>${groovy.version}</version>-->
+<!--			<type>pom</type>-->
+<!--		</dependency>-->
+
 
 		<!-- <dependency> -->
 		<!-- <groupId>com.fasterxml.jackson.dataformat</groupId> -->
@@ -101,6 +110,10 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+<!--			<plugin>-->
+<!--				&lt;!&ndash; exclui a execução de testes de integração no momento do build &ndash;&gt;-->
+<!--				<artifactId>maven-failsafe-plugin</artifactId>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 </project>
