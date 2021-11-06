@@ -31,7 +31,6 @@ public class Order implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 //	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="order_id_seq")
 //	@SequenceGenerator(name="order_id_seq", sequenceName="order_id_seq", allocationSize = 1)
-	@Column(name="id")	
 	private Long id;
 	
 	private BigDecimal subtotal;

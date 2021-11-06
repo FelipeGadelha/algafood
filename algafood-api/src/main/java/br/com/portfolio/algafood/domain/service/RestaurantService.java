@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class RestaurantService {
 
 	private static final String MSG_RESTAURANT_NOT_FOUND = "Não existe Restaurante com o ID %d";
-	
 	private final RestaurantRepository restaurantRepository;
 	private final KitchenService kitchenService;
 	private final CityService cityService;
@@ -46,13 +45,20 @@ public class RestaurantService {
 	public Restaurant save(Restaurant restaurant) {
 		Long KitchenId = restaurant.getKitchen().getId();
 		Kitchen kitchen = kitchenService.findById(KitchenId);
-		restaurant.setKitchen(kitchen);
+		restaurant = Restaurant.builder()
+				.clone(restaurant)
+				.kitchen(kitchen)
+				.build();
 		return restaurantRepository.save(restaurant);
 	}
 
 	@Transactional
 	public Restaurant update(Long id, Restaurant updated) {
-		Restaurant restaurant = this.findById(id);
+		var restaurant = this.findById(id);
+		restaurant = Restaurant.builder()
+				.clone(restaurant)
+				.copy(updated)
+				.build();
 		BeanUtils.copyProperties(updated, restaurant, "id", "paymentMethod", "address");
 		return this.save(restaurant);
 	}

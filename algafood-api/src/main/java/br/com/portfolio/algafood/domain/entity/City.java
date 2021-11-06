@@ -1,22 +1,10 @@
 package br.com.portfolio.algafood.domain.entity;
 
-import br.com.portfolio.algafood.core.validation.Groups;
-
-import java.io.Serializable;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.Valid;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class City implements Serializable {
@@ -25,18 +13,13 @@ public class City implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="city_id_seq")
-//	@SequenceGenerator(name="city_id_seq", sequenceName="city_id_seq", allocationSize = 1)
-	@Column(name="id")	
 	private Long id;
 
 	@NotBlank
 	@Column(nullable = false)
 	private String name;
 
-	@Valid
 	@NotNull
-	@ConvertGroup(from = Default.class, to = Groups.StateId.class)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "state_id", nullable = false)
 	private State state;
@@ -44,34 +27,55 @@ public class City implements Serializable {
 	@Deprecated
 	public City() {	}
 
-	public City(Long id, String name, State state) {
-		this.id = id;
-		this.name = name;
-		this.state = state;
+	public City(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.state = builder.state;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public static Builder builder() { return new Builder(); }
+	public static class Builder {
+		private Long id;
+		private String name;
+		private State state;
+
+		public Builder() { }
+
+		public Builder id(Long id) {
+			this.id = id;
+			return this;
+		}
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+		public Builder state(State state) {
+			this.state = state;
+			return this;
+		}
+		public Builder copy(City city) {
+			this.id = (Objects.isNull(id)) ? city.id : this.id;
+			this.name = city.name;
+			this.state = city.state;
+			return this;
+		}
+		public Builder clone(City city) {
+			this.id = city.id;
+			this.name = city.name;
+			this.state = city.state;
+			return this;
+		}
+		public City build() { return new City(this); }
 	}
 
 	public Long getId() {
 		return id;
 	}
-
 	public String getName() {
 		return name;
 	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public State getState() {
 		return state;
-	}
-	
-	public void setState(State state) {
-		this.state = state;
 	}
 
 	@Override
@@ -103,7 +107,4 @@ public class City implements Serializable {
 	public String toString() {
 		return "City [id=" + id + ", name=" + name + ", state=" + state + "]";
 	}
-	
-	
-
 }

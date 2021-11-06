@@ -25,18 +25,13 @@ public class Kitchen implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull(groups = Groups.KitchenId.class)
-	@Column(name="id")	
 	private Long id;
-	
-//	@JsonIgnore
-//	@JsonProperty("titulo")
+
 	@NotBlank
 	@Column(nullable = false)
 	private String name;
-	
-//	@JsonIgnore
-	@JsonManagedReference
+
+//	@JsonManagedReference
 	@OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL)
 	private List<Restaurant> restaurants = new ArrayList<>();
 	
@@ -55,24 +50,12 @@ public class Kitchen implements Serializable{
 		this.restaurants = restaurants;
 	}
 
-	public Long getId() {
-//		Assert.state(Objects.nonNull(id), "Entidade ainda não foi persistida do banco de dados");
-		return id;
-	}
-
+	public Long getId() { return id; }
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public List<Restaurant> getRestaurants() {
 		return restaurants;
-	}
-	
-	public void setRestaurants(List<Restaurant> restaurants) {
-		this.restaurants = restaurants;
 	}
 
 	@Override

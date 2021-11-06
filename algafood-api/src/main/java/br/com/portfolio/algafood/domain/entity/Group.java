@@ -20,7 +20,6 @@ public class Group {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 //	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="groups_id_seq")
 //	@SequenceGenerator(name="groups_id_seq", sequenceName="groups_id_seq", allocationSize = 1)
-	@Column(name="id")
 	private Long id;
 	
 	private String name;

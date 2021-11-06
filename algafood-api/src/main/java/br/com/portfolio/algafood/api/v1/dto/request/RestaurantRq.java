@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.api.v1.dto.request;
 
+import br.com.portfolio.algafood.core.validation.TaxFreight;
 import br.com.portfolio.algafood.domain.entity.Kitchen;
 import br.com.portfolio.algafood.domain.entity.Restaurant;
 
@@ -13,11 +14,9 @@ public class RestaurantRq {
 
     @NotBlank
     private final String name;
-    @NotNull
-    @PositiveOrZero
+    @NotNull @PositiveOrZero @TaxFreight
     private final BigDecimal taxFreight;
-    @NotNull
-    @Positive
+    @NotNull @Positive
     private final Long kitchenId;
 
     public RestaurantRq(String name, BigDecimal taxFreight, Long kitchenId) {
@@ -26,6 +25,10 @@ public class RestaurantRq {
         this.kitchenId = kitchenId;
     }
     public Restaurant convert() {
-        return new Restaurant(null, name, taxFreight, new Kitchen(kitchenId, null), null, null, null);
+        return Restaurant.builder()
+                .name(name)
+                .taxFreight(taxFreight)
+                .kitchen(new Kitchen(kitchenId, null))
+                .build();
     }
 }

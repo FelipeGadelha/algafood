@@ -3,6 +3,7 @@ package br.com.portfolio.algafood.domain.service;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.portfolio.algafood.domain.entity.State;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
@@ -40,7 +41,9 @@ public class KitchenService {
 
 	public Kitchen update(Long id, Kitchen updated) {
 		var kitchen = this.findById(id);
-		BeanUtils.copyProperties(updated, kitchen, "id");
+		kitchen = new Kitchen(
+				kitchen.getId(),
+				updated.getName());
 		return kitchenRepository.save(kitchen);
 	}
 

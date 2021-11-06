@@ -23,7 +23,6 @@ public class Product implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 //	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="product_id_seq")
 //	@SequenceGenerator(name="product_id_seq", sequenceName="product_id_seq", allocationSize = 1)
-	@Column(name="id")
 	private Long id;
 	
 	private String name;

@@ -1,18 +1,15 @@
 package br.com.portfolio.algafood.domain.service;
 
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
+import br.com.portfolio.algafood.domain.entity.City;
+import br.com.portfolio.algafood.domain.exception.EntityInUseException;
+import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
+import br.com.portfolio.algafood.domain.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import br.com.portfolio.algafood.domain.entity.City;
-import br.com.portfolio.algafood.domain.entity.State;
-import br.com.portfolio.algafood.domain.exception.EntityInUseException;
-import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
-import br.com.portfolio.algafood.domain.repository.CityRepository;
+import java.util.List;
 
 @Service
 public class CityService {
@@ -39,14 +36,21 @@ public class CityService {
 	}
 
 	public City save(City city) {
-		State state = stateService.findById(city.getState().getId());
-		city.setState(state);
+		Long stateId = city.getState().getId();
+		var state = stateService.findById(stateId);
+		city = City.builder()
+				.clone(city)
+				.state(state)
+				.build();
 		return cityRepository.save(city);
 	}
 
 	public City update(Long id, City updated) {
-		City city = this.findById(id);
-		BeanUtils.copyProperties(updated, city, "id");
+		var city = this.findById(id);
+		city = City.builder()
+				.clone(city)
+				.copy(updated)
+				.build();
 		return this.save(city);
 	}
 
@@ -61,7 +65,4 @@ public class CityService {
 		}
 	}
 
-	
-	
-	
 }

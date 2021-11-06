@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,6 +30,7 @@ import javax.validation.groups.Default;
 import br.com.portfolio.algafood.core.validation.Groups;
 import br.com.portfolio.algafood.core.validation.TaxFreight;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -40,37 +42,26 @@ public class Restaurant implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
-	@NotEmpty
-	@NotBlank
+	@NotNull @NotEmpty @NotBlank
 	@Column(nullable = false)
 	private String name;
-	
+
 //	@DecimalMin("1")
 //	@PositiveOrZero
-	@TaxFreight
-	@Column(name = "tax_freight", nullable = false)
+	@TaxFreight @Column(name = "tax_freight", nullable = false)
 	private BigDecimal taxFreight;
 	
-	@JsonIgnore
 	@Embedded
 	private Address address;
-	
-	@Valid
-	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
-	@NotNull
-	@JsonBackReference
-	@ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = { CascadeType.MERGE, CascadeType.ALL })
-	@JsonIgnoreProperties(value = "name", allowGetters = true)
+
+//	@JsonIgnoreProperties(value = "name", allowGetters = true)
+	@NotNull @ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = { CascadeType.MERGE, CascadeType.ALL })
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
-	
-//	@JsonIgnore
+
 	@ManyToMany//(fetch = FetchType.EAGER)
 	@JoinTable(name = "restaurant_payment_method", 
 		joinColumns = 
@@ -78,95 +69,138 @@ public class Restaurant implements Serializable {
 			inverseJoinColumns = @JoinColumn(name = "payment_method_id")
 	)
 	private List<PaymentMethod> paymentMethod = new ArrayList<>();
-	
-	@JsonIgnore
+
 //	@JsonManagedReference
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
 	
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(name="creation_date", nullable = false)	
 	private OffsetDateTime creationDate;
-	
-	@JsonIgnore
+
 	@UpdateTimestamp
 	@Column(name="update_date", nullable = false)	
 	private OffsetDateTime updateDate;
 	
-	@Deprecated
-	public Restaurant() {	}
+	@Deprecated public Restaurant() {	}
 
-	public Restaurant(Long id, String name, BigDecimal taxFreight, Kitchen kitchen, List<PaymentMethod> paymentMethod,
-			Address address, List<Product> products) {
-		this.id = id;
-		this.name = name;
-		this.taxFreight = taxFreight;
-		this.kitchen = kitchen;
-		this.paymentMethod = paymentMethod;
-		this.address = address;
-		this.products = products;
+	public Restaurant(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.taxFreight = builder.taxFreight;
+		this.kitchen = builder.kitchen;
+		this.paymentMethod = builder.paymentMethod;
+		this.address = builder.address;
+		this.products = builder.products;
+		this.creationDate = builder.creationDate;
+		this.updateDate = builder.updateDate;
 	}
+	public static Builder builder() { return new Builder(); }
+	public static class Builder {
+		private Long id;
+		private String name;
+		private BigDecimal taxFreight;
+		private Kitchen kitchen;
+		private List<PaymentMethod> paymentMethod;
+		private Address address;
+		private List<Product> products = new ArrayList<>();
+		private OffsetDateTime creationDate;
+		private OffsetDateTime updateDate;
 
+		public Builder() { }
+
+		public Builder id(Long id) {
+			this.id = id;
+			return this;
+		}
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+		public Builder taxFreight(BigDecimal taxFreight) {
+			this.taxFreight = taxFreight;
+			return this;
+		}
+		public Builder kitchen(Kitchen kitchen) {
+			this.kitchen = kitchen;
+			return this;
+		}
+		public Builder paymentMethod(List<PaymentMethod> paymentMethod) {
+			this.paymentMethod = paymentMethod;
+			return this;
+		}
+		public Builder address(Address address) {
+			this.address = address;
+			return this;
+		}
+		public Builder products(List<Product> products) {
+			this.products = products;
+			return this;
+		}
+		public Builder creationDate(OffsetDateTime creationDate) {
+			this.creationDate = creationDate;
+			return this;
+		}
+		public Builder updateDate(OffsetDateTime updateDate) {
+			this.updateDate = updateDate;
+			return this;
+		}
+		/**
+		 * <strong>Function:</strong> copy the properties of a restaurant that can be changed
+		 * such as <strong>name, taxFreight, kitchen</strong>
+		 * @param restaurant {@link Restaurant restaurant} that will have the values copied.
+		 * @return {@link Builder Restaurant.Builder}
+		 */
+		public Builder copy(Restaurant restaurant) {
+			this.id = (Objects.isNull(id)) ? restaurant.id : this.id;
+			this.name = restaurant.name;
+			this.taxFreight = restaurant.taxFreight;
+			this.kitchen = restaurant.kitchen;
+			this.paymentMethod = (Objects.isNull(paymentMethod)) ? restaurant.paymentMethod : this.paymentMethod;
+			this.address = (Objects.isNull(address)) ? restaurant.address : this.address;
+			this.products = (Objects.isNull(products)) ? restaurant.products : this.products;
+			this.creationDate = (Objects.isNull(creationDate)) ? restaurant.creationDate : this.creationDate;
+			this.updateDate = (Objects.isNull(updateDate)) ? restaurant.updateDate : this.updateDate;
+			return this;
+		}
+		public Builder clone(Restaurant restaurant) {
+			this.id = restaurant.id;
+			this.name = restaurant.name;
+			this.taxFreight = restaurant.taxFreight;
+			this.kitchen = restaurant.kitchen;
+			this.paymentMethod = restaurant.paymentMethod;
+			this.address = restaurant.address;
+			this.products = restaurant.products;
+			this.creationDate = restaurant.creationDate;
+			this.updateDate = restaurant.updateDate;
+			return this;
+		}
+		public Restaurant build() { return new Restaurant(this); }
+	}
 	public Long getId() {
 		return id;
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public BigDecimal getTaxFreight() {
 		return taxFreight;
 	}
-
-	public void setTaxFreight(BigDecimal taxFreight) {
-		this.taxFreight = taxFreight;
-	}
-
 	public Kitchen getKitchen() {
 		return kitchen;
 	}
-
-	public void setKitchen(Kitchen kitchen) {
-		this.kitchen = kitchen;
-	}
-
 	public List<PaymentMethod> getPaymentMethod() {
 		return paymentMethod;
 	}
-
-	public void setPaymentMethod(List<PaymentMethod> paymentMethod) {
-		this.paymentMethod = paymentMethod;
-	}
-
 	public Address getAddress() {
 		return address;
 	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
 	public List<Product> getProducts() {
 		return products;
 	}
-
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
-
 	public OffsetDateTime getCreationDate() {
 		return creationDate;
 	}
-
 	public OffsetDateTime getUpdateDate() {
 		return updateDate;
 	}
@@ -196,13 +230,9 @@ public class Restaurant implements Serializable {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Restaurant [id=" + id + ", name=" + name + ", taxFreight=" + taxFreight + ", kitchen=" + kitchen.getId()
 				+ ", creationDate=" + creationDate + ", updateDate=" + updateDate + "]";
 	}
-
-
-
 }
