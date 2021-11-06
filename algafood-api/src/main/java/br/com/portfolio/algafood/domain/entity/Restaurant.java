@@ -28,6 +28,7 @@ import javax.validation.groups.Default;
 
 import br.com.portfolio.algafood.core.validation.Groups;
 import br.com.portfolio.algafood.core.validation.TaxFreight;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -65,7 +66,7 @@ public class Restaurant implements Serializable {
 	@NotNull
 	@JsonBackReference
 	@ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = { CascadeType.MERGE, CascadeType.ALL })
-//	@JsonIgnoreProperties({"hibernateLazyInitializer"})//, "handler"})
+	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
 	
@@ -96,8 +97,6 @@ public class Restaurant implements Serializable {
 	@Deprecated
 	public Restaurant() {	}
 
-	
-	
 	public Restaurant(Long id, String name, BigDecimal taxFreight, Kitchen kitchen, List<PaymentMethod> paymentMethod,
 			Address address, List<Product> products) {
 		this.id = id;

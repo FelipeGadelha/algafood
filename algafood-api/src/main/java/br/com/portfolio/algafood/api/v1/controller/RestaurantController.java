@@ -3,11 +3,16 @@ package br.com.portfolio.algafood.api.v1.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import br.com.portfolio.algafood.api.v1.dto.View;
+import br.com.portfolio.algafood.api.v1.dto.request.RestaurantRq;
+import br.com.portfolio.algafood.api.v1.dto.response.RestaurantRs;
 import br.com.portfolio.algafood.domain.exception.ValidationException;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,35 +52,48 @@ public class RestaurantController {
 	}
 
 	@GetMapping()
-	public List<Restaurant> findAll() {
-		return restaurantService.findAll();
+	@JsonView(View.Basic.class)
+	public ResponseEntity<List<RestaurantRs>> findAll() {
+		return ResponseEntity.ok(restaurantService.findAll()
+				.stream()
+				.map(RestaurantRs::new)
+				.collect(Collectors.toList()));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id) {
-		return ResponseEntity.ok(restaurantService.findById(id));
+	@JsonView(View.Detail.class)
+	public ResponseEntity<RestaurantRs> findById(@PathVariable Long id) {
+		var restaurant = restaurantService.findById(id);
+		return ResponseEntity.ok(new RestaurantRs(restaurant));
 	}
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody @Valid Restaurant restaurant) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.save(restaurant));
+	@JsonView(View.Detail.class)
+	public ResponseEntity<RestaurantRs> save(@RequestBody @Valid RestaurantRq restaurantRq) {
+		var saved = restaurantService.save(restaurantRq.convert());
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(new RestaurantRs(saved));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable @Valid Long id, @RequestBody @Valid Restaurant restaurant) {
-		return ResponseEntity.ok(restaurantService.update(id, restaurant));
+	@JsonView(View.Detail.class)
+	public ResponseEntity<RestaurantRs> update(@PathVariable @Valid Long id, @RequestBody @Valid RestaurantRq restaurantRq) {
+		var updated = restaurantService.update(id, restaurantRq.convert());
+		return ResponseEntity.ok(new RestaurantRs(updated));
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
+	public ResponseEntity<RestaurantRs> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 		Restaurant restaurant = restaurantService.findById(id);
 		this.merge(fields, restaurant, request);
 		this.validate(restaurant, "restaurant");
-		return update(id, restaurant);
+		var updated = restaurantService.update(id, restaurant);
+		return ResponseEntity.ok(new RestaurantRs(updated));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		restaurantService.remove(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -99,7 +117,6 @@ public class RestaurantController {
 				Field field = ReflectionUtils.findField(Restaurant.class, propName);
 				field.setAccessible(true);
 				Object newValue = ReflectionUtils.getField(field, converted);
-//			System.err.println(propName + " = " + propValue + " = " + newValue);
 				ReflectionUtils.setField(field, restaurant, newValue);
 			});
 		} catch (IllegalArgumentException e) {

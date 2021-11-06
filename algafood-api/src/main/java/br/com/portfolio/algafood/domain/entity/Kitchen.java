@@ -43,6 +43,11 @@ public class Kitchen implements Serializable{
 	@Deprecated
 	public Kitchen() {	}
 
+	public Kitchen(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public Kitchen(Long id, String name, List<Restaurant> restaurants) {
 		super();
 		this.id = id;

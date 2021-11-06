@@ -13,6 +13,7 @@ import br.com.portfolio.algafood.domain.entity.Restaurant;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.repository.RestaurantRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RestaurantService {
@@ -29,16 +30,19 @@ public class RestaurantService {
 		this.kitchenService = kitchenService;
 		this.cityService = cityService;
 	}
-	
+
+	@Transactional
 	public List<Restaurant> findAll() {
 		return restaurantRepository.findAll();
 	}
-	
+
+	@Transactional
 	public Restaurant findById(Long id) {
 		return restaurantRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_RESTAURANT_NOT_FOUND, id)));
 	}
 
+	@Transactional
 	public Restaurant save(Restaurant restaurant) {
 		Long KitchenId = restaurant.getKitchen().getId();
 		Kitchen kitchen = kitchenService.findById(KitchenId);
@@ -46,17 +50,19 @@ public class RestaurantService {
 		return restaurantRepository.save(restaurant);
 	}
 
+	@Transactional
 	public Restaurant update(Long id, Restaurant updated) {
 		Restaurant restaurant = this.findById(id);
 		BeanUtils.copyProperties(updated, restaurant, "id", "paymentMethod", "address");
 		return this.save(restaurant);
 	}
-	
+
 	public Restaurant patch(Restaurant restaurant) {
 		System.out.println(restaurant);
 		return null;
 	}
 
+	@Transactional
 	public void remove(Long id) {
 		try {
 			restaurantRepository.deleteById(id);
