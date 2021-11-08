@@ -72,6 +72,7 @@ public class RestaurantService {
 	public void remove(Long id) {
 		try {
 			restaurantRepository.deleteById(id);
+			restaurantRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(String.format("Restaurante com o ID %d não existe", id));
 		} catch (DataIntegrityViolationException e) {

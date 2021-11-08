@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.portfolio.algafood.domain.entity.Kitchen;
 import br.com.portfolio.algafood.domain.repository.KitchenRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class KitchenService {
@@ -32,13 +33,16 @@ public class KitchenService {
 		return kitchenRepository.findAll();
 	}
 
+	@Transactional
 	public Kitchen findById(Long id) {
 		return kitchenRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id)));
 	}
 
+	@Transactional
 	public Kitchen save(Kitchen kitchen) { return kitchenRepository.save(kitchen); }
 
+	@Transactional
 	public Kitchen update(Long id, Kitchen updated) {
 		var kitchen = this.findById(id);
 		kitchen = new Kitchen(
@@ -47,9 +51,11 @@ public class KitchenService {
 		return kitchenRepository.save(kitchen);
 	}
 
+	@Transactional
 	public void deleteById(Long id) {
 		try {
 			kitchenRepository.deleteById(id);
+			kitchenRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id));
 		} catch (DataIntegrityViolationException e) {

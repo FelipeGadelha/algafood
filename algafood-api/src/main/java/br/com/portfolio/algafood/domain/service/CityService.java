@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,15 +27,18 @@ public class CityService {
 		this.stateService = stateService;
 	}
 
+	@Transactional
 	public List<City> findAll() {
 		return cityRepository.findAll();
 	}
 
+	@Transactional
 	public City findById(Long id) {
 		return cityRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_CITY_NOT_FOUND, id)));
 	}
 
+	@Transactional
 	public City save(City city) {
 		Long stateId = city.getState().getId();
 		var state = stateService.findById(stateId);
@@ -44,7 +48,7 @@ public class CityService {
 				.build();
 		return cityRepository.save(city);
 	}
-
+	@Transactional
 	public City update(Long id, City updated) {
 		var city = this.findById(id);
 		city = City.builder()
@@ -54,9 +58,11 @@ public class CityService {
 		return this.save(city);
 	}
 
+	@Transactional
 	public void deleteById(Long id) {
 		try {
 			cityRepository.deleteById(id);
+			cityRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(String.format(MSG_CITY_NOT_FOUND, id));
 		} 
