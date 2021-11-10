@@ -1,44 +1,58 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
-import java.util.List;
-
+import br.com.portfolio.algafood.api.v1.dto.request.PaymentMethodRq;
+import br.com.portfolio.algafood.api.v1.dto.response.PaymentMethodRs;
+import br.com.portfolio.algafood.domain.service.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import br.com.portfolio.algafood.domain.entity.PaymentMethod;
-import br.com.portfolio.algafood.domain.repository.PaymentMethodRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/payment-methods")
 public class PaymentMethodController {
 	
+	private final PaymentMethodService paymentMethodService;
+
 	@Autowired
-	private PaymentMethodRepository repository;
-	
+	public PaymentMethodController(PaymentMethodService paymentMethodService) {
+		this.paymentMethodService = paymentMethodService;
+	}
+
 	@GetMapping()
-	public List<PaymentMethod> findAll() {
-		return repository.findAll();
+	public ResponseEntity<List<PaymentMethodRs>> findAll() {
+		return ResponseEntity.ok(paymentMethodService.findAll()
+				.stream()
+				.map(PaymentMethodRs::new)
+				.collect(Collectors.toList()));
 	}
 	
 	@GetMapping("/{id}")
-	public PaymentMethod findById(@PathVariable Long id) {
-		return repository.findById(id).get();
+	public ResponseEntity<PaymentMethodRs> findById(@PathVariable Long id) {
+		var paymentMethod = paymentMethodService.findById(id);
+		return ResponseEntity.ok(new PaymentMethodRs(paymentMethod));
 	}
 	
 	@PostMapping
-	public PaymentMethod save(@RequestBody PaymentMethod paymentMethod) {
-		System.err.println(paymentMethod);
-		return repository.save(paymentMethod);
+	public ResponseEntity<PaymentMethodRs> save(@RequestBody PaymentMethodRq paymentMethodRq) {
+		final var saved = paymentMethodService.save(paymentMethodRq.convert());
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(new PaymentMethodRs(saved));
 	}
-	
-	
-	
-	
-	
 
+	@PutMapping
+	public ResponseEntity<PaymentMethodRs> save(@PathVariable Long id, @RequestBody PaymentMethodRq paymentMethodRq) {
+		final var saved = paymentMethodService.update(id, paymentMethodRq.convert());
+		return ResponseEntity.ok(new PaymentMethodRs(saved));
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		paymentMethodService.remove(id);
+		return ResponseEntity.noContent().build();
+	}
 }

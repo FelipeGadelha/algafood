@@ -16,12 +16,18 @@ public class RestaurantRs {
     private final BigDecimal taxFreight;
     @JsonView(View.Detail.class)
     private final KitchenRs kitchen;
+    @JsonView(View.Detail.class)
+    private final Boolean active;
+    @JsonView(View.Detail.class)
+    private final AddressRs address;
 
     public RestaurantRs(Restaurant restaurant) {
         this.id = restaurant.getId();
         this.name = restaurant.getName();
         this.taxFreight = restaurant.getTaxFreight();
         this.kitchen = new KitchenRs(restaurant.getKitchen());
+        this.active = restaurant.getActive();
+        this.address = new AddressRs(restaurant.getAddress());
     }
 
     public Long getId() { return id; }

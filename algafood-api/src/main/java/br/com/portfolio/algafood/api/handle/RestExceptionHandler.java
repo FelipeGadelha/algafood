@@ -76,14 +76,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@ExceptionHandler(NullPointerException.class)
-	public ResponseEntity<Object> handleNullPointerException(
-			NullPointerException ex, WebRequest request) {
+	public ResponseEntity<Object> handleNullPointerException(NullPointerException ex, WebRequest request) {
 		return handleExceptionInternal(ex, exceptionReplace(ex), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity<Object> handleEntityNotFoundException(
-			EntityNotFoundException ex, WebRequest request) {
+	public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
 		return handleExceptionInternal(ex, exceptionReplace(ex), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
@@ -238,7 +236,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	private String joinPath(List<Reference> references) {
 		return references.stream()
-			.map(ref -> ref.getFieldName())
+			.map(Reference::getFieldName)
 			.collect(Collectors.joining("."));
 	}
 	

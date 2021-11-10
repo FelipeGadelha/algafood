@@ -44,12 +44,12 @@ INSERT INTO city (id, name, state_id) VALUES (3, 'São Paulo', 2);
 INSERT INTO city (id, name, state_id) VALUES (4, 'Campinas', 2);
 INSERT INTO city (id, name, state_id) VALUES (5, 'Fortaleza', 3);
 
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, address_city_id, address_cep, address_place, address_number, address_district) VALUES (1, 'Thai Gourmet', 10, 1, now(), now(), 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro');
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date) VALUES (2, 'Coco Bambu', 100.0, 1, now(), now());
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date) VALUES (3, 'Outback', 150.50, 3, now(), now());
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date) VALUES (4, 'Paris 6', 150.50, 5, now(), now());
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date) VALUES (5, 'Sí Señor', 80.0, 4, now(), now());
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date) VALUES (6, 'terraço italia', 90.0, 6, now(), now());
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active, address_city_id, address_cep, address_place, address_number, address_district) VALUES (1, 'Thai Gourmet', 10, 1, now(), now(), true, 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro');
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (2, 'Coco Bambu', 100.0, 1, now(), now(), true);
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (3, 'Outback', 150.50, 3, now(), now(), true);
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (4, 'Paris 6', 150.50, 5, now(), now(), true);
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (5, 'Sí Señor', 80.0, 4, now(), now(), true);
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (6, 'terraço italia', 90.0, 6, now(), now(), true);
 
 INSERT INTO payment_method (id, description) VALUES (1, 'cartão de credito');
 INSERT INTO payment_method (id, description) VALUES (2, 'cartão de debito');

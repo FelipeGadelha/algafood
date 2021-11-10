@@ -33,64 +33,82 @@ public class Address implements Serializable{
 	/**
 	 * @deprecated Constructor used by Hibernate;
 	 */
-	@Deprecated//(since = "1.0")
+	@Deprecated
 	public Address() { }
-	
-	public Address(String cep, String place, String number, String complement, String district, City city) {
-		this.cep = cep;
-		this.place = place;
-		this.number = number;
-		this.complement = complement;
-		this.district = district;
-		this.city = city;
+
+	public Address(Builder builder) {
+		this.cep = builder.cep;
+		this.place = builder.place;
+		this.number = builder.number;
+		this.complement = builder.complement;
+		this.district = builder.district;
+		this.city = builder.city;
 	}
 
+	public static Builder builder() { return new Builder(); }
+	public static class Builder {
+
+		private String cep;
+		private String place;
+		private String number;
+		private String complement;
+		private String district;
+		private City city;
+
+		public Builder() { }
+
+		public Builder cep(String cep) {
+			this.cep = cep;
+			return this;
+		}
+		public Builder place(String place) {
+			this.place = place;
+			return this;
+		}
+		public Builder number(String number) {
+			this.number = number;
+			return this;
+		}
+		public Builder complement(String complement) {
+			this.complement = complement;
+			return this;
+		}
+		public Builder district(String district) {
+			this.district = district;
+			return this;
+		}
+		public Builder city(City city) {
+			this.city = city;
+			return this;
+		}
+		public Builder clone(Address address) {
+			this.cep = address.getCep();
+			this.place = address.getPlace();
+			this.number = address.getNumber();
+			this.complement = address.getComplement();
+			this.district = address.getDistrict();
+			this.city = address.getCity();
+			return this;
+		}
+		public Address build() { return new Address(this); }
+	}
 	public String getCep() {
 		return cep;
 	}
-	
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
-
 	public String getPlace() {
 		return place;
 	}
-	
-	public void setPlace(String place) {
-		this.place = place;
-	}
-	
 	public String getNumber() {
 		return number;
 	}
-	
-	public void setNumber(String number) {
-		this.number = number;
-	}
-
 	public String getComplement() {
 		return complement;
 	}
-	
-	public void setComplement(String complement) {
-		this.complement = complement;
-	}
-
 	public String getDistrict() {
 		return district;
 	}
-	
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-	
 	public City getCity() {
 		return city;
-	}
-	
-	public void setCity(City city) {
-		this.city = city;
 	}
 
 	@Override

@@ -6,6 +6,10 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -73,6 +77,8 @@ public class Restaurant implements Serializable {
 //	@JsonManagedReference
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
+
+	private Boolean active = Boolean.TRUE;
 	
 	@CreationTimestamp
 	@Column(name="creation_date", nullable = false)	
@@ -92,10 +98,13 @@ public class Restaurant implements Serializable {
 		this.paymentMethod = builder.paymentMethod;
 		this.address = builder.address;
 		this.products = builder.products;
+		this.active = (Objects.nonNull(builder.active)) ? builder.active : Boolean.TRUE;
 		this.creationDate = builder.creationDate;
 		this.updateDate = builder.updateDate;
 	}
 	public static Builder builder() { return new Builder(); }
+
+
 	public static class Builder {
 		private Long id;
 		private String name;
@@ -104,6 +113,7 @@ public class Restaurant implements Serializable {
 		private List<PaymentMethod> paymentMethod;
 		private Address address;
 		private List<Product> products = new ArrayList<>();
+		private Boolean active;
 		private OffsetDateTime creationDate;
 		private OffsetDateTime updateDate;
 
@@ -129,12 +139,20 @@ public class Restaurant implements Serializable {
 			this.paymentMethod = paymentMethod;
 			return this;
 		}
+		public Builder address(UnaryOperator<Address> func) {
+			this.address = func.apply(this.address);
+			return this;
+		}
 		public Builder address(Address address) {
 			this.address = address;
 			return this;
 		}
 		public Builder products(List<Product> products) {
 			this.products = products;
+			return this;
+		}
+		public Builder active(Boolean active) {
+			this.active = active;
 			return this;
 		}
 		public Builder creationDate(OffsetDateTime creationDate) {
@@ -147,7 +165,7 @@ public class Restaurant implements Serializable {
 		}
 		/**
 		 * <strong>Function:</strong> copy the properties of a restaurant that can be changed
-		 * such as <strong>name, taxFreight, kitchen</strong>
+		 * such as <strong>name, taxFreight, kitchen, address</strong>
 		 * @param restaurant {@link Restaurant restaurant} that will have the values copied.
 		 * @return {@link Builder Restaurant.Builder}
 		 */
@@ -156,9 +174,10 @@ public class Restaurant implements Serializable {
 			this.name = restaurant.name;
 			this.taxFreight = restaurant.taxFreight;
 			this.kitchen = restaurant.kitchen;
+			this.address = restaurant.address;
 			this.paymentMethod = (Objects.isNull(paymentMethod)) ? restaurant.paymentMethod : this.paymentMethod;
-			this.address = (Objects.isNull(address)) ? restaurant.address : this.address;
 			this.products = (Objects.isNull(products)) ? restaurant.products : this.products;
+			this.active = (Objects.isNull(active)) ? restaurant.active : this.active;
 			this.creationDate = (Objects.isNull(creationDate)) ? restaurant.creationDate : this.creationDate;
 			this.updateDate = (Objects.isNull(updateDate)) ? restaurant.updateDate : this.updateDate;
 			return this;
@@ -171,40 +190,26 @@ public class Restaurant implements Serializable {
 			this.paymentMethod = restaurant.paymentMethod;
 			this.address = restaurant.address;
 			this.products = restaurant.products;
+			this.active = restaurant.active;
 			this.creationDate = restaurant.creationDate;
 			this.updateDate = restaurant.updateDate;
 			return this;
 		}
 		public Restaurant build() { return new Restaurant(this); }
 	}
-	public Long getId() {
-		return id;
-	}
-	public String getName() {
-		return name;
-	}
-	public BigDecimal getTaxFreight() {
-		return taxFreight;
-	}
-	public Kitchen getKitchen() {
-		return kitchen;
-	}
-	public List<PaymentMethod> getPaymentMethod() {
-		return paymentMethod;
-	}
-	public Address getAddress() {
-		return address;
-	}
-	public List<Product> getProducts() {
-		return products;
-	}
-	public OffsetDateTime getCreationDate() {
-		return creationDate;
-	}
-	public OffsetDateTime getUpdateDate() {
-		return updateDate;
-	}
-
+	public Long getId() { return id; }
+	public String getName() { return name; }
+	public BigDecimal getTaxFreight() { return taxFreight; }
+	public Kitchen getKitchen() { return kitchen; }
+	public List<PaymentMethod> getPaymentMethod() { return paymentMethod; }
+	public Address getAddress() { return address; }
+	public List<Product> getProducts() { return products; }
+	public Boolean getActive() { return active; }
+	public OffsetDateTime getCreationDate() { return creationDate; }
+	public OffsetDateTime getUpdateDate() { return updateDate; }
+	public void activate() { this.active = true; }
+	public void inactivate() { this.active = false; }
+	public Long getCityId() { return this.getAddress().getCity().getId(); }
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -229,10 +234,19 @@ public class Restaurant implements Serializable {
 			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
-		return "Restaurant [id=" + id + ", name=" + name + ", taxFreight=" + taxFreight + ", kitchen=" + kitchen.getId()
-				+ ", creationDate=" + creationDate + ", updateDate=" + updateDate + "]";
+		return "Restaurant{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", taxFreight=" + taxFreight +
+				", address=" + address +
+				", kitchen=" + kitchen +
+				", paymentMethod=" + paymentMethod +
+//				", products=" + products +
+				", active=" + active +
+				", creationDate=" + creationDate +
+				", updateDate=" + updateDate +
+				'}';
 	}
 }

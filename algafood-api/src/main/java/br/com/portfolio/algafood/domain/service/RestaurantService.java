@@ -2,6 +2,8 @@ package br.com.portfolio.algafood.domain.service;
 
 import java.util.List;
 
+import br.com.portfolio.algafood.domain.entity.Address;
+import br.com.portfolio.algafood.domain.entity.City;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -45,10 +47,15 @@ public class RestaurantService {
 	public Restaurant save(Restaurant restaurant) {
 		Long KitchenId = restaurant.getKitchen().getId();
 		Kitchen kitchen = kitchenService.findById(KitchenId);
+		final var city = cityService.findById(restaurant.getCityId());
 		restaurant = Restaurant.builder()
 				.clone(restaurant)
 				.kitchen(kitchen)
-				.build();
+				.address(a -> Address.builder()
+						.clone(a)
+						.city(city)
+						.build()
+				).build();
 		return restaurantRepository.save(restaurant);
 	}
 
@@ -59,7 +66,7 @@ public class RestaurantService {
 				.clone(restaurant)
 				.copy(updated)
 				.build();
-		BeanUtils.copyProperties(updated, restaurant, "id", "paymentMethod", "address");
+		System.err.println(restaurant);
 		return this.save(restaurant);
 	}
 
@@ -67,6 +74,8 @@ public class RestaurantService {
 		System.out.println(restaurant);
 		return null;
 	}
+	@Transactional public void activate(Long id) { this.findById(id).activate(); }
+	@Transactional public void inactivate(Long id) { this.findById(id).inactivate(); }
 
 	@Transactional
 	public void remove(Long id) {
