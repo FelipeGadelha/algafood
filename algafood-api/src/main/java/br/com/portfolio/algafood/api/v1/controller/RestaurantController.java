@@ -1,18 +1,14 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.RestaurantRq;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantRs;
+import br.com.portfolio.algafood.domain.entity.Restaurant;
 import br.com.portfolio.algafood.domain.exception.ValidationException;
+import br.com.portfolio.algafood.domain.service.RestaurantService;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,15 +17,15 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.DataBinder;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.portfolio.algafood.domain.entity.Restaurant;
-import br.com.portfolio.algafood.domain.service.RestaurantService;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/restaurants")
@@ -37,9 +33,6 @@ public class RestaurantController {
 
 	private final RestaurantService restaurantService;
 	private final SmartValidator smartValidator;
-
-	@InitBinder
-	private void activateDirectFieldAccess(DataBinder dataBinder) { dataBinder.initDirectFieldAccess(); }
 
 	@Autowired
 	public RestaurantController(RestaurantService restaurantService, SmartValidator smartValidator) {
@@ -80,6 +73,7 @@ public class RestaurantController {
 	}
 	
 	@PatchMapping("/{id}")
+	@JsonView(View.Detail.class)
 	public ResponseEntity<RestaurantRs> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 		Restaurant restaurant = restaurantService.findById(id);
 		this.merge(fields, restaurant, request);
@@ -97,10 +91,9 @@ public class RestaurantController {
 	public void inactivate(@PathVariable Long id) { restaurantService.inactivate(id); }
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		restaurantService.remove(id);
-		return ResponseEntity.noContent().build();
-	}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteById(@PathVariable Long id) { restaurantService.deleteById(id); }
+
 
 	private void validate(Restaurant restaurant, String objectName) {
 		var bindingResult = new BeanPropertyBindingResult(restaurant, objectName);

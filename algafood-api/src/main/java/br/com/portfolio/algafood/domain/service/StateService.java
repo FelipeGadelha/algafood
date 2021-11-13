@@ -3,7 +3,6 @@ package br.com.portfolio.algafood.domain.service;
 import java.util.List;
 
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -65,5 +64,4 @@ public class StateService {
 		}
 		
 	}
-
 }

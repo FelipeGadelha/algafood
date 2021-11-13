@@ -46,7 +46,7 @@ public class PaymentMethodService {
     }
 
     @Transactional
-    public void remove(Long id) {
+    public void deleteById(Long id) {
         try {
             paymentMethodRepository.deleteById(id);
             paymentMethodRepository.flush();

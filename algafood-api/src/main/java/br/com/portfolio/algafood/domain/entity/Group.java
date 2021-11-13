@@ -16,10 +16,7 @@ import javax.persistence.Table;
 @Table(name = "groups")
 public class Group {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="groups_id_seq")
-//	@SequenceGenerator(name="groups_id_seq", sequenceName="groups_id_seq", allocationSize = 1)
+	@Id	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private String name;
@@ -44,21 +41,11 @@ public class Group {
 	public Long getId() {
 		return id;
 	}
-
 	public String getName() {
 		return name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public List<Permission> getPermissions() {
 		return permissions;
-	}
-
-	public void setPermissions(List<Permission> permissions) {
-		this.permissions = permissions;
 	}
 
 	@Override
@@ -90,7 +77,4 @@ public class Group {
 	public String toString() {
 		return "Group [id=" + id + ", name=" + name + ", permissions=" + permissions + "]";
 	}
-	
-	
-
 }

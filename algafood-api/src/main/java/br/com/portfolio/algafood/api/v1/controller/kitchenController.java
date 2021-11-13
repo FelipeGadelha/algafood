@@ -56,8 +56,7 @@ public class kitchenController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id) {
-		kitchenService.deleteById(id);
-		return ResponseEntity.noContent().build();
-	}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteById(@PathVariable Long id) { kitchenService.deleteById(id); }
+
 }

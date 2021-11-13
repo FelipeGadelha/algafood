@@ -3,6 +3,7 @@ package br.com.portfolio.algafood.domain.entity;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,46 +50,81 @@ public class User implements Serializable {
 	@Deprecated
 	public User() {	}
 
-	public User(Long id, String name, String email, String password, List<Group> groups) {
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.groups = groups;
+	private User(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.email = builder.email;
+		this.password = builder.password;
+		this.groups = builder.groups;
 	}
 
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+		private Long id;
+		private String name;
+		private String email;
+		private String password;
+		private List<Group> groups;
+		private OffsetDateTime creationDate;
+
+		public Builder id(Long id) {
+			this.id = id;
+			return this;
+		}
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+		public Builder email(String email) {
+			this.email = email;
+			return this;
+		}
+		public Builder password(String password) {
+			this.password = password;
+			return this;
+		}
+		public Builder groups(List<Group> groups) {
+			this.groups = groups;
+			return this;
+		}
+		public Builder clone(User user) {
+			this.id = user.id;
+			this.name = user.name;
+			this.email = user.email;
+			this.password = user.password;
+			this.groups = user.groups;
+			this.creationDate = user.creationDate;
+			return this;
+		}
+		public Builder copy(User user) {
+			this.id = (Objects.isNull(id)) ? user.id : this.id;
+			this.name = user.name;
+			this.email = user.email;
+			this.password = (Objects.isNull(password)) ? user.password : this.password;
+			this.groups = (Objects.isNull(groups)) ? user.groups : this.groups;
+			this.creationDate = (Objects.isNull(creationDate)) ? user.creationDate : this.creationDate;
+			return this;
+		}
+		public User build() { return new User(this); }
+	}
 	public Long getId() {
 		return id;
 	}
-
 	public String getName() {
 		return name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getEmail() {
 		return email;
 	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public String getPassword() {
 		return password;
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public List<Group> getGroups() {
 		return groups;
 	}
-
 	public void setGroups(List<Group> groups) {
 		this.groups = groups;
 	}
@@ -123,5 +159,4 @@ public class User implements Serializable {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", groups="
 				+ groups + ", creationDate=" + creationDate + "]";
 	}
-	
 }

@@ -66,7 +66,6 @@ public class RestaurantService {
 				.clone(restaurant)
 				.copy(updated)
 				.build();
-		System.err.println(restaurant);
 		return this.save(restaurant);
 	}
 
@@ -78,14 +77,14 @@ public class RestaurantService {
 	@Transactional public void inactivate(Long id) { this.findById(id).inactivate(); }
 
 	@Transactional
-	public void remove(Long id) {
+	public void deleteById(Long id) {
 		try {
 			restaurantRepository.deleteById(id);
 			restaurantRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(String.format("Restaurante com o ID %d não existe", id));
 		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException(String.format("Restaurante com o ID  %d não pode ser removida, pois esta em uso", id));
+			throw new EntityInUseException(String.format("Restaurante com o ID %d não pode ser removido, pois esta em uso", id));
 		}
 	}
 
