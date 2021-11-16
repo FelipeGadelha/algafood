@@ -5,10 +5,7 @@ import br.com.portfolio.algafood.domain.entity.Restaurant;
 import br.com.portfolio.algafood.domain.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +30,10 @@ public class RestaurantPaymentMethodController {
                 .collect(Collectors.toList()));
     }
 
+    @DeleteMapping
+    public void deletePaymentMethod(@PathVariable Long restaurantId, @PathVariable Long id) {
+        restaurantService.deletePaymentMethod(restaurantId, id);
+    }
 
 
 }

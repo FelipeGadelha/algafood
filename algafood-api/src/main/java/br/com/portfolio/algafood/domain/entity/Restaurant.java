@@ -139,6 +139,15 @@ public class Restaurant implements Serializable {
 			this.paymentMethod = paymentMethod;
 			return this;
 		}
+		public Builder addPaymentMethod(PaymentMethod paymentMethod) {
+			this.paymentMethod.add(paymentMethod);
+			return this;
+		}
+		public Builder removePaymentMethod(PaymentMethod paymentMethod) {
+			this.paymentMethod.remove(paymentMethod);
+			return this;
+		}
+
 		public Builder address(UnaryOperator<Address> func) {
 			this.address = func.apply(this.address);
 			return this;

@@ -3,8 +3,7 @@ package br.com.portfolio.algafood.domain.service;
 import java.util.List;
 
 import br.com.portfolio.algafood.domain.entity.Address;
-import br.com.portfolio.algafood.domain.entity.City;
-import org.springframework.beans.BeanUtils;
+import br.com.portfolio.algafood.domain.entity.PaymentMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,12 +23,14 @@ public class RestaurantService {
 	private final RestaurantRepository restaurantRepository;
 	private final KitchenService kitchenService;
 	private final CityService cityService;
+	private final PaymentMethodService paymentMethodService;
 	
 	@Autowired
-	public RestaurantService(RestaurantRepository restaurantRepository, KitchenService kitchenService, CityService cityService) {
+	public RestaurantService(RestaurantRepository restaurantRepository, KitchenService kitchenService, CityService cityService, PaymentMethodService paymentMethodService) {
 		this.restaurantRepository = restaurantRepository;
 		this.kitchenService = kitchenService;
 		this.cityService = cityService;
+		this.paymentMethodService = paymentMethodService;
 	}
 
 	@Transactional
@@ -88,4 +89,15 @@ public class RestaurantService {
 		}
 	}
 
+	@Transactional
+	public void deletePaymentMethod(Long restaurantId, Long paymentMethodId) {
+		var restaurant = this.findById(restaurantId);
+		var paymentMethod = paymentMethodService.findById(paymentMethodId);
+
+		Restaurant.builder()
+				.clone(restaurant)
+				.removePaymentMethod(paymentMethod)
+				.build();
+
+	}
 }
