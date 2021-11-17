@@ -3,9 +3,7 @@ package br.com.portfolio.algafood.domain.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -72,13 +70,14 @@ public class Restaurant implements Serializable {
 			@JoinColumn(name = "restaurant_id"),
 			inverseJoinColumns = @JoinColumn(name = "payment_method_id")
 	)
-	private List<PaymentMethod> paymentMethod = new ArrayList<>();
+	private Set<PaymentMethod> paymentMethod = new HashSet<>();
 
 //	@JsonManagedReference
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
 
 	private Boolean active = Boolean.TRUE;
+	private Boolean open = Boolean.TRUE;
 	
 	@CreationTimestamp
 	@Column(name="creation_date", nullable = false)	
@@ -99,6 +98,7 @@ public class Restaurant implements Serializable {
 		this.address = builder.address;
 		this.products = builder.products;
 		this.active = (Objects.nonNull(builder.active)) ? builder.active : Boolean.TRUE;
+		this.open = (Objects.nonNull(builder.open)) ? builder.open : Boolean.TRUE;
 		this.creationDate = builder.creationDate;
 		this.updateDate = builder.updateDate;
 	}
@@ -110,10 +110,11 @@ public class Restaurant implements Serializable {
 		private String name;
 		private BigDecimal taxFreight;
 		private Kitchen kitchen;
-		private List<PaymentMethod> paymentMethod;
+		private Set<PaymentMethod> paymentMethod = new HashSet<>();
 		private Address address;
 		private List<Product> products = new ArrayList<>();
 		private Boolean active;
+		private Boolean open;
 		private OffsetDateTime creationDate;
 		private OffsetDateTime updateDate;
 
@@ -135,7 +136,7 @@ public class Restaurant implements Serializable {
 			this.kitchen = kitchen;
 			return this;
 		}
-		public Builder paymentMethod(List<PaymentMethod> paymentMethod) {
+		public Builder paymentMethod(Set<PaymentMethod> paymentMethod) {
 			this.paymentMethod = paymentMethod;
 			return this;
 		}
@@ -160,6 +161,14 @@ public class Restaurant implements Serializable {
 			this.products = products;
 			return this;
 		}
+		public Builder addProduct(Product product) {
+			this.products.add(product);
+			return this;
+		}
+		public Builder removeProduct(Product product) {
+			this.products.remove(product);
+			return this;
+		}
 		public Builder active(Boolean active) {
 			this.active = active;
 			return this;
@@ -170,6 +179,10 @@ public class Restaurant implements Serializable {
 		}
 		public Builder updateDate(OffsetDateTime updateDate) {
 			this.updateDate = updateDate;
+			return this;
+		}
+		public Builder open(Boolean open) {
+			this.open = open;
 			return this;
 		}
 		/**
@@ -187,6 +200,7 @@ public class Restaurant implements Serializable {
 			this.paymentMethod = (Objects.isNull(paymentMethod)) ? restaurant.paymentMethod : this.paymentMethod;
 			this.products = (Objects.isNull(products)) ? restaurant.products : this.products;
 			this.active = (Objects.isNull(active)) ? restaurant.active : this.active;
+			this.open = (Objects.isNull(open)) ? restaurant.open : this.open;
 			this.creationDate = (Objects.isNull(creationDate)) ? restaurant.creationDate : this.creationDate;
 			this.updateDate = (Objects.isNull(updateDate)) ? restaurant.updateDate : this.updateDate;
 			return this;
@@ -200,24 +214,28 @@ public class Restaurant implements Serializable {
 			this.address = restaurant.address;
 			this.products = restaurant.products;
 			this.active = restaurant.active;
+			this.open = restaurant.open;
 			this.creationDate = restaurant.creationDate;
 			this.updateDate = restaurant.updateDate;
 			return this;
 		}
 		public Restaurant build() { return new Restaurant(this); }
-	}
+    }
 	public Long getId() { return id; }
 	public String getName() { return name; }
 	public BigDecimal getTaxFreight() { return taxFreight; }
 	public Kitchen getKitchen() { return kitchen; }
-	public List<PaymentMethod> getPaymentMethod() { return paymentMethod; }
+	public Set<PaymentMethod> getPaymentMethod() { return paymentMethod; }
 	public Address getAddress() { return address; }
 	public List<Product> getProducts() { return products; }
 	public Boolean getActive() { return active; }
+	public Boolean getOpen() { return open; }
 	public OffsetDateTime getCreationDate() { return creationDate; }
 	public OffsetDateTime getUpdateDate() { return updateDate; }
 	public void activate() { this.active = true; }
 	public void inactivate() { this.active = false; }
+	public void open() { this.open = true; }
+	public void close() { this.open = false; }
 	public Long getCityId() { return this.getAddress().getCity().getId(); }
 	@Override
 	public int hashCode() {

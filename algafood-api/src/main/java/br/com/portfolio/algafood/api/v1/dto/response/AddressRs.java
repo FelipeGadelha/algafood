@@ -4,30 +4,33 @@ import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.domain.entity.Address;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import java.util.Objects;
+
 public class AddressRs {
 
     @JsonView(View.Detail.class)
-    private final String cep;
+    private String cep;
     @JsonView(View.Detail.class)
-    private final String place;
+    private String place;
     @JsonView(View.Detail.class)
-    private final String number;
+    private String number;
     @JsonView(View.Detail.class)
-    private final String complement;
+    private String complement;
     @JsonView(View.Detail.class)
-    private final String district;
+    private String district;
     @JsonView(View.Detail.class)
-    private final CityRs city;
+    private CityRs city;
 
     public AddressRs(Address address) {
-        this.cep = address.getCep();
-        this.place = address.getPlace();
-        this.number = address.getNumber();
-        this.complement = address.getComplement();
-        this.district = address.getDistrict();
-        this.city = new CityRs(address.getCity());
+        if (Objects.nonNull(address)) {
+            this.cep = address.getCep();
+            this.place = address.getPlace();
+            this.number = address.getNumber();
+            this.complement = address.getComplement();
+            this.district = address.getDistrict();
+            this.city = new CityRs(address.getCity());
+        }
     }
-
     public String getCep() { return cep; }
     public String getPlace() { return place; }
     public String getNumber() { return number; }

@@ -59,12 +59,12 @@ SELECT nextval ('city_id_seq');
 SELECT nextval ('city_id_seq');
 SELECT nextval ('city_id_seq');
 
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active, address_city_id, address_cep, address_place, address_number, address_district) VALUES (1, 'Thai Gourmet', 10, 1, now(), now(), true, 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro');
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (2, 'Coco Bambu', 100.0, 1, now(), now(), true);
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (3, 'Outback', 150.50, 3, now(), now(), true);
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (4, 'Paris 6', 150.50, 5, now(), now(), true);
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (5, 'Sí Señor', 80.0, 4, now(), now(), true);
-INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active) VALUES (6, 'terraço italia', 90.0, 6, now(), now(), true);
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active, open, address_city_id, address_cep, address_place, address_number, address_district) VALUES (1, 'Thai Gourmet', 10, 1, now(), now(), true, true, 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro');
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active, open) VALUES (2, 'Coco Bambu', 100.0, 1, now(), now(), true, true);
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active, open) VALUES (3, 'Outback', 150.50, 3, now(), now(), true, true);
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active, open) VALUES (4, 'Paris 6', 150.50, 5, now(), now(), true, true);
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active, open) VALUES (5, 'Sí Señor', 80.0, 4, now(), now(), true, true);
+INSERT INTO Restaurant (id, name, tax_freight, kitchen_id, creation_date, update_date, active, open) VALUES (6, 'terraço italia', 90.0, 6, now(), now(), true, true);
 
 SELECT nextval ('restaurant_id_seq');
 SELECT nextval ('restaurant_id_seq');

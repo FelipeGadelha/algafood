@@ -76,6 +76,10 @@ public class RestaurantService {
 	}
 	@Transactional public void activate(Long id) { this.findById(id).activate(); }
 	@Transactional public void inactivate(Long id) { this.findById(id).inactivate(); }
+	@Transactional public void open(Long id) {
+		this.findById(id);
+	}
+	@Transactional public void close(Long id) { this.findById(id); }
 
 	@Transactional
 	public void deleteById(Long id) {
@@ -87,17 +91,5 @@ public class RestaurantService {
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(String.format("Restaurante com o ID %d não pode ser removido, pois esta em uso", id));
 		}
-	}
-
-	@Transactional
-	public void deletePaymentMethod(Long restaurantId, Long paymentMethodId) {
-		var restaurant = this.findById(restaurantId);
-		var paymentMethod = paymentMethodService.findById(paymentMethodId);
-
-		Restaurant.builder()
-				.clone(restaurant)
-				.removePaymentMethod(paymentMethod)
-				.build();
-
 	}
 }

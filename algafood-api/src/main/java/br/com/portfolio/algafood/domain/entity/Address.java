@@ -44,10 +44,8 @@ public class Address implements Serializable{
 		this.district = builder.district;
 		this.city = builder.city;
 	}
-
 	public static Builder builder() { return new Builder(); }
 	public static class Builder {
-
 		private String cep;
 		private String place;
 		private String number;

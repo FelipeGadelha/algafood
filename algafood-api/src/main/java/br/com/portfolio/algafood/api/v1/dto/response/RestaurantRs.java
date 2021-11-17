@@ -18,6 +18,8 @@ public class RestaurantRs {
     private final KitchenRs kitchen;
     @JsonView(View.Detail.class)
     private final Boolean active;
+    @JsonView({View.Basic.class, View.Detail.class})
+    private final Boolean open;
     @JsonView(View.Detail.class)
     private final AddressRs address;
 
@@ -27,11 +29,14 @@ public class RestaurantRs {
         this.taxFreight = restaurant.getTaxFreight();
         this.kitchen = new KitchenRs(restaurant.getKitchen());
         this.active = restaurant.getActive();
+        this.open = restaurant.getOpen();
         this.address = new AddressRs(restaurant.getAddress());
     }
-
     public Long getId() { return id; }
     public String getName() { return name; }
     public BigDecimal getTaxFreight() { return taxFreight; }
     public KitchenRs getKitchen() { return kitchen; }
+    public Boolean getActive() { return active; }
+    public Boolean getOpen() { return open; }
+    public AddressRs getAddress() { return address; }
 }

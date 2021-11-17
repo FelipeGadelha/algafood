@@ -1,9 +1,10 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
 import br.com.portfolio.algafood.api.v1.dto.response.PaymentMethodRs;
-import br.com.portfolio.algafood.domain.entity.Restaurant;
+import br.com.portfolio.algafood.domain.service.RestaurantPaymentMethodService;
 import br.com.portfolio.algafood.domain.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,26 +15,31 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1/restaurants/{restaurantId}/payment-methods")
 public class RestaurantPaymentMethodController {
 
-    private final RestaurantService restaurantService;
+    private final RestaurantPaymentMethodService restaurantPaymentMethodService;
 
     @Autowired
-    public RestaurantPaymentMethodController(RestaurantService restaurantService) {
-        this.restaurantService = restaurantService;
+    public RestaurantPaymentMethodController(RestaurantPaymentMethodService restaurantPaymentMethodService) {
+        this.restaurantPaymentMethodService = restaurantPaymentMethodService;
     }
 
     @GetMapping
     public ResponseEntity<List<PaymentMethodRs>> findAll(@PathVariable Long restaurantId) {
-        final var restaurant = restaurantService.findById(restaurantId);
-        return ResponseEntity.ok(restaurant.getPaymentMethod()
+        return ResponseEntity.ok(restaurantPaymentMethodService.findAll(restaurantId)
                 .stream()
                 .map(PaymentMethodRs::new)
                 .collect(Collectors.toList()));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePaymentMethod(@PathVariable Long restaurantId, @PathVariable Long id) {
-        restaurantService.deletePaymentMethod(restaurantId, id);
+        restaurantPaymentMethodService.deletePaymentMethod(restaurantId, id);
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addPaymentMethod(@PathVariable Long restaurantId, @PathVariable Long id) {
+        restaurantPaymentMethodService.addPaymentMethod(restaurantId, id);
+    }
 
 }

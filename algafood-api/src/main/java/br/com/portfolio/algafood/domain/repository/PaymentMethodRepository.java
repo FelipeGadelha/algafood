@@ -1,11 +1,9 @@
 package br.com.portfolio.algafood.domain.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import br.com.portfolio.algafood.domain.entity.PaymentMethod;
 import org.springframework.stereotype.Repository;
 
-import br.com.portfolio.algafood.domain.entity.PaymentMethod;
-
 @Repository
-public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, Long>{
+public interface PaymentMethodRepository extends CustomJpaRepository<PaymentMethod, Long>{
 	
 }
