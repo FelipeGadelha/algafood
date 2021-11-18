@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.infra.repository;
 
-import static br.com.portfolio.algafood.infra.spec.RestaurantSpecs.*;
+import static br.com.portfolio.algafood.infra.specification.RestaurantSpecs.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

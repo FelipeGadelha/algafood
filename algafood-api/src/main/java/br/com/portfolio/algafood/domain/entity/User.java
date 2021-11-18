@@ -25,10 +25,7 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="users_id_seq")
-//	@SequenceGenerator(name="users_id_seq", sequenceName="users_id_seq", allocationSize = 1)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private String email;
@@ -36,13 +33,11 @@ public class User implements Serializable {
 	
 	@ManyToMany
 	@JoinTable(name = "users_groups", 
-	joinColumns = 
-		@JoinColumn(name = "users_id"),
+	joinColumns = @JoinColumn(name = "users_id"),
 		inverseJoinColumns = @JoinColumn(name = "groups_id")
 		)
 	private List<Group> groups;
 	
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(name="creation_date", nullable = false)	
 	private OffsetDateTime creationDate;
@@ -56,6 +51,7 @@ public class User implements Serializable {
 		this.email = builder.email;
 		this.password = builder.password;
 		this.groups = builder.groups;
+		this.creationDate = builder.creationDate;
 	}
 
 	public static Builder builder() {
@@ -90,6 +86,14 @@ public class User implements Serializable {
 			this.groups = groups;
 			return this;
 		}
+		public Builder addGroup(Group group) {
+			this.groups.add(group);
+			return this;
+		}
+		public Builder removeGroup(Group group) {
+			this.groups.remove(group);
+			return this;
+		}
 		public Builder clone(User user) {
 			this.id = user.id;
 			this.name = user.name;
@@ -109,7 +113,7 @@ public class User implements Serializable {
 			return this;
 		}
 		public User build() { return new User(this); }
-	}
+    }
 	public Long getId() {
 		return id;
 	}
@@ -125,9 +129,7 @@ public class User implements Serializable {
 	public List<Group> getGroups() {
 		return groups;
 	}
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
-	}
+	public OffsetDateTime getCreationDate() { return creationDate; }
 
 	@Override
 	public int hashCode() {

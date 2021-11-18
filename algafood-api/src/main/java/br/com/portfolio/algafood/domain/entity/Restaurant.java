@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import javax.persistence.CascadeType;
@@ -21,23 +18,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 
-import br.com.portfolio.algafood.core.validation.Groups;
 import br.com.portfolio.algafood.core.validation.TaxFreight;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Restaurant implements Serializable {
@@ -78,7 +65,13 @@ public class Restaurant implements Serializable {
 
 	private Boolean active = Boolean.TRUE;
 	private Boolean open = Boolean.TRUE;
-	
+
+	@ManyToMany
+	@JoinTable(name = "users_restaurants_owner",
+			joinColumns = @JoinColumn(name = "restaurant_id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> owners = new HashSet<>();
+
 	@CreationTimestamp
 	@Column(name="creation_date", nullable = false)	
 	private OffsetDateTime creationDate;
@@ -99,6 +92,7 @@ public class Restaurant implements Serializable {
 		this.products = builder.products;
 		this.active = (Objects.nonNull(builder.active)) ? builder.active : Boolean.TRUE;
 		this.open = (Objects.nonNull(builder.open)) ? builder.open : Boolean.TRUE;
+		this.owners = builder.owners;
 		this.creationDate = builder.creationDate;
 		this.updateDate = builder.updateDate;
 	}
@@ -115,6 +109,7 @@ public class Restaurant implements Serializable {
 		private List<Product> products = new ArrayList<>();
 		private Boolean active;
 		private Boolean open;
+		private Set<User> owners = new HashSet<>();
 		private OffsetDateTime creationDate;
 		private OffsetDateTime updateDate;
 
@@ -161,6 +156,10 @@ public class Restaurant implements Serializable {
 			this.products = products;
 			return this;
 		}
+		public Builder products(UnaryOperator<List<Product>> func) {
+			this.products = func.apply(this.products);
+			return this;
+		}
 		public Builder addProduct(Product product) {
 			this.products.add(product);
 			return this;
@@ -173,6 +172,19 @@ public class Restaurant implements Serializable {
 			this.active = active;
 			return this;
 		}
+		public Builder owners(Set<User> owners) {
+			this.owners = owners;
+			return this;
+		}
+		public Builder addOwner(User owner) {
+			this.owners.add(owner);
+			return this;
+		}
+		public Builder removeOwner(User owner) {
+			this.owners.remove(owner);
+			return this;
+		}
+
 		public Builder creationDate(OffsetDateTime creationDate) {
 			this.creationDate = creationDate;
 			return this;
@@ -201,6 +213,7 @@ public class Restaurant implements Serializable {
 			this.products = (Objects.isNull(products)) ? restaurant.products : this.products;
 			this.active = (Objects.isNull(active)) ? restaurant.active : this.active;
 			this.open = (Objects.isNull(open)) ? restaurant.open : this.open;
+			this.owners = (Objects.isNull(owners)) ? restaurant.owners : this.owners;
 			this.creationDate = (Objects.isNull(creationDate)) ? restaurant.creationDate : this.creationDate;
 			this.updateDate = (Objects.isNull(updateDate)) ? restaurant.updateDate : this.updateDate;
 			return this;
@@ -215,6 +228,7 @@ public class Restaurant implements Serializable {
 			this.products = restaurant.products;
 			this.active = restaurant.active;
 			this.open = restaurant.open;
+			this.owners = restaurant.owners;
 			this.creationDate = restaurant.creationDate;
 			this.updateDate = restaurant.updateDate;
 			return this;
@@ -230,6 +244,7 @@ public class Restaurant implements Serializable {
 	public List<Product> getProducts() { return products; }
 	public Boolean getActive() { return active; }
 	public Boolean getOpen() { return open; }
+	public Set<User> getOwners() { return owners; }
 	public OffsetDateTime getCreationDate() { return creationDate; }
 	public OffsetDateTime getUpdateDate() { return updateDate; }
 	public void activate() { this.active = true; }

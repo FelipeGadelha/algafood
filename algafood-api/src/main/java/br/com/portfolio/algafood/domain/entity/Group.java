@@ -1,16 +1,10 @@
 package br.com.portfolio.algafood.domain.entity;
 
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.UnaryOperator;
 
 @Entity
 @Table(name = "groups")
@@ -27,24 +21,68 @@ public class Group {
 		@JoinColumn(name = "groups_id"),
 		inverseJoinColumns = @JoinColumn(name = "permission_id")
 		)
-	private List<Permission> permissions;
+	private Set<Permission> permissions = new HashSet<>();
 	
 	@Deprecated
 	public Group() { }
 
-	public Group(Long id, String name, List<Permission> permissions) {
-		this.id = id;
-		this.name = name;
-		this.permissions = permissions;
+	public Group(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.permissions = builder.permissions;
 	}
+	public static Builder builder() { return new Builder(); }
+	public static class Builder {
+		private Long id;
+		private String name;
+		private Set<Permission> permissions = new HashSet<>();
 
+		public Builder() { }
+
+		public Builder id(Long id) {
+			this.id = id;
+			return this;
+		}
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+		public Builder permissions(Set<Permission> permissions) {
+			this.permissions = permissions;
+			return this;
+		}
+		public Builder addPermissions(Permission permission) {
+			this.permissions.add(permission);
+			return this;
+		}
+		public Builder removePermissions(Permission permission) {
+			this.permissions.remove(permission);
+			return this;
+		}
+		public Builder clone(Group group) {
+			this.id = group.id;
+			this.name = group.name;
+			this.permissions = group.permissions;
+			return this;
+		}
+
+		public Builder copy(Group group) {
+			this.id = group.id;
+			this.name = group.name;
+			this.permissions = (Objects.isNull(permissions)) ? group.permissions : this.permissions;
+			return this;
+		}
+
+		public Group build() { return new Group(this); }
+
+	}
 	public Long getId() {
 		return id;
 	}
 	public String getName() {
 		return name;
 	}
-	public List<Permission> getPermissions() {
+	public Set<Permission> getPermissions() {
 		return permissions;
 	}
 

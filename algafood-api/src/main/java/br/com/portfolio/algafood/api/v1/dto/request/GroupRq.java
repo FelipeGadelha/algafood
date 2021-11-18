@@ -1,14 +1,16 @@
 package br.com.portfolio.algafood.api.v1.dto.request;
 
 import br.com.portfolio.algafood.domain.entity.Group;
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GroupRq {
+import javax.validation.constraints.NotBlank;
 
-    private final String name;
-
-    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public GroupRq(String name) { this.name = name; }
-
-    public Group convert() { return new Group(null, name, null); }
+public record GroupRq(
+        @JsonProperty("name") @NotBlank String name
+) {
+    public Group convert() {
+        return Group.builder()
+                .name(name)
+                .build();
+    }
 }

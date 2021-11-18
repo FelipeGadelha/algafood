@@ -1,8 +1,7 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
 import br.com.portfolio.algafood.api.v1.dto.response.PaymentMethodRs;
-import br.com.portfolio.algafood.domain.service.RestaurantPaymentMethodService;
-import br.com.portfolio.algafood.domain.service.RestaurantService;
+import br.com.portfolio.algafood.api.application.RestaurantPaymentMethodAppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +14,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1/restaurants/{restaurantId}/payment-methods")
 public class RestaurantPaymentMethodController {
 
-    private final RestaurantPaymentMethodService restaurantPaymentMethodService;
+    private final RestaurantPaymentMethodAppService restaurantPaymentMethodAppService;
 
     @Autowired
-    public RestaurantPaymentMethodController(RestaurantPaymentMethodService restaurantPaymentMethodService) {
-        this.restaurantPaymentMethodService = restaurantPaymentMethodService;
+    public RestaurantPaymentMethodController(RestaurantPaymentMethodAppService restaurantPaymentMethodAppService) {
+        this.restaurantPaymentMethodAppService = restaurantPaymentMethodAppService;
     }
 
     @GetMapping
     public ResponseEntity<List<PaymentMethodRs>> findAll(@PathVariable Long restaurantId) {
-        return ResponseEntity.ok(restaurantPaymentMethodService.findAll(restaurantId)
+        return ResponseEntity.ok(restaurantPaymentMethodAppService.findAll(restaurantId)
                 .stream()
                 .map(PaymentMethodRs::new)
                 .collect(Collectors.toList()));
@@ -33,13 +32,13 @@ public class RestaurantPaymentMethodController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePaymentMethod(@PathVariable Long restaurantId, @PathVariable Long id) {
-        restaurantPaymentMethodService.deletePaymentMethod(restaurantId, id);
+        restaurantPaymentMethodAppService.deletePaymentMethod(restaurantId, id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addPaymentMethod(@PathVariable Long restaurantId, @PathVariable Long id) {
-        restaurantPaymentMethodService.addPaymentMethod(restaurantId, id);
+        restaurantPaymentMethodAppService.addPaymentMethod(restaurantId, id);
     }
 
 }

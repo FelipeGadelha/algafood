@@ -13,24 +13,18 @@ import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 @Validated
-public class RestaurantRq {
-
+public record RestaurantRq(
     @NotBlank
-    private final String name;
+    String name,
     @NotNull @PositiveOrZero @TaxFreight
-    private final BigDecimal taxFreight;
+    BigDecimal taxFreight,
     @NotNull @Positive
-    private final Long kitchenId;
+    Long kitchenId,
     @Valid
     @NotNull
-    private AddressRq address;
+    AddressRq address
 
-    public RestaurantRq(String name, BigDecimal taxFreight, Long kitchenId, AddressRq address) {
-        this.name = name;
-        this.taxFreight = taxFreight;
-        this.kitchenId = kitchenId;
-        this.address = address;
-    }
+) {
     public Restaurant convert() {
         return Restaurant.builder()
                 .name(name)

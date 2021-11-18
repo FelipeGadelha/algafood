@@ -1,6 +1,7 @@
 package br.com.portfolio.algafood.domain.service;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import br.com.portfolio.algafood.domain.entity.Address;
 import br.com.portfolio.algafood.domain.entity.PaymentMethod;
@@ -26,7 +27,10 @@ public class RestaurantService {
 	private final PaymentMethodService paymentMethodService;
 	
 	@Autowired
-	public RestaurantService(RestaurantRepository restaurantRepository, KitchenService kitchenService, CityService cityService, PaymentMethodService paymentMethodService) {
+	public RestaurantService(RestaurantRepository restaurantRepository,
+							 KitchenService kitchenService,
+							 CityService cityService,
+							 PaymentMethodService paymentMethodService) {
 		this.restaurantRepository = restaurantRepository;
 		this.kitchenService = kitchenService;
 		this.cityService = cityService;
@@ -75,10 +79,10 @@ public class RestaurantService {
 		return null;
 	}
 	@Transactional public void activate(Long id) { this.findById(id).activate(); }
+	@Transactional public void activate(List<Long> ids) { ids.forEach(this::activate); }
 	@Transactional public void inactivate(Long id) { this.findById(id).inactivate(); }
-	@Transactional public void open(Long id) {
-		this.findById(id);
-	}
+	@Transactional public void inactivate(List<Long> ids) { ids.forEach(this::inactivate); }
+	@Transactional public void open(Long id) { this.findById(id); }
 	@Transactional public void close(Long id) { this.findById(id); }
 
 	@Transactional

@@ -16,9 +16,9 @@
 	<description>API de delivery de comida</description>
 
 	<properties>
-		<java.version>11</java.version>
-		<maven.compiler.target>11</maven.compiler.target>
-		<maven.compiler.source>11</maven.compiler.source>
+		<java.version>17</java.version>
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<springdoc-openapi-ui.version>1.5.11</springdoc-openapi-ui.version>
@@ -110,7 +110,15 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-<!--			<plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
+            </plugin>
+            <!--			<plugin>-->
 <!--				&lt;!&ndash; exclui a execução de testes de integração no momento do build &ndash;&gt;-->
 <!--				<artifactId>maven-failsafe-plugin</artifactId>-->
 <!--			</plugin>-->

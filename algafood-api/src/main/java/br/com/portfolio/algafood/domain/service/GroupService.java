@@ -36,10 +36,10 @@ public class GroupService {
     @Transactional
     public Group update(Long id, Group update) {
         var group = this.findById(id);
-        group = new Group(
-                group.getId(),
-                update.getName(),
-                null);
+        group = Group.builder()
+                .id(group.getId())
+                .name(update.getName())
+                .build();
         return groupRepository.save(group);
     }
 

@@ -1,46 +1,71 @@
 package br.com.portfolio.algafood.domain.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Permission implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="permission_id_seq")
-//	@SequenceGenerator(name="permission_id_seq", sequenceName="permission_id_seq", allocationSize = 1)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
 	private String name;
-	
 	private String description;
 
 	@Deprecated
 	public Permission() { }
 	
-	public Permission(Long id, String name, String description) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
+	public Permission(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.description = builder.description;
+	}
+	public static Builder builder() { return new Builder(); }
+
+	public static class Builder {
+		private Long id;
+		private String name;
+		private String description;
+
+		public Builder id(Long id) {
+			this.id = id;
+			return this;
+		}
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+		public Builder description(String description) {
+			this.description = description;
+			return this;
+		}
+		public Builder clone(Permission permission) {
+			this.id = permission.id;
+			this.name = permission.name;
+			this.description = permission.description;
+			return this;
+		}
+		public Builder copy(Permission permission) {
+			this.id = (Objects.isNull(this.id)) ? permission.id : this.id;
+			this.name = permission.name;
+			this.description = permission.description;
+			return this;
+		}
+		public Permission build() { return new Permission(this); }
 	}
 
 	public Long getId() {
 		return id;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -74,9 +99,4 @@ public class Permission implements Serializable{
 	public String toString() {
 		return "Permission [id=" + id + ", name=" + name + ", description=" + description + "]";
 	}
-	
-	
-	
-	
-
 }

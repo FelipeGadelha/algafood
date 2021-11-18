@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,7 @@ public class GroupController {
 
     @PutMapping("/{id}")
     @JsonView(View.Detail.class)
-    public ResponseEntity<GroupRs> update(@PathVariable Long id, @RequestBody GroupRq groupRq) {
+    public ResponseEntity<GroupRs> update(@PathVariable Long id, @RequestBody @Valid GroupRq groupRq) {
         var group = groupService.update(id, groupRq.convert());
         return ResponseEntity.ok(new GroupRs(group));
     }

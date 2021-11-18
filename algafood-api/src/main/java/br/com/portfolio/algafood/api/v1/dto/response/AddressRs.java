@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import java.util.Objects;
 
+
+
 public class AddressRs {
 
     @JsonView(View.Detail.class)

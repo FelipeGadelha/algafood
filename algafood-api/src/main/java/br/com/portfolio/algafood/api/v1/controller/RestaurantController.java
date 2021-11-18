@@ -4,6 +4,8 @@ import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.RestaurantRq;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantRs;
 import br.com.portfolio.algafood.domain.entity.Restaurant;
+import br.com.portfolio.algafood.domain.exception.BusinessException;
+import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.exception.ValidationException;
 import br.com.portfolio.algafood.domain.service.RestaurantService;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -86,9 +88,23 @@ public class RestaurantController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void activate(@PathVariable Long id) { restaurantService.activate(id); }
 
+	@PutMapping("/activations")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void massActivations(@RequestBody List<Long> ids) {
+		try { restaurantService.activate(ids); }
+			catch (EntityNotFoundException ex) { throw new BusinessException(ex.getMessage(), ex); }
+	}
+
 	@DeleteMapping("/{id}/inactivate")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inactivate(@PathVariable Long id) { restaurantService.inactivate(id); }
+
+	@DeleteMapping("/inactivations")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void massInactivations(@RequestBody List<Long> ids) {
+		try { restaurantService.inactivate(ids); }
+			catch (EntityNotFoundException ex) { throw new BusinessException(ex.getMessage(), ex); }
+	}
 
 	@PutMapping("/{id}/open")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

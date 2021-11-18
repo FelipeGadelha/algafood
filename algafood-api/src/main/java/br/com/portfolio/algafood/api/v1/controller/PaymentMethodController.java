@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,7 @@ public class PaymentMethodController {
 	
 	@PostMapping
 	@JsonView(View.Detail.class)
-	public ResponseEntity<PaymentMethodRs> save(@RequestBody PaymentMethodRq paymentMethodRq) {
+	public ResponseEntity<PaymentMethodRs> save(@RequestBody @Valid PaymentMethodRq paymentMethodRq) {
 		final var saved = paymentMethodService.save(paymentMethodRq.convert());
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
@@ -51,7 +52,7 @@ public class PaymentMethodController {
 
 	@PutMapping
 	@JsonView(View.Detail.class)
-	public ResponseEntity<PaymentMethodRs> save(@PathVariable Long id, @RequestBody PaymentMethodRq paymentMethodRq) {
+	public ResponseEntity<PaymentMethodRs> update(@PathVariable Long id, @RequestBody @Valid PaymentMethodRq paymentMethodRq) {
 		final var saved = paymentMethodService.update(id, paymentMethodRq.convert());
 		return ResponseEntity.ok(new PaymentMethodRs(saved));
 	}
