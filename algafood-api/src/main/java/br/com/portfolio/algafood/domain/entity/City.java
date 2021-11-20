@@ -27,7 +27,7 @@ public class City implements Serializable {
 	@Deprecated
 	public City() {	}
 
-	public City(Builder builder) {
+	private City(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
 		this.state = builder.state;
@@ -39,7 +39,7 @@ public class City implements Serializable {
 		private String name;
 		private State state;
 
-		public Builder() { }
+		private Builder() { }
 
 		public Builder id(Long id) {
 			this.id = id;

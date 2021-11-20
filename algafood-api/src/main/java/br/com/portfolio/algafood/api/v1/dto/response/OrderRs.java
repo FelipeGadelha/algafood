@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

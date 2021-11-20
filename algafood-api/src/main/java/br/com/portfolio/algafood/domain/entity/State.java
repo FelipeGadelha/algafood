@@ -20,16 +20,12 @@ public class State implements Serializable {
 	@Id
 	@NotNull(groups = Groups.StateId.class)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="state_id_seq")
-//	@SequenceGenerator(name="state_id_seq", sequenceName="state_id_seq", allocationSize = 1)
 	private Long id;
 
-	@NotBlank
-	@Column(nullable = false)
+	@NotBlank @Column(nullable = false)
 	private String name;
 
-	@Deprecated
-	public State() { }
+	@Deprecated public State() { }
 	
 	public State(Long id, String name) {
 		this.id = id;
@@ -39,13 +35,8 @@ public class State implements Serializable {
 	public Long getId() {
 		return id;
 	}
-	
 	public String getName() {
 		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	@Override

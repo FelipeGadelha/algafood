@@ -27,6 +27,8 @@ ALTER SEQUENCE permission_id_seq RESTART WITH 1;
 ALTER SEQUENCE product_id_seq RESTART WITH 1;
 ALTER SEQUENCE restaurant_id_seq RESTART WITH 1;
 ALTER SEQUENCE users_id_seq RESTART WITH 1;
+ALTER SEQUENCE orders_id_seq RESTART WITH 1;
+ALTER SEQUENCE order_item_id_seq RESTART WITH 1;
 
 INSERT INTO kitchen (id, name) VALUES (1, 'Tailandesa');
 INSERT INTO kitchen (id, name) VALUES (2, 'Indiana');
@@ -90,6 +92,7 @@ INSERT INTO permission (id, name, description) VALUES (3, 'EXCLUIR_COZINHAS', 'P
 
 SELECT nextval ('permission_id_seq');
 SELECT nextval ('permission_id_seq');
+SELECT nextval ('permission_id_seq');
 
 INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3);
 
@@ -107,6 +110,15 @@ INSERT INTO product (id, name, description, price, active, restaurant_id) VALUES
 (10, 'Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, true, 6);
 
 SELECT nextval ('product_id_seq');
+SELECT nextval ('product_id_seq');
+SELECT nextval ('product_id_seq');
+SELECT nextval ('product_id_seq');
+SELECT nextval ('product_id_seq');
+SELECT nextval ('product_id_seq');
+SELECT nextval ('product_id_seq');
+SELECT nextval ('product_id_seq');
+SELECT nextval ('product_id_seq');
+SELECT nextval ('product_id_seq');
 
 INSERT INTO groups (name) VALUES ('Gerente'), ('Vendedor'), ('Secretária'), ('Cadastrador');
 
@@ -116,6 +128,12 @@ INSERT INTO users (id, name, email, password, creation_date) VALUES
 (3, 'José Souza', 'jose.aux@outlook.com', '123', now()),
 (4, 'Sebastião Martins', 'sebastiao.cad@test.com', '123', now()),
 (5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', now());
+
+SELECT nextval ('users_id_seq');
+SELECT nextval ('users_id_seq');
+SELECT nextval ('users_id_seq');
+SELECT nextval ('users_id_seq');
+SELECT nextval ('users_id_seq');
 
 INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3);
 INSERT INTO groups_permission (groups_id, permission_id) VALUES (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3);
@@ -131,7 +149,14 @@ VALUES
 (1, 298.90, 10, 308.90, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil', 'CREATED', now()),
 (2, 79, 0, 79, 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro', 'CREATED', now());
 
+SELECT nextval ('orders_id_seq');
+SELECT nextval ('orders_id_seq');
+
 INSERT INTO order_item (id, order_id, product_id, quantity, unit_price, total_price, observation) VALUES
 (1, 1, 1, 1, 78.9, 78.9, null),
 (2, 1, 2, 2, 110, 220, 'Menos picante, por favor'),
 (3, 2, 6, 1, 79, 79, 'Ao ponto');
+
+SELECT nextval ('order_item_id_seq');
+SELECT nextval ('order_item_id_seq');
+SELECT nextval ('order_item_id_seq');

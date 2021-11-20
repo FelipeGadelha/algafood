@@ -6,6 +6,7 @@ import br.com.portfolio.algafood.api.v1.dto.response.GroupRs;
 import br.com.portfolio.algafood.domain.entity.Group;
 import br.com.portfolio.algafood.domain.service.GroupService;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

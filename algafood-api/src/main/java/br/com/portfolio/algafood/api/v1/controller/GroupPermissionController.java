@@ -2,7 +2,7 @@ package br.com.portfolio.algafood.api.v1.controller;
 
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.response.PermissionRs;
-import br.com.portfolio.algafood.api.application.GroupPermissionAppService;
+import br.com.portfolio.algafood.domain.service.GroupPermissionService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,29 +16,29 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1/groups/{groupId}/permissions")
 public class GroupPermissionController {
 
-    private final GroupPermissionAppService groupPermissionAppService;
+    private final GroupPermissionService groupPermissionService;
 
     @Autowired
-    public GroupPermissionController(GroupPermissionAppService groupPermissionAppService){
-        this.groupPermissionAppService = groupPermissionAppService;
+    public GroupPermissionController(GroupPermissionService groupPermissionService){
+        this.groupPermissionService = groupPermissionService;
     }
 
     @GetMapping
     @JsonView(View.Basic.class)
     public ResponseEntity<Set<PermissionRs>> findAll(@PathVariable Long groupId) {
-        return ResponseEntity.ok(groupPermissionAppService.findAll(groupId).stream()
+        return ResponseEntity.ok(groupPermissionService.findAll(groupId).stream()
                 .map(PermissionRs::new)
                 .collect(Collectors.toSet()));
     }
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void connect(@PathVariable Long groupId, @PathVariable Long id) {
-        groupPermissionAppService.connect(groupId, id);
+        groupPermissionService.connect(groupId, id);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void disconnect(@PathVariable Long groupId, @PathVariable Long id) {
-        groupPermissionAppService.disconnect(groupId, id);
+        groupPermissionService.disconnect(groupId, id);
     }
 
 

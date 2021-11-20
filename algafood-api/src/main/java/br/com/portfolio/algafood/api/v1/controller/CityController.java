@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/v1/cities")
 public class CityController {
 	
-
 	private final CityService cityService;
 
 	@Autowired

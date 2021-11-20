@@ -43,10 +43,8 @@ public class Restaurant implements Serializable {
 	@TaxFreight @Column(name = "tax_freight", nullable = false)
 	private BigDecimal taxFreight;
 	
-	@Embedded
-	private Address address;
+	@Embedded private Address address;
 
-//	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@NotNull @ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = { CascadeType.MERGE, CascadeType.ALL })
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
@@ -59,7 +57,6 @@ public class Restaurant implements Serializable {
 	)
 	private Set<PaymentMethod> paymentMethod = new HashSet<>();
 
-//	@JsonManagedReference
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
 
@@ -72,17 +69,15 @@ public class Restaurant implements Serializable {
 			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> owners = new HashSet<>();
 
-	@CreationTimestamp
-	@Column(name="creation_date", nullable = false)	
+	@CreationTimestamp @Column(name="creation_date", nullable = false)
 	private OffsetDateTime creationDate;
 
-	@UpdateTimestamp
-	@Column(name="update_date", nullable = false)	
+	@UpdateTimestamp @Column(name="update_date", nullable = false)
 	private OffsetDateTime updateDate;
 	
 	@Deprecated public Restaurant() {	}
 
-	public Restaurant(Builder builder) {
+	private Restaurant(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
 		this.taxFreight = builder.taxFreight;
@@ -97,8 +92,6 @@ public class Restaurant implements Serializable {
 		this.updateDate = builder.updateDate;
 	}
 	public static Builder builder() { return new Builder(); }
-
-
 	public static class Builder {
 		private Long id;
 		private String name;
@@ -112,8 +105,7 @@ public class Restaurant implements Serializable {
 		private Set<User> owners = new HashSet<>();
 		private OffsetDateTime creationDate;
 		private OffsetDateTime updateDate;
-
-		public Builder() { }
+		private Builder() { }
 
 		public Builder id(Long id) {
 			this.id = id;
@@ -143,7 +135,6 @@ public class Restaurant implements Serializable {
 			this.paymentMethod.remove(paymentMethod);
 			return this;
 		}
-
 		public Builder address(UnaryOperator<Address> func) {
 			this.address = func.apply(this.address);
 			return this;
@@ -184,7 +175,6 @@ public class Restaurant implements Serializable {
 			this.owners.remove(owner);
 			return this;
 		}
-
 		public Builder creationDate(OffsetDateTime creationDate) {
 			this.creationDate = creationDate;
 			return this;
@@ -252,6 +242,7 @@ public class Restaurant implements Serializable {
 	public void open() { this.open = true; }
 	public void close() { this.open = false; }
 	public Long getCityId() { return this.getAddress().getCity().getId(); }
+	public boolean acceptPaymentMethod(PaymentMethod method) { return paymentMethod.contains(method); }
 	@Override
 	public int hashCode() {
 		final int prime = 31;

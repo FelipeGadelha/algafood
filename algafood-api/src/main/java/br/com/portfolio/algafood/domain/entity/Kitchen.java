@@ -20,18 +20,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 //@JsonRootName("gastronomy")
 @Entity
 public class Kitchen implements Serializable{
-
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
-	@Column(nullable = false)
+	@NotBlank @Column(nullable = false)
 	private String name;
 
-//	@JsonManagedReference
 	@OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL)
 	private List<Restaurant> restaurants = new ArrayList<>();
 	
@@ -42,14 +38,11 @@ public class Kitchen implements Serializable{
 		this.id = id;
 		this.name = name;
 	}
-
 	public Kitchen(Long id, String name, List<Restaurant> restaurants) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.restaurants = restaurants;
 	}
-
 	public Long getId() { return id; }
 	public String getName() {
 		return name;
@@ -82,10 +75,8 @@ public class Kitchen implements Serializable{
 			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
 		return "Kitchen [id=" + id + ", name=" + name + "]";
 	}
-
 }

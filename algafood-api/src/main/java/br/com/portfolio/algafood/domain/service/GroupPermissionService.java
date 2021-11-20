@@ -1,9 +1,7 @@
-package br.com.portfolio.algafood.api.application;
+package br.com.portfolio.algafood.domain.service;
 
 import br.com.portfolio.algafood.domain.entity.Group;
 import br.com.portfolio.algafood.domain.entity.Permission;
-import br.com.portfolio.algafood.domain.service.GroupService;
-import br.com.portfolio.algafood.domain.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 
 @Service
-public class GroupPermissionAppService {
+public class GroupPermissionService {
 
     private final GroupService groupService;
     private final PermissionService permissionService;
 
     @Autowired
-    public GroupPermissionAppService(GroupService groupService, PermissionService permissionService) {
+    public GroupPermissionService(GroupService groupService, PermissionService permissionService) {
         this.groupService = groupService;
         this.permissionService = permissionService;
     }

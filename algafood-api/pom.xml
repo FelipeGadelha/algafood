@@ -88,7 +88,13 @@
 			<version>${rest-assured.version}</version>
 			<scope>test</scope>
 		</dependency>
-<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all &ndash;&gt;-->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all &ndash;&gt;-->
 <!--		<dependency>-->
 <!--			<groupId>org.codehaus.groovy</groupId>-->
 <!--			<artifactId>groovy-all</artifactId>-->

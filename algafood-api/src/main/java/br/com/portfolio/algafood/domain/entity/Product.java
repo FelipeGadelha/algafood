@@ -27,7 +27,7 @@ public class Product implements Serializable {
 	
 	@Deprecated public Product() { }
 
-	public Product(Builder builder) {
+	private Product(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
 		this.description = builder.description;
@@ -43,6 +43,7 @@ public class Product implements Serializable {
 		private BigDecimal price;
 		private Boolean active;
 		private Restaurant restaurant;
+		private Builder() {}
 
 		public Builder id(Long id) {
 			this.id = id;

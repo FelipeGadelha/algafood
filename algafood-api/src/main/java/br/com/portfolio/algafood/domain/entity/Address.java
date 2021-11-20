@@ -36,7 +36,7 @@ public class Address implements Serializable{
 	@Deprecated
 	public Address() { }
 
-	public Address(Builder builder) {
+	private Address(Builder builder) {
 		this.cep = builder.cep;
 		this.place = builder.place;
 		this.number = builder.number;
@@ -53,7 +53,7 @@ public class Address implements Serializable{
 		private String district;
 		private City city;
 
-		public Builder() { }
+		private Builder() { }
 
 		public Builder cep(String cep) {
 			this.cep = cep;

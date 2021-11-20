@@ -26,7 +26,7 @@ public class Group {
 	@Deprecated
 	public Group() { }
 
-	public Group(Builder builder) {
+	private Group(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
 		this.permissions = builder.permissions;
@@ -37,7 +37,7 @@ public class Group {
 		private String name;
 		private Set<Permission> permissions = new HashSet<>();
 
-		public Builder() { }
+		private Builder() { }
 
 		public Builder id(Long id) {
 			this.id = id;
@@ -65,16 +65,13 @@ public class Group {
 			this.permissions = group.permissions;
 			return this;
 		}
-
 		public Builder copy(Group group) {
 			this.id = group.id;
 			this.name = group.name;
 			this.permissions = (Objects.isNull(permissions)) ? group.permissions : this.permissions;
 			return this;
 		}
-
 		public Group build() { return new Group(this); }
-
 	}
 	public Long getId() {
 		return id;

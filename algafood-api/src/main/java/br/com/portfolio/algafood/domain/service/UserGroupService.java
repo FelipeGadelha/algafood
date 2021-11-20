@@ -1,9 +1,7 @@
-package br.com.portfolio.algafood.api.application;
+package br.com.portfolio.algafood.domain.service;
 
 import br.com.portfolio.algafood.domain.entity.Group;
 import br.com.portfolio.algafood.domain.entity.User;
-import br.com.portfolio.algafood.domain.service.GroupService;
-import br.com.portfolio.algafood.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UserGroupAppService {
+public class UserGroupService {
 
     private final UserService userService;
     private final GroupService groupService;
 
     @Autowired
-    public UserGroupAppService(UserService userService, GroupService groupService) {
+    public UserGroupService(UserService userService, GroupService groupService) {
         this.userService = userService;
         this.groupService = groupService;
     }

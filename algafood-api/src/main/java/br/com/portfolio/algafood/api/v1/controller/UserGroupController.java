@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
-import br.com.portfolio.algafood.api.application.UserGroupAppService;
+import br.com.portfolio.algafood.domain.service.UserGroupService;
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.response.GroupRs;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1/users/{userId}/groups")
 public class UserGroupController {
 
-    private final UserGroupAppService userGroupAppService;
+    private final UserGroupService userGroupService;
 
     @Autowired
-    public UserGroupController(UserGroupAppService userGroupAppService) {
-        this.userGroupAppService = userGroupAppService;
+    public UserGroupController(UserGroupService userGroupService) {
+        this.userGroupService = userGroupService;
     }
 
     @GetMapping
     @JsonView(View.Basic.class)
     public ResponseEntity<List<GroupRs>> findAll(@PathVariable Long userId) {
-        return ResponseEntity.ok(userGroupAppService.findById(userId)
+        return ResponseEntity.ok(userGroupService.findById(userId)
                 .stream()
                 .map(GroupRs::new)
                 .collect(Collectors.toList()));
@@ -34,11 +34,12 @@ public class UserGroupController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void connect(@PathVariable Long userId, @PathVariable Long id) {
-        userGroupAppService.connect(userId, id);
+        userGroupService.connect(userId, id);
     }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void disconnect(@PathVariable Long userId, @PathVariable Long id) {
-        userGroupAppService.disconnect(userId, id);
+        userGroupService.disconnect(userId, id);
     }
 }

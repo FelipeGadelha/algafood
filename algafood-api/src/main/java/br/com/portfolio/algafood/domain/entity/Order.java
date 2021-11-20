@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 @Entity
 @Table(name = "orders")
@@ -33,18 +34,18 @@ public class Order implements Serializable {
 	private Restaurant restaurant;
 	@ManyToOne @JoinColumn(name = "user_client_id", nullable = false)
 	private User client;
-	@Embedded
-	private Address addressDelivery;
+	@Embedded private Address addressDelivery;
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderItem> ordersItens = new ArrayList<>();
-	
 	@Deprecated public Order() { }
 
-	public Order(Builder builder) {
+	private Order(Builder builder) {
 		this.id = builder.id;
-		this.subtotal = builder.subtotal;
-		this.taxFreight = builder.taxFreight;
-		this.totalValue = builder.totalValue;
+		this.subtotal = builder.ordersItens.stream()
+				.map(OrderItem::getTotalPrice)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		this.taxFreight = (Objects.nonNull(builder.taxFreight)) ? builder.taxFreight : BigDecimal.ZERO;
+		this.totalValue = this.subtotal.add(this.taxFreight);
 		this.creationDate = builder.creationDate;
 		this.confirmationDate = builder.confirmationDate;
 		this.cancelDate = builder.cancelDate;
@@ -73,6 +74,7 @@ public class Order implements Serializable {
 		private User client;
 		private Address addressDelivery;
 		private List<OrderItem> ordersItens = new ArrayList<>();
+		private Builder() {}
 
 		public Builder id(Long id) {
 			this.id = id;
@@ -110,7 +112,7 @@ public class Order implements Serializable {
 			this.status = status;
 			return this;
 		}
-		public Builder method(PaymentMethod method) {
+		public Builder paymentMethod(PaymentMethod method) {
 			this.method = method;
 			return this;
 		}
@@ -124,6 +126,10 @@ public class Order implements Serializable {
 		}
 		public Builder addressDelivery(Address addressDelivery) {
 			this.addressDelivery = addressDelivery;
+			return this;
+		}
+		public Builder addressDelivery(UnaryOperator<Address> func) {
+			this.addressDelivery = func.apply(this.addressDelivery);
 			return this;
 		}
 		public Builder ordersItens(List<OrderItem> ordersItens) {
@@ -180,4 +186,18 @@ public class Order implements Serializable {
 	public User getClient() { return client; }
 	public Address getAddressDelivery() { return addressDelivery; }
 	public List<OrderItem> getOrdersItens() { return ordersItens; }
+	private void calculateTotalValue() {
+		this.subtotal = getOrdersItens().stream()
+				.map(OrderItem::getTotalPrice)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Order order = (Order) o;
+		return Objects.equals(id, order.id);
+	}
+	@Override public int hashCode() { return Objects.hash(id); }
 }

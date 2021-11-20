@@ -21,7 +21,7 @@ public class Permission implements Serializable{
 	@Deprecated
 	public Permission() { }
 	
-	public Permission(Builder builder) {
+	private Permission(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
 		this.description = builder.description;
@@ -32,6 +32,7 @@ public class Permission implements Serializable{
 		private Long id;
 		private String name;
 		private String description;
+		private Builder() {}
 
 		public Builder id(Long id) {
 			this.id = id;
