@@ -15,10 +15,8 @@ public class OrderItem implements Serializable {
 	private BigDecimal unitPrice;
 	private BigDecimal totalPrice;
 	private String observation;
-	@ManyToOne @JoinColumn(name = "order_id", nullable = false)
-	private Order order;
-	@ManyToOne @JoinColumn(nullable = false)
-	private Product product;
+	@ManyToOne @JoinColumn(nullable = false) private Order order;
+	@ManyToOne @JoinColumn(nullable = false) private Product product;
 
 	@Deprecated public OrderItem() { }
 	
@@ -132,11 +130,11 @@ public class OrderItem implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		OrderItem orderItem = (OrderItem) o;
-		return Objects.equals(id, orderItem.id);
+		return id != null ? id.equals(orderItem.id) : orderItem.id == null;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return id != null ? id.hashCode() : 0;
 	}
 }

@@ -49,7 +49,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order save(Order order) {
+    public Order save(final Order order) {
         Long restaurantId = order.getRestaurant().getId();
         Long methodId = order.getMethod().getId();
         Long cityId = order.getAddressDelivery().getCity().getId();
@@ -59,14 +59,13 @@ public class OrderService {
         var city = cityService.findById(cityId);
         var client = userService.findById(clientId);
 
-        var finalOrder = order;
         var itens = order.getOrdersItens().stream()
                 .map(item -> {
                     var product = productService.findById(restaurantId, item.getProduct().getId());
                     return OrderItem.builder()
                             .clone(item)
                             .product(product)
-                            .order(finalOrder)
+                            .order(order)
                             .unitPrice(product.getPrice())
                             .build();
                 }).collect(Collectors.toList());
@@ -74,7 +73,8 @@ public class OrderService {
         if (!restaurant.acceptPaymentMethod(method))
             throw new BusinessException(String
                     .format("Forma de pagamento '%s' não é aceito por esse restaurante.", method.getDescription()));
-        order = Order.builder()
+
+        var result = Order.builder()
                 .clone(order)
                 .restaurant(restaurant)
                 .client(client)
@@ -86,7 +86,7 @@ public class OrderService {
                 .taxFreight(order.getRestaurant().getTaxFreight())
                 .ordersItens(itens)
                 .build();
-        return orderRepository.save(order);
+        return orderRepository.save(result);
     }
 
     private List<OrderItem> validateItems(Order order, Long restaurantId) {

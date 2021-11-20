@@ -35,7 +35,7 @@ public class Order implements Serializable {
 	@ManyToOne @JoinColumn(name = "user_client_id", nullable = false)
 	private User client;
 	@Embedded private Address addressDelivery;
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "order")
 	private List<OrderItem> ordersItens = new ArrayList<>();
 	@Deprecated public Order() { }
 
