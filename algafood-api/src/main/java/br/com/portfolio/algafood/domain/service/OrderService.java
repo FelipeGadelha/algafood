@@ -1,16 +1,17 @@
 package br.com.portfolio.algafood.domain.service;
 
-import br.com.portfolio.algafood.domain.entity.Address;
-import br.com.portfolio.algafood.domain.entity.Order;
-import br.com.portfolio.algafood.domain.entity.OrderItem;
+import br.com.portfolio.algafood.domain.entity.*;
 import br.com.portfolio.algafood.domain.exception.BusinessException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.repository.OrderRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,6 +86,7 @@ public class OrderService {
                 ).paymentMethod(method)
                 .taxFreight(order.getRestaurant().getTaxFreight())
                 .ordersItens(itens)
+                .orderStatus(Set.of(new OrderStatus(OrderStatusType.CREATED, OffsetDateTime.now())))
                 .build();
         return orderRepository.save(result);
     }

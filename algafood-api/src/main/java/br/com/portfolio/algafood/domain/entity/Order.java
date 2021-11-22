@@ -6,9 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.UnaryOperator;
 
 @Entity
@@ -27,7 +25,7 @@ public class Order implements Serializable {
 	private OffsetDateTime cancelDate;
 	private OffsetDateTime deliveryDate;
 	@Enumerated(EnumType.STRING)
-	private OrderStatus status = OrderStatus.CREATED;
+	private OrderStatusType status = OrderStatusType.CREATED;
 	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "payment_method_id", nullable = false)
 	private PaymentMethod method;
 	@ManyToOne @JoinColumn(name = "restaurant_id", nullable = false)
@@ -37,6 +35,10 @@ public class Order implements Serializable {
 	@Embedded private Address addressDelivery;
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> ordersItens = new ArrayList<>();
+	@ElementCollection
+	@CollectionTable(name = "order_status",
+			joinColumns = @JoinColumn(name = "order_status_id"))
+	private Set<OrderStatus> orderStatus = new HashSet<>();
 	@Deprecated public Order() { }
 
 	private Order(Builder builder) {
@@ -50,12 +52,13 @@ public class Order implements Serializable {
 		this.confirmationDate = builder.confirmationDate;
 		this.cancelDate = builder.cancelDate;
 		this.deliveryDate = builder.deliveryDate;
-		this.status = (Objects.nonNull(builder.status)) ? builder.status : OrderStatus.CREATED;
+		this.status = (Objects.nonNull(builder.status)) ? builder.status : OrderStatusType.CREATED;
 		this.method = builder.method;
 		this.restaurant = builder.restaurant;
 		this.client = builder.client;
 		this.addressDelivery = builder.addressDelivery;
 		this.ordersItens = builder.ordersItens;
+		this.orderStatus = builder.orderStatus;
 	}
 
 	public static Builder builder() { return new Builder(); }
@@ -68,12 +71,13 @@ public class Order implements Serializable {
 		private OffsetDateTime confirmationDate;
 		private OffsetDateTime cancelDate;
 		private OffsetDateTime deliveryDate;
-		private OrderStatus status;
+		private OrderStatusType status;
 		private PaymentMethod method;
 		private Restaurant restaurant;
 		private User client;
 		private Address addressDelivery;
 		private List<OrderItem> ordersItens = new ArrayList<>();
+		private Set<OrderStatus> orderStatus = new HashSet<>();
 		private Builder() {}
 
 		public Builder id(Long id) {
@@ -108,7 +112,7 @@ public class Order implements Serializable {
 			this.deliveryDate = deliveryDate;
 			return this;
 		}
-		public Builder status(OrderStatus status) {
+		public Builder status(OrderStatusType status) {
 			this.status = status;
 			return this;
 		}
@@ -136,6 +140,10 @@ public class Order implements Serializable {
 			this.ordersItens = ordersItens;
 			return this;
 		}
+		public Builder orderStatus(Set<OrderStatus> orderStatus) {
+			this.orderStatus = orderStatus;
+			return this;
+		}
 		public Builder copy(Order order) {
 			this.id = (Objects.isNull(id)) ? order.id : this.id;
 			this.subtotal = order.subtotal;
@@ -151,6 +159,7 @@ public class Order implements Serializable {
 			this.client = order.client;
 			this.addressDelivery = order.addressDelivery;
 			this.ordersItens = order.ordersItens;
+			this.orderStatus = order.orderStatus;
 			return this;
 		}
 		public Builder clone(Order order) {
@@ -168,6 +177,7 @@ public class Order implements Serializable {
 			this.client = order.client;
 			this.addressDelivery = order.addressDelivery;
 			this.ordersItens = order.ordersItens;
+			this.orderStatus = order.orderStatus;
 			return this;
 		}
 		public Order build() { return new Order(this); }
@@ -180,12 +190,14 @@ public class Order implements Serializable {
 	public OffsetDateTime getConfirmationDate() { return confirmationDate; }
 	public OffsetDateTime getCancelDate() { return cancelDate; }
 	public OffsetDateTime getDeliveryDate() { return deliveryDate; }
-	public OrderStatus getStatus() { return status; }
+	public OrderStatusType getStatus() { return status; }
 	public PaymentMethod getMethod() { return method; }
 	public Restaurant getRestaurant() { return restaurant; }
 	public User getClient() { return client; }
 	public Address getAddressDelivery() { return addressDelivery; }
 	public List<OrderItem> getOrdersItens() { return ordersItens; }
+	public Set<OrderStatus> getOrderStatus() { return orderStatus; }
+
 	private void calculateTotalValue() {
 		this.subtotal = getOrdersItens().stream()
 				.map(OrderItem::getTotalPrice)
@@ -200,4 +212,23 @@ public class Order implements Serializable {
 		return Objects.equals(id, order.id);
 	}
 	@Override public int hashCode() { return Objects.hash(id); }
+
+	@Override
+	public String toString() {
+		return "Order{" +
+				"id=" + id +
+				", subtotal=" + subtotal +
+				", taxFreight=" + taxFreight +
+				", totalValue=" + totalValue +
+				", creationDate=" + creationDate +
+				", confirmationDate=" + confirmationDate +
+				", cancelDate=" + cancelDate +
+				", deliveryDate=" + deliveryDate +
+				", status=" + status +
+				", method=" + method +
+				", addressDelivery=" + addressDelivery +
+				", ordersItens=" + ordersItens +
+				", orderStatus=" + orderStatus +
+				'}';
+	}
 }

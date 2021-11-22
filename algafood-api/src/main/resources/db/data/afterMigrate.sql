@@ -15,6 +15,7 @@ DELETE FROM users_groups;
 DELETE FROM users_restaurants_owner;
 DELETE FROM orders;
 DELETE FROM order_item;
+DELETE FROM order_status;
 
 SET session_replication_role = 'origin';
 
@@ -160,3 +161,7 @@ INSERT INTO order_item (id, order_id, product_id, quantity, unit_price, total_pr
 SELECT nextval ('order_item_id_seq');
 SELECT nextval ('order_item_id_seq');
 SELECT nextval ('order_item_id_seq');
+
+INSERT INTO order_status (order_status_id, status, moment) VALUES
+(1, 'CREATED', now()),
+(2, 'CREATED', now());

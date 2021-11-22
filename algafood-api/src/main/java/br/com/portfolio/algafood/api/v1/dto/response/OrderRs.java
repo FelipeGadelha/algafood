@@ -2,12 +2,13 @@ package br.com.portfolio.algafood.api.v1.dto.response;
 
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.domain.entity.Order;
-import br.com.portfolio.algafood.domain.entity.OrderStatus;
+import br.com.portfolio.algafood.domain.entity.OrderStatusType;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class OrderRs {
@@ -29,7 +30,7 @@ public class OrderRs {
     @JsonView(View.Detail.class)
     private OffsetDateTime deliveryDate;
     @JsonView({View.Basic.class, View.Detail.class})
-    private OrderStatus status;
+    private OrderStatusType status;
     @JsonView(View.Detail.class)
     private PaymentMethodRs method;
     @JsonView({View.Basic.class, View.Detail.class})
@@ -40,6 +41,8 @@ public class OrderRs {
     private AddressRs addressDelivery;
     @JsonView(View.Detail.class)
     private List<OrderItemRs> ordersItens;
+    @JsonView(View.Detail.class)
+    private Set<OrderStatusRs> orderStatus;
 
     public OrderRs(Order order) {
         this.id = order.getId();
@@ -56,6 +59,7 @@ public class OrderRs {
         this.client = new UserRs(order.getClient());
         this.addressDelivery = new AddressRs(order.getAddressDelivery());
         this.ordersItens = order.getOrdersItens().stream().map(OrderItemRs::new).collect(Collectors.toList());
+        this.orderStatus = order.getOrderStatus().stream().map(OrderStatusRs::new).collect(Collectors.toSet());
     }
     public Long getId() { return id; }
     public BigDecimal getSubtotal() { return subtotal; }
@@ -65,10 +69,11 @@ public class OrderRs {
     public OffsetDateTime getConfirmationDate() { return confirmationDate; }
     public OffsetDateTime getCancelDate() { return cancelDate; }
     public OffsetDateTime getDeliveryDate() { return deliveryDate; }
-    public OrderStatus getStatus() { return status; }
+    public OrderStatusType getStatus() { return status; }
     public PaymentMethodRs getMethod() { return method; }
     public RestaurantRs getRestaurant() { return restaurant; }
     public UserRs getClient() { return client; }
     public AddressRs getAddressDelivery() { return addressDelivery; }
     public List<OrderItemRs> getOrdersItens() { return ordersItens; }
+    public Set<OrderStatusRs> getOrderStatus() { return orderStatus; }
 }

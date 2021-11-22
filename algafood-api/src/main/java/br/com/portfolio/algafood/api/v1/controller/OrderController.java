@@ -46,6 +46,7 @@ public class OrderController {
     public ResponseEntity<OrderRs> save(@RequestBody @Valid OrderRq orderRq) {
         var user = User.builder().id(1L).build();
         var order = orderService.save(orderRq.convert(user));
+        System.err.println(order);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new OrderRs(order));
     }
