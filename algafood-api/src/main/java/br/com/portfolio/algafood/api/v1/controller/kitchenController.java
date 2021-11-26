@@ -27,7 +27,6 @@ public class kitchenController {
 	}
 
 	@GetMapping
-	@JsonView(View.Basic.class)
 	public ResponseEntity<List<KitchenRs>> findAll() {
 		return ResponseEntity.ok(kitchenService.findAll()
 				.stream()
@@ -36,20 +35,17 @@ public class kitchenController {
 	}
 
 	@GetMapping("/{kitchenId}")
-	@JsonView(View.Detail.class)
 	public ResponseEntity<KitchenRs> findById(@PathVariable("kitchenId") Long id) {
 		return ResponseEntity.ok(new KitchenRs(kitchenService.findById(id)));
 	}
 
 	@PostMapping
-	@JsonView(View.Detail.class)
 	public ResponseEntity<KitchenRs> save(@RequestBody @Valid KitchenRq kitchenRq) {
 		Kitchen saved = kitchenService.save(kitchenRq.convert());
 		return new ResponseEntity<>(new KitchenRs(saved), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	@JsonView(View.Detail.class)
 	public ResponseEntity<KitchenRs> update(@PathVariable Long id, @RequestBody @Valid KitchenRq kitchenRq) {
 		Kitchen update = kitchenService.update(id, kitchenRq.convert());
 		return ResponseEntity.ok(new KitchenRs(update));

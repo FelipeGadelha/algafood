@@ -26,7 +26,6 @@ public class PaymentMethodController {
 	}
 
 	@GetMapping()
-	@JsonView(View.Basic.class)
 	public ResponseEntity<List<PaymentMethodRs>> findAll() {
 		return ResponseEntity.ok(paymentMethodService.findAll()
 				.stream()
@@ -35,14 +34,12 @@ public class PaymentMethodController {
 	}
 	
 	@GetMapping("/{id}")
-	@JsonView(View.Detail.class)
 	public ResponseEntity<PaymentMethodRs> findById(@PathVariable Long id) {
 		var paymentMethod = paymentMethodService.findById(id);
 		return ResponseEntity.ok(new PaymentMethodRs(paymentMethod));
 	}
 	
 	@PostMapping
-	@JsonView(View.Detail.class)
 	public ResponseEntity<PaymentMethodRs> save(@RequestBody @Valid PaymentMethodRq paymentMethodRq) {
 		final var saved = paymentMethodService.save(paymentMethodRq.convert());
 		return ResponseEntity
@@ -51,7 +48,6 @@ public class PaymentMethodController {
 	}
 
 	@PutMapping
-	@JsonView(View.Detail.class)
 	public ResponseEntity<PaymentMethodRs> update(@PathVariable Long id, @RequestBody @Valid PaymentMethodRq paymentMethodRq) {
 		final var saved = paymentMethodService.update(id, paymentMethodRq.convert());
 		return ResponseEntity.ok(new PaymentMethodRs(saved));

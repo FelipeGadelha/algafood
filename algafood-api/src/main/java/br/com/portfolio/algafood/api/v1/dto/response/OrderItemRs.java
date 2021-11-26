@@ -19,7 +19,7 @@ public class OrderItemRs {
     @JsonView(View.Detail.class)
     private String observation;
     @JsonView({View.Basic.class, View.Detail.class})
-    private Long orderId;
+    private String orderCode;
     @JsonView(View.Detail.class)
     private Long productId;
     @JsonView({View.Basic.class, View.Detail.class})
@@ -31,7 +31,7 @@ public class OrderItemRs {
         this.unitPrice = orderItem.getUnitPrice();
         this.totalPrice = orderItem.getTotalPrice();
         this.observation = orderItem.getObservation();
-        this.orderId = orderItem.getOrder().getId();
+        this.orderCode = orderItem.getOrder().getCode();
         this.productId = orderItem.getProduct().getId();
         this.productName = orderItem.getProduct().getName();
     }
@@ -40,7 +40,7 @@ public class OrderItemRs {
     public BigDecimal getUnitPrice() { return unitPrice; }
     public BigDecimal getTotalPrice() { return totalPrice; }
     public String getObservation() { return observation; }
-    public Long getOrderId() { return orderId; }
+    public String getOrderId() { return orderCode; }
     public Long getProductId() { return productId; }
     public String getProductName() { return productName; }
 }

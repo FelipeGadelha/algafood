@@ -24,7 +24,6 @@ public class GroupPermissionController {
     }
 
     @GetMapping
-    @JsonView(View.Basic.class)
     public ResponseEntity<Set<PermissionRs>> findAll(@PathVariable Long groupId) {
         return ResponseEntity.ok(groupPermissionService.findAll(groupId).stream()
                 .map(PermissionRs::new)

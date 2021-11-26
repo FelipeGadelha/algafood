@@ -6,11 +6,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 public class PermissionRs {
 
-    @JsonView({View.Basic.class, View.Detail.class})
-    private final Long id;
-    @JsonView({View.Basic.class, View.Detail.class})
-    private final String name;
-    @JsonView(View.Detail.class)
+    @JsonView(View.Basic.class) private final Long id;
+    @JsonView(View.Basic.class) private final String name;
     private final String description;
 
     public PermissionRs(Permission permission) {

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class OrderService {
@@ -23,7 +23,7 @@ public class OrderService {
     private final ProductService productService;
     private final UserService userService;
     private final CityService cityService;
-    private static final String MSG_ORDER_NOT_FOUND = "Não existe um pedido com código %d";
+    private static final String MSG_ORDER_NOT_FOUND = "Não existe um pedido com código %s";
 
     @Autowired
     public OrderService(OrderRepository orderRepository,
@@ -44,9 +44,9 @@ public class OrderService {
     public List<Order> findAll() { return orderRepository.findAll(); }
 
     @Transactional
-    public Order findById(Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(MSG_ORDER_NOT_FOUND, id)));
+    public Order findByCode(String code) {
+        return orderRepository.findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(MSG_ORDER_NOT_FOUND, code)));
     }
 
     @Transactional
@@ -86,7 +86,7 @@ public class OrderService {
                 ).paymentMethod(method)
                 .taxFreight(order.getRestaurant().getTaxFreight())
                 .ordersItens(itens)
-                .orderStatus(Set.of(new OrderStatus(OrderStatusType.CREATED, OffsetDateTime.now())))
+                .addOrderStatus(OrderStatusType.CREATED)
                 .build();
         return orderRepository.save(result);
     }

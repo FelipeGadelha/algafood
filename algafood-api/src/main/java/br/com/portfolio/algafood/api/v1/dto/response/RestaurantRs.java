@@ -8,19 +8,16 @@ import java.math.BigDecimal;
 
 public class RestaurantRs {
 
-    @JsonView({View.Basic.class, View.Detail.class})
+    @JsonView(View.Basic.class)
     private final Long id;
-    @JsonView({View.Basic.class, View.Detail.class})
+    @JsonView(View.Basic.class)
     private final String name;
-    @JsonView({View.Basic.class, View.Detail.class})
+    @JsonView(View.Basic.class)
     private final BigDecimal taxFreight;
-    @JsonView(View.Detail.class)
     private final KitchenRs kitchen;
-    @JsonView(View.Detail.class)
     private final Boolean active;
-    @JsonView({View.Basic.class, View.Detail.class})
+    @JsonView(View.Basic.class)
     private final Boolean open;
-    @JsonView(View.Detail.class)
     private final AddressRs address;
 
     public RestaurantRs(Restaurant restaurant) {

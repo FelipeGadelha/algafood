@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 public class KitchenRs {
 
-    @JsonView({View.Basic.class, View.Detail.class})
     private final Long id;
-    @JsonView({View.Basic.class, View.Detail.class})
     private final String name;
 
     public KitchenRs(Kitchen kitchen) {

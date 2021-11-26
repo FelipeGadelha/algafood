@@ -27,8 +27,9 @@ public class ProductController {
 
     @GetMapping
     @JsonView(View.Basic.class)
-    public ResponseEntity<List<ProductRs>> findAll(@PathVariable Long restaurantId) {
-        return ResponseEntity.ok(productService.findAll(restaurantId)
+    public ResponseEntity<List<ProductRs>> findAll(@PathVariable Long restaurantId,
+                                                   @RequestParam(required = false) boolean includeInactive) {
+        return ResponseEntity.ok(productService.findAll(restaurantId, includeInactive)
                 .stream()
                 .map(ProductRs::new)
                 .collect(Collectors.toList())
@@ -36,14 +37,12 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    @JsonView(View.Detail.class)
     public ResponseEntity<ProductRs> findById(@PathVariable Long restaurantId, @PathVariable Long id) {
         final var product = productService.findById(restaurantId, id);
         return ResponseEntity.ok(new ProductRs(product));
     }
 
     @PostMapping
-    @JsonView(View.Detail.class)
     public ResponseEntity<ProductRs> save(@PathVariable Long restaurantId, @RequestBody @Valid ProductRq productRq) {
         var product = productService.save(productRq.convert(), restaurantId);
         return ResponseEntity
@@ -51,7 +50,6 @@ public class ProductController {
                 body(new ProductRs(product));
     }
     @PutMapping("/{id}")
-    @JsonView(View.Detail.class)
     public ResponseEntity<ProductRs> update(@PathVariable Long restaurantId,
                                             @PathVariable Long id,
                                             @RequestBody @Valid ProductRq productRq) {

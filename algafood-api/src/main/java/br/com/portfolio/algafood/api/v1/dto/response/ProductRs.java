@@ -8,15 +8,10 @@ import java.math.BigDecimal;
 
 public class ProductRs {
 
-    @JsonView({View.Basic.class, View.Detail.class})
-    private final Long id;
-    @JsonView({View.Basic.class, View.Detail.class})
-    private final String name;
-    @JsonView(View.Detail.class)
+    @JsonView(View.Basic.class) private final Long id;
+    @JsonView(View.Basic.class) private final String name;
     private final String description;
-    @JsonView({View.Basic.class, View.Detail.class})
-    private final BigDecimal price;
-    @JsonView(View.Detail.class)
+    @JsonView(View.Basic.class) private final BigDecimal price;
     private final Boolean active;
 
     public ProductRs(Product product) {

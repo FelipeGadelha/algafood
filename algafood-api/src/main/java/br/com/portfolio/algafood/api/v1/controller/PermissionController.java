@@ -35,14 +35,12 @@ public class PermissionController {
     }
 
     @GetMapping("/{id}")
-    @JsonView(View.Detail.class)
     public ResponseEntity<PermissionRs> findById(@PathVariable Long id) {
         var permission = permissionService.findById(id);
         return ResponseEntity.ok(new PermissionRs(permission));
     }
 
     @PostMapping
-    @JsonView(View.Detail.class)
     public ResponseEntity<PermissionRs> save(@RequestBody @Valid PermissionRq permissionRq) {
         var permission = permissionService.save(permissionRq.convert());
         return ResponseEntity
@@ -51,7 +49,6 @@ public class PermissionController {
     }
 
     @PutMapping("/{id}")
-    @JsonView(View.Detail.class)
     public ResponseEntity<PermissionRs> update(@PathVariable Long id, @RequestBody PermissionRq permissionRq) {
         var permission = permissionService.update(id, permissionRq.convert());
         return ResponseEntity.ok(new PermissionRs(permission));

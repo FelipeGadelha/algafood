@@ -22,6 +22,8 @@ import br.com.portfolio.algafood.domain.entity.State;
 import br.com.portfolio.algafood.domain.service.StateService;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/states")
@@ -35,30 +37,27 @@ public class StateController {
 		this.stateService = stateService;
 	}
 
-	@JsonView(View.Basic.class)
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> findAll() {
+	public ResponseEntity<List<StateRs>> findAll() {
 		return ResponseEntity.ok(stateService.findAll()
 				.stream()
-				.map(StateRs::new));
+				.map(StateRs::new)
+				.collect(Collectors.toList()));
 	}
 
 	@GetMapping("/{id}")
-	@JsonView(View.Detail.class)
-	public ResponseEntity<?> findById(@PathVariable Long id) {
+	public ResponseEntity<StateRs> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(new StateRs(stateService.findById(id)));
 	}
 
 	@PostMapping
-	@JsonView(View.Detail.class)
-	public ResponseEntity<?> save(@RequestBody @Valid StateRq stateRq) {
+	public ResponseEntity<StateRs> save(@RequestBody @Valid StateRq stateRq) {
 		State saved = stateService.save(stateRq.convert());
 		return new ResponseEntity<>(new StateRs(saved), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	@JsonView(View.Detail.class)
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid StateRq stateRq) {
+	public ResponseEntity<StateRs> update(@PathVariable Long id, @RequestBody @Valid StateRq stateRq) {
 		State state = stateService.update(id, stateRq.convert());
 		return ResponseEntity.ok(new StateRs(state));
 	}

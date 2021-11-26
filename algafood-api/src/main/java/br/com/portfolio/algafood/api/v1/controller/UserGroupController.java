@@ -24,7 +24,6 @@ public class UserGroupController {
     }
 
     @GetMapping
-    @JsonView(View.Basic.class)
     public ResponseEntity<List<GroupRs>> findAll(@PathVariable Long userId) {
         return ResponseEntity.ok(userGroupService.findById(userId)
                 .stream()

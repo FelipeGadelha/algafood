@@ -23,6 +23,7 @@ import br.com.portfolio.algafood.domain.entity.City;
 import br.com.portfolio.algafood.domain.service.CityService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,28 +39,25 @@ public class CityController {
 
 	@JsonView(View.Basic.class)
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> findAll() {
+	public ResponseEntity<List<CityRs>> findAll() {
 		return ResponseEntity.ok(cityService.findAll().stream()
 				.map(CityRs::new)
 				.collect(Collectors.toList()));
 	}
 
 	@GetMapping("/{id}")
-	@JsonView(View.Detail.class)
-	public ResponseEntity<?> findById(@PathVariable Long id) {
+	public ResponseEntity<CityRs> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(new CityRs(cityService.findById(id)));
 	}
 
 	@PostMapping
-	@JsonView(View.Detail.class)
-	public ResponseEntity<?> save(@RequestBody @Valid CityRq cityRq) {
+	public ResponseEntity<CityRs> save(@RequestBody @Valid CityRq cityRq) {
 		City saved = cityService.save(cityRq.convert());
 		return new ResponseEntity<>(new CityRs(saved), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	@JsonView(View.Detail.class)
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid CityRq cityRq) {
+	public ResponseEntity<CityRs> update(@PathVariable Long id, @RequestBody @Valid CityRq cityRq) {
 		City city = cityService.update(id, cityRq.convert());
 		return ResponseEntity.ok(new CityRs(city));
 	}

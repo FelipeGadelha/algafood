@@ -24,7 +24,10 @@ public class ProductService {
     }
 
     @Transactional
-    public List<Product> findAll(Long restaurantId) { return restaurantService.findById(restaurantId).getProducts(); }
+    public List<Product> findAll(Long restaurantId, boolean includeInactive) {
+        return (includeInactive) ? productRepository.findByRestaurantId(restaurantId)
+                : productRepository.findByActiveRestaurants(restaurantId);
+    }
 
     @Transactional
     public Product findById(Long restaurantId, Long id) {

@@ -100,7 +100,7 @@ INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES 
 --INSERT INTO product (id, name, description, price, active, restaurant_id) VALUES
 INSERT INTO product (id, name, description, price, active, restaurant_id) VALUES
 (1, 'Coxinha', 'coxinha de frango', 50.0, true, 1),
-(2, 'Porco com molho agridoce', 'Deliciosa carne suína ao molho especial', 78.90, true, 1),
+(2, 'Porco com molho agridoce', 'Deliciosa carne suína ao molho especial', 78.90, false, 1),
 (3, 'Camarão tailandês', '16 camarões grandes ao molho picante', 110, true, 1),
 (4, 'Salada picante com carne grelhada', 'Salada de folhas com cortes finos de carne bovina grelhada e nosso molho especial de pimenta vermelha', 87.20, true, 2),
 (5, 'Garlic Naan', 'Pão tradicional indiano com cobertura de alho', 21, true, 3),
@@ -143,12 +143,12 @@ INSERT INTO users_groups (users_id, groups_id) VALUES (1, 1), (1, 2), (1, 3), (2
 INSERT INTO users_restaurants_owner (user_id, restaurant_id) values (1, 5), (3, 5);
 
 INSERT INTO orders (
-id, subtotal, tax_freight, total_value, restaurant_id, user_client_id, payment_method_id,
-address_city_id, address_cep, address_place, address_number, address_complement, address_district,
-status, creation_date)
+id, code, subtotal, tax_freight, total_value, restaurant_id, user_client_id, payment_method_id,
+address_city_id, address_cep, address_place, address_number, address_complement, address_district)
+--status, creation_date)
 VALUES
-(1, 298.90, 10, 308.90, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil', 'CREATED', now()),
-(2, 79, 0, 79, 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro', 'CREATED', now());
+(1, '66909e67-fdbf-49ab-86c5-221b998127c6', 298.90, 10, 308.90, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil'),
+(2, '4a6977b6-9bc3-4a36-b8b0-e599e0f72507', 79, 0, 79, 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro');
 
 SELECT nextval ('orders_id_seq');
 SELECT nextval ('orders_id_seq');

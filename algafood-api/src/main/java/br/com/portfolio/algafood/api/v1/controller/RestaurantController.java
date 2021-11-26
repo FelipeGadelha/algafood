@@ -52,14 +52,12 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/{id}")
-	@JsonView(View.Detail.class)
 	public ResponseEntity<RestaurantRs> findById(@PathVariable Long id) {
 		var restaurant = restaurantService.findById(id);
 		return ResponseEntity.ok(new RestaurantRs(restaurant));
 	}
 
 	@PostMapping
-	@JsonView(View.Detail.class)
 	public ResponseEntity<RestaurantRs> save(@RequestBody @Valid RestaurantRq restaurantRq) {
 		var saved = restaurantService.save(restaurantRq.convert());
 		return ResponseEntity
@@ -68,14 +66,12 @@ public class RestaurantController {
 	}
 
 	@PutMapping("/{id}")
-	@JsonView(View.Detail.class)
 	public ResponseEntity<RestaurantRs> update(@PathVariable @Valid Long id, @RequestBody @Valid RestaurantRq restaurantRq) {
 		var updated = restaurantService.update(id, restaurantRq.convert());
 		return ResponseEntity.ok(new RestaurantRs(updated));
 	}
 	
 	@PatchMapping("/{id}")
-	@JsonView(View.Detail.class)
 	public ResponseEntity<RestaurantRs> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 		Restaurant restaurant = restaurantService.findById(id);
 		this.merge(fields, restaurant, request);

@@ -26,7 +26,6 @@ public class GroupController {
     public GroupController(GroupService groupService) { this.groupService = groupService; }
 
     @GetMapping
-    @JsonView(View.Basic.class)
     public ResponseEntity<List<GroupRs>> findAll() {
         return ResponseEntity.ok(groupService.findAll()
                 .stream()
@@ -35,14 +34,12 @@ public class GroupController {
     }
 
     @GetMapping("/{id}")
-    @JsonView(View.Detail.class)
     public ResponseEntity<GroupRs> findById(@PathVariable Long id) {
         var group = groupService.findById(id);
         return ResponseEntity.ok(new GroupRs(group));
     }
 
     @PostMapping
-    @JsonView(View.Detail.class)
     public ResponseEntity<GroupRs> save(@RequestBody GroupRq groupRq) {
         var group = groupService.save(groupRq.convert());
         return ResponseEntity
@@ -51,7 +48,6 @@ public class GroupController {
     }
 
     @PutMapping("/{id}")
-    @JsonView(View.Detail.class)
     public ResponseEntity<GroupRs> update(@PathVariable Long id, @RequestBody @Valid GroupRq groupRq) {
         var group = groupService.update(id, groupRq.convert());
         return ResponseEntity.ok(new GroupRs(group));

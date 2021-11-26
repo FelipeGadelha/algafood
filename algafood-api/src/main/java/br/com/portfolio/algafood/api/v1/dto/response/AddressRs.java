@@ -1,8 +1,6 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
-import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.domain.entity.Address;
-import com.fasterxml.jackson.annotation.JsonView;
 
 import java.util.Objects;
 
@@ -10,17 +8,11 @@ import java.util.Objects;
 
 public class AddressRs {
 
-    @JsonView(View.Detail.class)
     private String cep;
-    @JsonView(View.Detail.class)
     private String place;
-    @JsonView(View.Detail.class)
     private String number;
-    @JsonView(View.Detail.class)
     private String complement;
-    @JsonView(View.Detail.class)
     private String district;
-    @JsonView(View.Detail.class)
     private CityRs city;
 
     public AddressRs(Address address) {

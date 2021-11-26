@@ -1,11 +1,10 @@
 package br.com.portfolio.algafood.domain.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.UnaryOperator;
 
@@ -16,16 +15,10 @@ public class Order implements Serializable {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String code;
 	private BigDecimal subtotal;
 	private BigDecimal taxFreight;
 	private BigDecimal totalValue;
-	@CreationTimestamp @Column(name="creation_date", nullable = false)
-	private OffsetDateTime creationDate;
-	private OffsetDateTime confirmationDate;
-	private OffsetDateTime cancelDate;
-	private OffsetDateTime deliveryDate;
-	@Enumerated(EnumType.STRING)
-	private OrderStatusType status = OrderStatusType.CREATED;
 	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "payment_method_id", nullable = false)
 	private PaymentMethod method;
 	@ManyToOne @JoinColumn(name = "restaurant_id", nullable = false)
@@ -38,21 +31,18 @@ public class Order implements Serializable {
 	@ElementCollection
 	@CollectionTable(name = "order_status",
 			joinColumns = @JoinColumn(name = "order_status_id"))
-	private Set<OrderStatus> orderStatus = new HashSet<>();
+	@OrderBy("moment asc")
+	private SortedSet<OrderStatus> orderStatus = new TreeSet<>();
 	@Deprecated public Order() { }
 
 	private Order(Builder builder) {
 		this.id = builder.id;
+		this.code = (Objects.isNull(builder.code)) ? UUID.randomUUID().toString() : builder.code;
 		this.subtotal = builder.ordersItens.stream()
 				.map(OrderItem::getTotalPrice)
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 		this.taxFreight = (Objects.nonNull(builder.taxFreight)) ? builder.taxFreight : BigDecimal.ZERO;
 		this.totalValue = this.subtotal.add(this.taxFreight);
-		this.creationDate = builder.creationDate;
-		this.confirmationDate = builder.confirmationDate;
-		this.cancelDate = builder.cancelDate;
-		this.deliveryDate = builder.deliveryDate;
-		this.status = (Objects.nonNull(builder.status)) ? builder.status : OrderStatusType.CREATED;
 		this.method = builder.method;
 		this.restaurant = builder.restaurant;
 		this.client = builder.client;
@@ -60,28 +50,30 @@ public class Order implements Serializable {
 		this.ordersItens = builder.ordersItens;
 		this.orderStatus = builder.orderStatus;
 	}
+//	@PrePersist public void code() { this.code = UUID.randomUUID().toString(); }
 
 	public static Builder builder() { return new Builder(); }
+
 	public static class Builder {
 		private Long id;
+		private String code;
 		private BigDecimal subtotal;
 		private BigDecimal taxFreight;
 		private BigDecimal totalValue;
-		private OffsetDateTime creationDate;
-		private OffsetDateTime confirmationDate;
-		private OffsetDateTime cancelDate;
-		private OffsetDateTime deliveryDate;
-		private OrderStatusType status;
 		private PaymentMethod method;
 		private Restaurant restaurant;
 		private User client;
 		private Address addressDelivery;
 		private List<OrderItem> ordersItens = new ArrayList<>();
-		private Set<OrderStatus> orderStatus = new HashSet<>();
+		private SortedSet<OrderStatus> orderStatus = new TreeSet<>();
 		private Builder() {}
 
 		public Builder id(Long id) {
 			this.id = id;
+			return this;
+		}
+		public Builder code(String code) {
+			this.code = code;
 			return this;
 		}
 		public Builder subtotal(BigDecimal subtotal) {
@@ -94,26 +86,6 @@ public class Order implements Serializable {
 		}
 		public Builder totalValue(BigDecimal totalValue) {
 			this.totalValue = totalValue;
-			return this;
-		}
-		public Builder creationDate(OffsetDateTime creationDate) {
-			this.creationDate = creationDate;
-			return this;
-		}
-		public Builder confirmationDate(OffsetDateTime confirmationDate) {
-			this.confirmationDate = confirmationDate;
-			return this;
-		}
-		public Builder cancelDate(OffsetDateTime cancelDate) {
-			this.cancelDate = cancelDate;
-			return this;
-		}
-		public Builder deliveryDate(OffsetDateTime deliveryDate) {
-			this.deliveryDate = deliveryDate;
-			return this;
-		}
-		public Builder status(OrderStatusType status) {
-			this.status = status;
 			return this;
 		}
 		public Builder paymentMethod(PaymentMethod method) {
@@ -140,20 +112,20 @@ public class Order implements Serializable {
 			this.ordersItens = ordersItens;
 			return this;
 		}
-		public Builder orderStatus(Set<OrderStatus> orderStatus) {
+		public Builder orderStatus(SortedSet<OrderStatus> orderStatus) {
 			this.orderStatus = orderStatus;
+			return this;
+		}
+		public Builder addOrderStatus(OrderStatusType status) {
+			this.orderStatus.add(new OrderStatus(status));
 			return this;
 		}
 		public Builder copy(Order order) {
 			this.id = (Objects.isNull(id)) ? order.id : this.id;
+			this.code = (Objects.isNull(code)) ? order.code : this.code;
 			this.subtotal = order.subtotal;
 			this.taxFreight = order.taxFreight;
 			this.totalValue = order.totalValue;
-			this.creationDate = order.creationDate;
-			this.confirmationDate = order.confirmationDate;
-			this.cancelDate = order.cancelDate;
-			this.deliveryDate = order.deliveryDate;
-			this.status = order.status;
 			this.method = order.method;
 			this.restaurant = order.restaurant;
 			this.client = order.client;
@@ -164,14 +136,10 @@ public class Order implements Serializable {
 		}
 		public Builder clone(Order order) {
 			this.id = order.id;
+			this.code = order.code;
 			this.subtotal = order.subtotal;
 			this.taxFreight = order.taxFreight;
 			this.totalValue = order.totalValue;
-			this.creationDate = order.creationDate;
-			this.confirmationDate = order.confirmationDate;
-			this.cancelDate = order.cancelDate;
-			this.deliveryDate = order.deliveryDate;
-			this.status = order.status;
 			this.method = order.method;
 			this.restaurant = order.restaurant;
 			this.client = order.client;
@@ -183,27 +151,54 @@ public class Order implements Serializable {
 		public Order build() { return new Order(this); }
 	}
 	public Long getId() { return id; }
+	public String getCode() { return code; }
 	public BigDecimal getSubtotal() { return subtotal; }
 	public BigDecimal getTaxFreight() { return taxFreight; }
 	public BigDecimal getTotalValue() { return totalValue; }
-	public OffsetDateTime getCreationDate() { return creationDate; }
-	public OffsetDateTime getConfirmationDate() { return confirmationDate; }
-	public OffsetDateTime getCancelDate() { return cancelDate; }
-	public OffsetDateTime getDeliveryDate() { return deliveryDate; }
-	public OrderStatusType getStatus() { return status; }
 	public PaymentMethod getMethod() { return method; }
 	public Restaurant getRestaurant() { return restaurant; }
 	public User getClient() { return client; }
 	public Address getAddressDelivery() { return addressDelivery; }
 	public List<OrderItem> getOrdersItens() { return ordersItens; }
-	public Set<OrderStatus> getOrderStatus() { return orderStatus; }
+	public SortedSet<OrderStatus> getOrderStatus() { return orderStatus; }
 
 	private void calculateTotalValue() {
 		this.subtotal = getOrdersItens().stream()
 				.map(OrderItem::getTotalPrice)
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
-
+	public void confirm() {
+		Assert.state(this.readyForConfirmation(),
+				String.format("Status do pedido %s não pode ser alterado de %s para %s",
+						this.getCode(), this.currentStatus().getDescription(), OrderStatusType.CONFIRMED.getDescription()));
+		this.orderStatus.add(new OrderStatus(OrderStatusType.CONFIRMED));
+	}
+	public void deliver() {
+		Assert.state(this.readyForDeliver(),
+				String.format("Status do pedido %s não pode ser alterado de %s para %s",
+						this.getCode(), this.currentStatus().getDescription(), OrderStatusType.DELIVERED.getDescription()));
+		this.orderStatus.add(new OrderStatus(OrderStatusType.DELIVERED));
+	}
+	public void cancel() {
+		Assert.state(this.readyForCancellation(),
+				String.format("Status do pedido %s não pode ser alterado de %s para %s",
+						this.getCode(), this.currentStatus().getDescription(), OrderStatusType.CANCELED.getDescription()));
+		this.orderStatus.add(new OrderStatus(OrderStatusType.CANCELED));
+	}
+	public boolean readyForConfirmation() {
+		return !orderStatus.stream()
+				.anyMatch(s -> !s.getStatus().equals(OrderStatusType.CREATED));
+	}
+	public boolean readyForDeliver() {
+		return orderStatus.stream()
+				.anyMatch(s -> s.getStatus().equals(OrderStatusType.CONFIRMED) &&
+						!s.getStatus().equals(OrderStatusType.CANCELED));
+	}
+	public boolean readyForCancellation() {
+		return orderStatus.size() == 1 &&
+				orderStatus.stream().anyMatch(s -> s.getStatus().equals(OrderStatusType.CREATED));
+	}
+	public OrderStatusType currentStatus() { return orderStatus.last().getStatus(); }
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -217,14 +212,10 @@ public class Order implements Serializable {
 	public String toString() {
 		return "Order{" +
 				"id=" + id +
+				"code=" + code +
 				", subtotal=" + subtotal +
 				", taxFreight=" + taxFreight +
 				", totalValue=" + totalValue +
-				", creationDate=" + creationDate +
-				", confirmationDate=" + confirmationDate +
-				", cancelDate=" + cancelDate +
-				", deliveryDate=" + deliveryDate +
-				", status=" + status +
 				", method=" + method +
 				", addressDelivery=" + addressDelivery +
 				", ordersItens=" + ordersItens +

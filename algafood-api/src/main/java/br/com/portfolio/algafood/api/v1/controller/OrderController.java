@@ -3,8 +3,6 @@ package br.com.portfolio.algafood.api.v1.controller;
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.OrderRq;
 import br.com.portfolio.algafood.api.v1.dto.response.OrderRs;
-import br.com.portfolio.algafood.api.v1.dto.response.PermissionRs;
-import br.com.portfolio.algafood.domain.entity.Order;
 import br.com.portfolio.algafood.domain.entity.User;
 import br.com.portfolio.algafood.domain.service.OrderService;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -35,14 +33,12 @@ public class OrderController {
                 .map(OrderRs::new)
                 .collect(Collectors.toList()));
     }
-    @GetMapping("/{id}")
-    @JsonView(View.Detail.class)
-    public ResponseEntity<OrderRs> findById(@PathVariable Long id) {
-        var order = orderService.findById(id);
+    @GetMapping("/{code}")
+    public ResponseEntity<OrderRs> findById(@PathVariable String code) {
+        var order = orderService.findByCode(code);
         return ResponseEntity.ok(new OrderRs(order));
     }
     @PostMapping
-    @JsonView(View.Detail.class)
     public ResponseEntity<OrderRs> save(@RequestBody @Valid OrderRq orderRq) {
         var user = User.builder().id(1L).build();
         var order = orderService.save(orderRq.convert(user));

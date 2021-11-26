@@ -6,11 +6,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 public class CityRs {
 
-    @JsonView({View.Basic.class, View.Detail.class})
+    @JsonView(View.Basic.class)
     private final Long id;
-    @JsonView({View.Basic.class, View.Detail.class})
+    @JsonView(View.Basic.class)
     private final String name;
-    @JsonView(View.Detail.class)
     private final StateRs state;
 
     public CityRs(City city) {
