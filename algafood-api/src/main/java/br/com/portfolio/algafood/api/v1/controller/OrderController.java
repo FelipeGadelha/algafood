@@ -4,6 +4,7 @@ import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.OrderRq;
 import br.com.portfolio.algafood.api.v1.dto.response.OrderRs;
 import br.com.portfolio.algafood.domain.entity.User;
+import br.com.portfolio.algafood.domain.filter.OrderFilter;
 import br.com.portfolio.algafood.domain.service.OrderService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class OrderController {
 
     @GetMapping
     @JsonView(View.Basic.class)
-    public ResponseEntity<List<OrderRs>> findAll() {
-        return ResponseEntity.ok(orderService.findAll().stream()
+    public ResponseEntity<List<OrderRs>> search(OrderFilter filter) {
+        return ResponseEntity.ok(orderService.findAll(filter).stream()
                 .map(OrderRs::new)
                 .collect(Collectors.toList()));
     }
@@ -42,7 +43,6 @@ public class OrderController {
     public ResponseEntity<OrderRs> save(@RequestBody @Valid OrderRq orderRq) {
         var user = User.builder().id(1L).build();
         var order = orderService.save(orderRq.convert(user));
-        System.err.println(order);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new OrderRs(order));
     }

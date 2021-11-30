@@ -3,9 +3,12 @@ package br.com.portfolio.algafood.domain.service;
 import br.com.portfolio.algafood.domain.entity.*;
 import br.com.portfolio.algafood.domain.exception.BusinessException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
+import br.com.portfolio.algafood.domain.filter.OrderFilter;
 import br.com.portfolio.algafood.domain.repository.OrderRepository;
+import br.com.portfolio.algafood.infra.specification.OrderSpecs;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +44,7 @@ public class OrderService {
     }
 
     @Transactional
-    public List<Order> findAll() { return orderRepository.findAll(); }
+    public List<Order> findAll(OrderFilter filter) { return orderRepository.findAll(OrderSpecs.useFilter(filter)); }
 
     @Transactional
     public Order findByCode(String code) {

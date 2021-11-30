@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@JsonFilter("orderFilter")
+//@JsonFilter("orderFilter")
 public class OrderRs {
 
     @JsonView(View.Basic.class) private String code;
@@ -21,8 +23,8 @@ public class OrderRs {
     @JsonView(View.Basic.class) private RestaurantRs restaurant;
     @JsonView(View.Basic.class) private UserRs client;
     private AddressRs addressDelivery;
-    private List<OrderItemRs> ordersItens;
-    private Set<OrderStatusRs> orderStatus;
+    private List<OrderItemRs> ordersItens = new ArrayList<>();
+    private Set<OrderStatusRs> orderStatus = new HashSet<>();
 
     public OrderRs(Order order) {
         this.code = order.getCode();

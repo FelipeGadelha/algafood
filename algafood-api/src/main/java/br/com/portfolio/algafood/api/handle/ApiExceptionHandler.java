@@ -19,9 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.DataBinder;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -152,29 +150,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-		List<FieldError> fieldErros = exception.getBindingResult().getFieldErrors();	
-		
-    	List<ObjectError> globalErrors = exception.getBindingResult().getGlobalErrors();
-    	
-    	Map<String, Set<String>> map = fieldErros.stream().collect(Collectors.groupingBy(FieldError::getField,
-				Collectors.mapping(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()), Collectors.toSet())));
-    	
-    	if (map.isEmpty()) {
-    		map = globalErrors.stream().collect(Collectors.groupingBy(ObjectError::getCode,
-    				Collectors.mapping(ObjectError::getDefaultMessage, Collectors.toSet())));			
-		}
-		return new ResponseEntity<>(ValidationExceptionDetails
-				.builder().timestamp(OffsetDateTime.now())
-				.status(HttpStatus.BAD_REQUEST.value())
-				.type(ExceptionStatus.ARGUMENT_NOT_VALID.getUri())
-				.title(ExceptionStatus.ARGUMENT_NOT_VALID.getTitle() + DOCUMENTATION)
-				.details(ERROR_FIELD)
-				.developerMessage(exception.getClass().getName())
-				.errors(map)
-				.build(), headers, HttpStatus.BAD_REQUEST);		
+		return argumentNotValidException(exception, headers, status, request, exception.getBindingResult());
 	}
-	
+	@Override
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		return argumentNotValidException(ex, headers, status, request, ex.getBindingResult());
+	}
+
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 				HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -186,14 +168,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 		return new ResponseEntity<>(
 				createExceptionDetailsBuilder(
-						ex, 
-						HttpStatus.BAD_REQUEST, 
-						ExceptionStatus.MESSAGE_NOT_READABLE, 
+						ex,
+						HttpStatus.BAD_REQUEST,
+						ExceptionStatus.MESSAGE_NOT_READABLE,
 						"The request body is invalid, check syntax error."),
 				headers, status);
 	}
-	
-	
+
 
 	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String path = joinPath(ex.getPath());
@@ -205,7 +186,31 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return handleExceptionInternal(ex, exceptionDetails, headers, status, request);
 	}
-	
+
+	private ResponseEntity<Object> argumentNotValidException(Exception exception,
+															 HttpHeaders headers, HttpStatus status, WebRequest request, BindingResult bindingResult) {
+		List<FieldError> fieldErros = bindingResult.getFieldErrors();
+
+		List<ObjectError> globalErrors = bindingResult.getGlobalErrors();
+
+		Map<String, Set<String>> map = fieldErros.stream().collect(Collectors.groupingBy(FieldError::getField,
+				Collectors.mapping(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()), Collectors.toSet())));
+
+		if (map.isEmpty()) {
+			map = globalErrors.stream().collect(Collectors.groupingBy(ObjectError::getCode,
+					Collectors.mapping(ObjectError::getDefaultMessage, Collectors.toSet())));
+		}
+		return new ResponseEntity<>(ValidationExceptionDetails
+				.builder().timestamp(OffsetDateTime.now())
+				.status(HttpStatus.BAD_REQUEST.value())
+				.type(ExceptionStatus.ARGUMENT_NOT_VALID.getUri())
+				.title(ExceptionStatus.ARGUMENT_NOT_VALID.getTitle() + DOCUMENTATION)
+				.details(ERROR_FIELD)
+				.developerMessage(exception.getClass().getName())
+				.errors(map)
+				.build(), headers, HttpStatus.BAD_REQUEST);
+	}
+
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String path = ex.getPath()
 				.stream()
