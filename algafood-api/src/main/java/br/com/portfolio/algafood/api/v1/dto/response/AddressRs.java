@@ -4,8 +4,6 @@ import br.com.portfolio.algafood.domain.entity.Address;
 
 import java.util.Objects;
 
-
-
 public class AddressRs {
 
     private String cep;

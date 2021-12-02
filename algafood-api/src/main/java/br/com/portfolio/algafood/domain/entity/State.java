@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.domain.entity;
 
-import br.com.portfolio.algafood.core.validation.Groups;
+import br.com.portfolio.algafood.config.validation.Groups;
 
 import java.io.Serializable;
 

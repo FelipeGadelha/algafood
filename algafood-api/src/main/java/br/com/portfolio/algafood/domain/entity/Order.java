@@ -1,5 +1,8 @@
 package br.com.portfolio.algafood.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -27,6 +30,7 @@ public class Order implements Serializable {
 	private User client;
 	@Embedded private Address addressDelivery;
 	@OneToMany(mappedBy = "order")
+	@JsonManagedReference
 	private List<OrderItem> ordersItens = new ArrayList<>();
 	@ElementCollection
 	@CollectionTable(name = "order_status",
@@ -218,7 +222,7 @@ public class Order implements Serializable {
 				", totalValue=" + totalValue +
 				", method=" + method +
 				", addressDelivery=" + addressDelivery +
-				", ordersItens=" + ordersItens +
+//				", ordersItens=" + ordersItens +
 				", orderStatus=" + orderStatus +
 				'}';
 	}

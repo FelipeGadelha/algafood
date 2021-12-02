@@ -147,9 +147,15 @@ id, code, subtotal, tax_freight, total_value, restaurant_id, user_client_id, pay
 address_city_id, address_cep, address_place, address_number, address_complement, address_district)
 --status, creation_date)
 VALUES
-(1, '66909e67-fdbf-49ab-86c5-221b998127c6', 298.90, 10, 308.90, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil'),
-(2, '4a6977b6-9bc3-4a36-b8b0-e599e0f72507', 79, 0, 79, 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro');
+(1, '66909e67-fdbf-49ab-86c5-221b998127c6', 298.90, 10, 308.90, 1, 2, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil'),
+(2, '4a6977b6-9bc3-4a36-b8b0-e599e0f72507', 79, 0, 79, 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro'),
+(3, '8d774bcf-b238-42f3-aef1-5fb388754d63', 87.2, 10, 97.2, 1, 3, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20', 'Martins'),
+(4, '5c621c9a-ba61-4454-8631-8aabefe58dc2', 174.4, 5, 179.4, 1, 2, 1, 1, '38400-800', 'Rua Fortaleza', '900', 'Apto 504', 'Centro'),
+(5, 'b5741512-8fbc-47fa-9ac1-b530354fc0ff', 110, 10, 120, 1, 1, 1, 1, '38400-222', 'Rua Natal', '200', 'Apto 317', 'Brasil');
 
+SELECT nextval ('orders_id_seq');
+SELECT nextval ('orders_id_seq');
+SELECT nextval ('orders_id_seq');
 SELECT nextval ('orders_id_seq');
 SELECT nextval ('orders_id_seq');
 
@@ -164,4 +170,9 @@ SELECT nextval ('order_item_id_seq');
 
 INSERT INTO order_status (order_status_id, status, moment) VALUES
 (1, 'CREATED', now()),
-(2, 'CREATED', now());
+(1, 'CONFIRMED', now()),
+(1, 'DELIVERED', now()),
+(2, 'CREATED', now()),
+(3, 'CREATED', now()),
+(4, 'CREATED', now()),
+(5, 'CREATED', now());

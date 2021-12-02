@@ -1,21 +1,21 @@
 package br.com.portfolio.algafood.domain.service;
 
-import br.com.portfolio.algafood.domain.entity.*;
+import br.com.portfolio.algafood.domain.entity.Address;
+import br.com.portfolio.algafood.domain.entity.Order;
+import br.com.portfolio.algafood.domain.entity.OrderItem;
+import br.com.portfolio.algafood.domain.entity.OrderStatusType;
 import br.com.portfolio.algafood.domain.exception.BusinessException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.filter.OrderFilter;
 import br.com.portfolio.algafood.domain.repository.OrderRepository;
 import br.com.portfolio.algafood.infra.specification.OrderSpecs;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.OffsetDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -44,7 +44,7 @@ public class OrderService {
     }
 
     @Transactional
-    public List<Order> findAll(OrderFilter filter) { return orderRepository.findAll(OrderSpecs.useFilter(filter)); }
+    public Page<Order> findAll(OrderFilter filter, Pageable pageable) { return orderRepository.findAll(OrderSpecs.useFilter(filter), pageable); }
 
     @Transactional
     public Order findByCode(String code) {
@@ -72,7 +72,7 @@ public class OrderService {
                             .order(order)
                             .unitPrice(product.getPrice())
                             .build();
-                }).collect(Collectors.toList());
+                }).toList();
 
         if (!restaurant.acceptPaymentMethod(method))
             throw new BusinessException(String
@@ -104,6 +104,6 @@ public class OrderService {
                             .order(order)
                             .unitPrice(product.getPrice())
                             .build();
-                }).collect(Collectors.toList());
+                }).toList();
     }
 }

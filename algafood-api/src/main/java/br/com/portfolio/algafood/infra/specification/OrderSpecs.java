@@ -12,11 +12,21 @@ public class OrderSpecs {
 
     public static Specification<Order> useFilter(OrderFilter filter) {
         return (root, query, builder) -> {
+//            if (Order.class.equals(query.getResultType())) {
+//                root.fetch("restaurant").fetch("kitchen");
+//                root.fetch("client");
+//                root.fetch("method");
+//                var rootOrdersItens = root.fetch("ordersItens");
+//                rootOrdersItens.fetch("order");
+//                rootOrdersItens.fetch("product");
+//                root.fetch("orderStatus");
+//            }
             var predicates = new ArrayList<Predicate>();
             if (filter.getClientId() != null) predicates.add((builder.equal(root.get("client"), filter.getClientId())));
             if (filter.getRestaurantId() != null) predicates.add((builder.equal(root.get("restaurant"), filter.getRestaurantId())));
             if (filter.getStatus() != null) predicates
-                    .add((builder.equal(root.join("orderStatus", JoinType.LEFT)
+                    .add((builder.equal(root
+                            .join("orderStatus", JoinType.LEFT)
                             .get("status"), filter.getStatus())));
 
             if (filter.getCreationDate() != null) predicates
@@ -37,6 +47,8 @@ public class OrderSpecs {
 //            https://stackoverflow.com/questions/29023182/using-an-embeddable-entity-in-a-jpa-criteriaquery
 //            https://www.google.com/search?q=how+to+specification+entity+for+embeddable+objects+in+hibernate&rlz=1C1GCEA_enBR971BR971&biw=1920&bih=937&sxsrf=AOaemvKUIRdUylGKxf66WIStTgC_RMZEHQ%3A1638243429436&ei=ZZylYY_IGfbT1sQPgey14As&ved=0ahUKEwjPjqqtlL_0AhX2qZUCHQF2DbwQ4dUDCA8&uact=5&oq=how+to+specification+entity+for+embeddable+objects+in+hibernate&gs_lcp=Cgdnd3Mtd2l6EAM6BwgjELADECc6BwgAEEcQsAM6BQgAEM0CSgQIQRgAUJJMWIZtYM-NAWgHcAJ4AIABpAGIAZAQkgEEMC4xNpgBAKABAcgBCcABAQ&sclient=gws-wiz
 //            https://github.com/ZhongjunTian/spring-repository-plus/issues/6
+//            https://evgeniy-khist.github.io/spring-data-examples/#260b142dfcc1f303ff3e67de6da4d730
+//            https://evgeniy-khist.github.io/spring-data-examples/
 
 //select * from orders o
 //        left join order_status os on o.id = os.order_status_id

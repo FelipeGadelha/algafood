@@ -1,19 +1,17 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
-import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.KitchenRq;
 import br.com.portfolio.algafood.api.v1.dto.response.KitchenRs;
 import br.com.portfolio.algafood.domain.entity.Kitchen;
 import br.com.portfolio.algafood.domain.service.KitchenService;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/v1/kitchens") // produces = MediaType.APPLICATION_JSON_VALUE)
@@ -27,11 +25,8 @@ public class kitchenController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<KitchenRs>> findAll() {
-		return ResponseEntity.ok(kitchenService.findAll()
-				.stream()
-				.map(KitchenRs::new)
-				.collect(Collectors.toList()));
+	public ResponseEntity<Page<KitchenRs>> findAll(Pageable pageable) {
+		return ResponseEntity.ok(kitchenService.findAll(pageable).map(KitchenRs::new));
 	}
 
 	@GetMapping("/{kitchenId}")

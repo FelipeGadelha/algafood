@@ -12,9 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
-import br.com.portfolio.algafood.core.validation.Groups;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 //@JsonRootName("gastronomy")
@@ -28,7 +26,7 @@ public class Kitchen implements Serializable{
 	@NotBlank @Column(nullable = false)
 	private String name;
 
-	@OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL)
+	@JsonManagedReference @OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL)
 	private List<Restaurant> restaurants = new ArrayList<>();
 	
 	@Deprecated

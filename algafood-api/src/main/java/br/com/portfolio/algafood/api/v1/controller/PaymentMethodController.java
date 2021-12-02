@@ -30,7 +30,7 @@ public class PaymentMethodController {
 		return ResponseEntity.ok(paymentMethodService.findAll()
 				.stream()
 				.map(PaymentMethodRs::new)
-				.collect(Collectors.toList()));
+				.toList());
 	}
 	
 	@GetMapping("/{id}")

@@ -42,7 +42,7 @@ public class StateController {
 		return ResponseEntity.ok(stateService.findAll()
 				.stream()
 				.map(StateRs::new)
-				.collect(Collectors.toList()));
+				.toList());
 	}
 
 	@GetMapping("/{id}")

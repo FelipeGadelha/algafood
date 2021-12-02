@@ -27,7 +27,7 @@ public record OrderRq (
                 .addressDelivery(address.convert())
                 .ordersItens(itens.stream()
                         .map(OrderItemRq::convert)
-                        .collect(Collectors.toList())
+                        .toList()
                 ).build();
     }
 }

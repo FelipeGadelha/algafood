@@ -30,7 +30,7 @@ public class GroupController {
         return ResponseEntity.ok(groupService.findAll()
                 .stream()
                 .map(GroupRs::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @GetMapping("/{id}")

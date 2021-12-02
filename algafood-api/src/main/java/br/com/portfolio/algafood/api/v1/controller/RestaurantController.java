@@ -2,6 +2,7 @@ package br.com.portfolio.algafood.api.v1.controller;
 
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.RestaurantRq;
+import br.com.portfolio.algafood.api.v1.dto.response.RestaurantDetailRs;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantRs;
 import br.com.portfolio.algafood.domain.entity.Restaurant;
 import br.com.portfolio.algafood.domain.exception.BusinessException;
@@ -43,41 +44,40 @@ public class RestaurantController {
 	}
 
 	@GetMapping()
-	@JsonView(View.Basic.class)
 	public ResponseEntity<List<RestaurantRs>> findAll() {
 		return ResponseEntity.ok(restaurantService.findAll()
 				.stream()
 				.map(RestaurantRs::new)
-				.collect(Collectors.toList()));
+				.toList());
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<RestaurantRs> findById(@PathVariable Long id) {
+	public ResponseEntity<RestaurantDetailRs> findById(@PathVariable Long id) {
 		var restaurant = restaurantService.findById(id);
-		return ResponseEntity.ok(new RestaurantRs(restaurant));
+		return ResponseEntity.ok(new RestaurantDetailRs(restaurant));
 	}
 
 	@PostMapping
-	public ResponseEntity<RestaurantRs> save(@RequestBody @Valid RestaurantRq restaurantRq) {
+	public ResponseEntity<RestaurantDetailRs> save(@RequestBody @Valid RestaurantRq restaurantRq) {
 		var saved = restaurantService.save(restaurantRq.convert());
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
-				.body(new RestaurantRs(saved));
+				.body(new RestaurantDetailRs(saved));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<RestaurantRs> update(@PathVariable @Valid Long id, @RequestBody @Valid RestaurantRq restaurantRq) {
+	public ResponseEntity<RestaurantDetailRs> update(@PathVariable @Valid Long id, @RequestBody @Valid RestaurantRq restaurantRq) {
 		var updated = restaurantService.update(id, restaurantRq.convert());
-		return ResponseEntity.ok(new RestaurantRs(updated));
+		return ResponseEntity.ok(new RestaurantDetailRs(updated));
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<RestaurantRs> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
+	public ResponseEntity<RestaurantDetailRs> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 		Restaurant restaurant = restaurantService.findById(id);
 		this.merge(fields, restaurant, request);
 		this.validate(restaurant, "restaurant");
 		var updated = restaurantService.update(id, restaurant);
-		return ResponseEntity.ok(new RestaurantRs(updated));
+		return ResponseEntity.ok(new RestaurantDetailRs(updated));
 	}
 
 	@PutMapping("/{id}/activate")

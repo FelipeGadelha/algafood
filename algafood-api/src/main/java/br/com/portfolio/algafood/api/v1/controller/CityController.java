@@ -42,7 +42,7 @@ public class CityController {
 	public ResponseEntity<List<CityRs>> findAll() {
 		return ResponseEntity.ok(cityService.findAll().stream()
 				.map(CityRs::new)
-				.collect(Collectors.toList()));
+				.toList());
 	}
 
 	@GetMapping("/{id}")

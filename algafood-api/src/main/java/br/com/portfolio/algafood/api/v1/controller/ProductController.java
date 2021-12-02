@@ -32,8 +32,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.findAll(restaurantId, includeInactive)
                 .stream()
                 .map(ProductRs::new)
-                .collect(Collectors.toList())
-        );
+                .toList());
     }
 
     @GetMapping("/{id}")

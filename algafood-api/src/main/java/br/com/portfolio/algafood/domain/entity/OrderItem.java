@@ -1,5 +1,7 @@
 package br.com.portfolio.algafood.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -15,7 +17,7 @@ public class OrderItem implements Serializable {
 	private BigDecimal unitPrice;
 	private BigDecimal totalPrice;
 	private String observation;
-	@ManyToOne @JoinColumn(nullable = false) private Order order;
+	@ManyToOne @JoinColumn(nullable = false) @JsonBackReference	private Order order;
 	@ManyToOne @JoinColumn(nullable = false) private Product product;
 
 	@Deprecated public OrderItem() { }

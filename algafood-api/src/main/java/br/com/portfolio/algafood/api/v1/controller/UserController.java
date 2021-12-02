@@ -2,6 +2,7 @@ package br.com.portfolio.algafood.api.v1.controller;
 
 import br.com.portfolio.algafood.api.v1.dto.request.UserRq;
 import br.com.portfolio.algafood.api.v1.dto.request.UserUpdateRq;
+import br.com.portfolio.algafood.api.v1.dto.response.UserDetailRs;
 import br.com.portfolio.algafood.api.v1.dto.response.UserRs;
 import br.com.portfolio.algafood.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,27 +28,27 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll()
                 .stream()
                 .map(UserRs::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserRs> findById(@PathVariable Long id) {
+    public ResponseEntity<UserDetailRs> findById(@PathVariable Long id) {
         var user = userService.findById(id);
-        return ResponseEntity.ok(new UserRs(user));
+        return ResponseEntity.ok(new UserDetailRs(user));
     }
 
     @PostMapping
-    public ResponseEntity<UserRs> save(@Valid @RequestBody UserRq userRq) {
+    public ResponseEntity<UserDetailRs> save(@Valid @RequestBody UserRq userRq) {
         var saved = userService.save(userRq.convert());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new UserRs(saved));
+                .body(new UserDetailRs(saved));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserRs> update(@PathVariable Long id, @Valid @RequestBody UserUpdateRq userUpdateRq) {
+    public ResponseEntity<UserDetailRs> update(@PathVariable Long id, @Valid @RequestBody UserUpdateRq userUpdateRq) {
         var update = userService.update(id, userUpdateRq.convert());
-        return ResponseEntity.ok(new UserRs(update));
+        return ResponseEntity.ok(new UserDetailRs(update));
     }
 
     @DeleteMapping("/{id}")

@@ -6,26 +6,21 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.UnaryOperator;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import br.com.portfolio.algafood.core.validation.TaxFreight;
+import br.com.portfolio.algafood.api.validator.annotation.TaxFreight;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+@NamedEntityGraph(
+		name = "order_with_all_associations",
+		includeAllAttributes = true
+)
 @Entity
 public class Restaurant implements Serializable {
 	
@@ -47,6 +42,7 @@ public class Restaurant implements Serializable {
 
 	@NotNull @ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = { CascadeType.MERGE, CascadeType.ALL })
 	@JoinColumn(name = "kitchen_id", nullable = false)
+	@JsonBackReference
 	private Kitchen kitchen;
 
 	@ManyToMany//(fetch = FetchType.EAGER)
@@ -57,7 +53,7 @@ public class Restaurant implements Serializable {
 	)
 	private Set<PaymentMethod> paymentMethod = new HashSet<>();
 
-	@OneToMany(mappedBy = "restaurant")
+	@OneToMany(mappedBy = "restaurant") @JsonManagedReference
 	private List<Product> products = new ArrayList<>();
 
 	private Boolean active = Boolean.TRUE;

@@ -28,7 +28,7 @@ public class UserGroupController {
         return ResponseEntity.ok(userGroupService.findById(userId)
                 .stream()
                 .map(GroupRs::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

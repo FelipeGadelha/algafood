@@ -26,7 +26,7 @@ public class RestaurantPaymentMethodController {
         return ResponseEntity.ok(restaurantPaymentMethodService.findAll(restaurantId)
                 .stream()
                 .map(PaymentMethodRs::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @DeleteMapping("/{id}")

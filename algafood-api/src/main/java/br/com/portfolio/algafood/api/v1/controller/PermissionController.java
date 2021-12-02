@@ -31,7 +31,7 @@ public class PermissionController {
         return ResponseEntity.ok(permissionService.findAll()
                 .stream()
                 .map(PermissionRs::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @GetMapping("/{id}")
