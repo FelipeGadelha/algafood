@@ -54,3 +54,7 @@ spring:
 #              action: create
 #              create-target: create.sql
     show-sql: true
+#logging:
+#  level:
+#    org.springframework.jdbc: DEBUG
+#    javax.persistence.criteria: DEBUG

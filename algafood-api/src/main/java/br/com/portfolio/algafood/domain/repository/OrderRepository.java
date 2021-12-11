@@ -15,6 +15,10 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends CustomJpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            attributePaths = { "restaurant", "client", "orderStatus" }
+    )
     Optional<Order> findByCode(String code);
 
     @Override
@@ -33,4 +37,16 @@ public interface OrderRepository extends CustomJpaRepository<Order, Long>, JpaSp
 
     @Query("from Order o join fetch o.client join fetch o.restaurant r join fetch r.kitchen")
     List<Order> findAll();
+
+//    @Query(value = """
+//            select
+//            date(os.moment) as date,
+//            count(o.id) as totalSales,
+//            sum(o.total_value) as totalIncome
+//            from orders o
+//            left join order_status os on o.id = os.order_status_id
+//            where os.status = 'DELIVERED'
+//            group by date(os.moment);
+//            """, nativeQuery = true)
+//    List<DailySaleProjection> findDailySale();
 }
