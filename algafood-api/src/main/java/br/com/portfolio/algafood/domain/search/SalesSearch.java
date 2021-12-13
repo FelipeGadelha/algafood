@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SalesSearch {
 
-    List<DailySale> findDailySale(DailySaleFilter filter);
+    List<DailySale> findDailySale(DailySaleFilter filter, String offset);
 }

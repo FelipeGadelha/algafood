@@ -2,7 +2,6 @@ package br.com.portfolio.algafood.infra.search;
 
 import br.com.portfolio.algafood.domain.entity.DailySale;
 import br.com.portfolio.algafood.domain.entity.Order;
-import br.com.portfolio.algafood.domain.entity.OrderStatus;
 import br.com.portfolio.algafood.domain.entity.OrderStatusType;
 import br.com.portfolio.algafood.domain.filter.DailySaleFilter;
 import br.com.portfolio.algafood.domain.search.SalesSearch;
@@ -11,11 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,27 +22,26 @@ public class SalesSearchImpl implements SalesSearch {
     @PersistenceContext private EntityManager manager;
 
     @Override
-    public List<DailySale> findDailySale(DailySaleFilter filter) {
+    public List<DailySale> findDailySale(DailySaleFilter filter, String offset) {
         var builder = manager.getCriteriaBuilder();
         var query = builder.createQuery(DailySale.class);
         var root = query.from(Order.class);
         var orderStatus = root.join("orderStatus", JoinType.LEFT);
 
         var predicates = new ArrayList<Predicate>();
-
         var functionConvertTzMoment = builder.function(
                 "timezone",
                 Date.class,
-                builder.literal("+00:00"),
+                builder.literal(offset),
                 orderStatus.get("moment")
-        );
+        ).as(Date.class);
 
         var functionDate = builder.function(
                 "TO_CHAR",
                 String.class,
                 functionConvertTzMoment,
                 builder.literal("yyyy-MM-dd")
-        );
+        ).as(String.class);
 
         var selection = builder.construct(DailySale.class,
                 functionDate,
