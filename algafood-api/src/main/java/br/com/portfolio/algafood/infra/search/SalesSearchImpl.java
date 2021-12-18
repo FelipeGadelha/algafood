@@ -5,11 +5,10 @@ import br.com.portfolio.algafood.domain.entity.Order;
 import br.com.portfolio.algafood.domain.entity.OrderStatusType;
 import br.com.portfolio.algafood.domain.filter.DailySaleFilter;
 import br.com.portfolio.algafood.domain.search.SalesSearch;
-import org.hibernate.criterion.Projections;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -19,7 +18,8 @@ import java.util.List;
 @Repository
 public class SalesSearchImpl implements SalesSearch {
 
-    @PersistenceContext private EntityManager manager;
+    private final EntityManager manager;
+    @Autowired public SalesSearchImpl(EntityManager manager) { this.manager = manager; }
 
     @Override
     public List<DailySale> findDailySale(DailySaleFilter filter, String offset) {
@@ -64,25 +64,23 @@ public class SalesSearchImpl implements SalesSearch {
         query.groupBy(functionDate);
         return manager.createQuery(query).getResultList();
     }
-
-
-
-    private List<DailySale> findByJPQL(DailySaleFilter filter) {
-        String jpql = "SELECT date(os.moment) as date, count(o.id) as totalSales, sum(o.total_value) as totalIncome " +
-                "FROM Order o left join order_status os on o.id = os.order_status_id WHERE 1=1 ";
-
-        if (filter.getRestaurantId() != null) {
-            jpql = " AND o.restaurantId = :restaurantId ";
-        }
-        if (filter != null) {
-            jpql = " AND p.dataCadastro = :dataCadastro ";
-        }
-        Projections.avg("");
-        var query = manager.createQuery(jpql, DailySale.class);
-
-        return query.getResultList();
-    }
 }
+
+//    private List<DailySale> findByJPQL(DailySaleFilter filter) {
+//        String jpql = "SELECT date(os.moment) as date, count(o.id) as totalSales, sum(o.total_value) as totalIncome " +
+//                "FROM Order o left join order_status os on o.id = os.order_status_id WHERE 1=1 ";
+//
+//        if (filter.getRestaurantId() != null) {
+//            jpql = " AND o.restaurantId = :restaurantId ";
+//        }
+//        if (filter != null) {
+//            jpql = " AND p.dataCadastro = :dataCadastro ";
+//        }
+//        Projections.avg("");
+//        var query = manager.createQuery(jpql, DailySale.class);
+//
+//        return query.getResultList();
+//    }
 
 //        if (filter.getRestaurantId() != null)
 //            predicates.add(builder.equal(root.get("restaurant"), filter.getRestaurantId()));
