@@ -25,6 +25,7 @@
 		<modelmapper.version>2.4.4</modelmapper.version>
 		<rest-assured.version>4.4.0</rest-assured.version>
 		<groovy.version>3.0.9</groovy.version>
+		<jasperreports.version>6.18.1</jasperreports.version>
 	</properties>
 
 	<dependencies>
@@ -99,7 +100,21 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-        <!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all &ndash;&gt;-->
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>${jasperreports.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-functions -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-functions</artifactId>
+			<version>${jasperreports.version}</version>
+		</dependency>
+
+
+		<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all &ndash;&gt;-->
 <!--		<dependency>-->
 <!--			<groupId>org.codehaus.groovy</groupId>-->
 <!--			<artifactId>groovy-all</artifactId>-->
@@ -121,14 +136,14 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <source>17</source>-->
+<!--                    <target>17</target>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <!--			<plugin>-->
 <!--				&lt;!&ndash; exclui a execução de testes de integração no momento do build &ndash;&gt;-->
 <!--				<artifactId>maven-failsafe-plugin</artifactId>-->
