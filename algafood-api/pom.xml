@@ -26,6 +26,7 @@
 		<rest-assured.version>4.4.0</rest-assured.version>
 		<groovy.version>3.0.9</groovy.version>
 		<jasperreports.version>6.18.1</jasperreports.version>
+		<aws-java-sdk-s3.version>1.12.336</aws-java-sdk-s3.version>
 	</properties>
 
 	<dependencies>
@@ -111,6 +112,12 @@
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports-functions</artifactId>
 			<version>${jasperreports.version}</version>
+		</dependency>
+		<!-- AWS SDK -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>${aws-java-sdk-s3.version}</version>
 		</dependency>
 
 

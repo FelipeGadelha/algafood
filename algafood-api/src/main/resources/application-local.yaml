@@ -58,3 +58,14 @@ spring:
 #  level:
 #    org.springframework.jdbc: DEBUG
 #    javax.persistence.criteria: DEBUG
+algafood:
+  storage:
+    type: local
+    local:
+      images-directory: C:\Users\Felix\Documents\dev\store
+    s3:
+      access-key: access-key-id
+      secret-key: access-key-secret
+      bucket: algafood
+      region: us-east-1
+      directory: catalog

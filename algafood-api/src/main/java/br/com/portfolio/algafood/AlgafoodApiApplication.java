@@ -10,7 +10,5 @@ import br.com.portfolio.algafood.infra.repository.CustomJpaRepositoryImpl;
 @EnableJpaRepositories(repositoryBaseClass = CustomJpaRepositoryImpl.class)
 public class AlgafoodApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AlgafoodApiApplication.class, args);
-	}
+	public static void main(String[] args) { SpringApplication.run(AlgafoodApiApplication.class, args); }
 }

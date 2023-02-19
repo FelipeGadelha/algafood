@@ -29,6 +29,3 @@ spring:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-algafood:
-  storage:
-    local: C:\Users\Felix\Documents\dev\store

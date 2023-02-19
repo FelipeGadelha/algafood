@@ -97,7 +97,4 @@ public class KitchenControllerTest {
 		assertThat(entity.getStatusCodeValue()).isEqualTo(204);
 		assertThat(entity.getBody()).isNull();
 	}
-	
-	
-	
 }

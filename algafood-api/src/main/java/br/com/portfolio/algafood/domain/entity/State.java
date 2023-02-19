@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class State implements Serializable {
+public class State implements Serializable, Functions<State> {
 	
 	private static final long serialVersionUID = 1L;
 	

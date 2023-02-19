@@ -7,6 +7,10 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 @Entity
 @Table(name = "users")
@@ -149,5 +153,17 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", groups="
 				+ groups + ", creationDate=" + creationDate + "]";
+	}
+	public <R> R map(Function<User, R> func) {
+		return func.apply(this);
+	}
+	public void also(Consumer<User> consumer) {
+		consumer.accept(this);
+	}
+	public void run(Supplier<User> supplier) {
+		supplier.get();
+	}
+	public User let(UnaryOperator<User> op) {
+		return op.apply(this);
 	}
 }

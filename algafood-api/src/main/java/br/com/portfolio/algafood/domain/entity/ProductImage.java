@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.domain.entity;
 
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ public class ProductImage {
         this.product = builder.product;
     }
     public static Builder builder() { return new Builder(); }
+
     public static class Builder {
         private Long id;
         private String fileName;
