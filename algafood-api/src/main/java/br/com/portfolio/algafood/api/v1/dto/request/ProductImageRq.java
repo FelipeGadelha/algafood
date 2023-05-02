@@ -2,8 +2,8 @@ package br.com.portfolio.algafood.api.v1.dto.request;
 
 import br.com.portfolio.algafood.api.validator.annotation.FileContentType;
 import br.com.portfolio.algafood.api.validator.annotation.FileSize;
-import br.com.portfolio.algafood.domain.entity.ProductImage;
-import br.com.portfolio.algafood.domain.entity.Product;
+import br.com.portfolio.algafood.domain.model.ProductImage;
+import br.com.portfolio.algafood.domain.model.Product;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 

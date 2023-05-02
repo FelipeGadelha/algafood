@@ -1,8 +1,8 @@
 package br.com.portfolio.algafood.api.v1.dto.request;
 
 import br.com.portfolio.algafood.api.validator.annotation.TaxFreight;
-import br.com.portfolio.algafood.domain.entity.Kitchen;
-import br.com.portfolio.algafood.domain.entity.Restaurant;
+import br.com.portfolio.algafood.domain.model.Kitchen;
+import br.com.portfolio.algafood.domain.model.Restaurant;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;

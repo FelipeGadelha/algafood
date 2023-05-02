@@ -3,7 +3,6 @@ package br.com.portfolio.algafood.api.v1.controller;
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.CityRq;
 import br.com.portfolio.algafood.api.v1.dto.response.CityRs;
-import br.com.portfolio.algafood.api.v1.dto.response.RestaurantRs;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,12 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.portfolio.algafood.domain.entity.City;
+import br.com.portfolio.algafood.domain.model.City;
 import br.com.portfolio.algafood.domain.service.CityService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/v1/cities")

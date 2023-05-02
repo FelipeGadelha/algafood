@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import br.com.portfolio.algafood.domain.entity.Restaurant;
+import br.com.portfolio.algafood.domain.model.Restaurant;
 import br.com.portfolio.algafood.domain.repository.RestaurantRepository;
 import br.com.portfolio.algafood.domain.repository.RestaurantRepositoryQueries;
 

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.portfolio.algafood.domain.entity.Kitchen;
-import br.com.portfolio.algafood.domain.entity.Restaurant;
+import br.com.portfolio.algafood.domain.model.Kitchen;
+import br.com.portfolio.algafood.domain.model.Restaurant;
 import br.com.portfolio.algafood.domain.repository.KitchenRepository;
 import br.com.portfolio.algafood.domain.repository.RestaurantRepository;
 

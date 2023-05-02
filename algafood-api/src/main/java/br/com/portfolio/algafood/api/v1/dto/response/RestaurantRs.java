@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
-import br.com.portfolio.algafood.domain.entity.Restaurant;
+import br.com.portfolio.algafood.domain.model.Restaurant;
 
 import java.math.BigDecimal;
 

@@ -1,7 +1,7 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
-import br.com.portfolio.algafood.domain.entity.OrderStatus;
-import br.com.portfolio.algafood.domain.entity.OrderStatusType;
+import br.com.portfolio.algafood.domain.model.OrderStatus;
+import br.com.portfolio.algafood.domain.model.OrderStatusType;
 import br.com.portfolio.algafood.domain.service.OrderStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

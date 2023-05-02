@@ -3,7 +3,7 @@ package br.com.portfolio.algafood.api.v1.controller;
 import br.com.portfolio.algafood.api.v1.dto.request.RestaurantRq;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantDetailRs;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantRs;
-import br.com.portfolio.algafood.domain.entity.Restaurant;
+import br.com.portfolio.algafood.domain.model.Restaurant;
 import br.com.portfolio.algafood.domain.exception.BusinessException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.exception.ValidationException;

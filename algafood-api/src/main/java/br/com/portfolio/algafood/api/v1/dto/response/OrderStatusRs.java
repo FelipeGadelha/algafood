@@ -1,7 +1,7 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
-import br.com.portfolio.algafood.domain.entity.OrderStatus;
-import br.com.portfolio.algafood.domain.entity.OrderStatusType;
+import br.com.portfolio.algafood.domain.model.OrderStatus;
+import br.com.portfolio.algafood.domain.model.OrderStatusType;
 
 import java.time.OffsetDateTime;
 

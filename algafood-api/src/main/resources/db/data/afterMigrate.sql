@@ -124,11 +124,11 @@ SELECT nextval ('product_id_seq');
 INSERT INTO groups (name) VALUES ('Gerente'), ('Vendedor'), ('Secretária'), ('Cadastrador');
 
 INSERT INTO users (id, name, email, password, creation_date) VALUES
-(1, 'João da Silva', 'joao.ger@gmail.com', '123', now()),
-(2, 'Maria Joaquina', 'maria.vnd@email.com', '123', now()),
-(3, 'José Souza', 'jose.aux@outlook.com', '123', now()),
-(4, 'Sebastião Martins', 'sebastiao.cad@test.com', '123', now()),
-(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', now());
+(1, 'João da Silva', 'felipegadelha90@gmail.com', '123', now()),
+(2, 'Maria Joaquina', 'felipe.dev.test+maria@gmail.com', '123', now()),
+(3, 'José Souza', 'felipe.dev.test+jose@gmail.com', '123', now()),
+(4, 'Sebastião Martins', 'felipe.dev.test+sebastiao@gmail.com', '123', now()),
+(5, 'Manoel Lima', 'felipe.dev.test+manoel@gmail.com', '123', now());
 
 SELECT nextval ('users_id_seq');
 SELECT nextval ('users_id_seq');

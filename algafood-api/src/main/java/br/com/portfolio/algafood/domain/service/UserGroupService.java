@@ -1,7 +1,7 @@
 package br.com.portfolio.algafood.domain.service;
 
-import br.com.portfolio.algafood.domain.entity.Group;
-import br.com.portfolio.algafood.domain.entity.User;
+import br.com.portfolio.algafood.domain.model.Group;
+import br.com.portfolio.algafood.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

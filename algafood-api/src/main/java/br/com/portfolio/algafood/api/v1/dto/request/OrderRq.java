@@ -1,15 +1,14 @@
 package br.com.portfolio.algafood.api.v1.dto.request;
 
-import br.com.portfolio.algafood.domain.entity.Order;
-import br.com.portfolio.algafood.domain.entity.PaymentMethod;
-import br.com.portfolio.algafood.domain.entity.Restaurant;
-import br.com.portfolio.algafood.domain.entity.User;
+import br.com.portfolio.algafood.domain.model.Order;
+import br.com.portfolio.algafood.domain.model.PaymentMethod;
+import br.com.portfolio.algafood.domain.model.Restaurant;
+import br.com.portfolio.algafood.domain.model.User;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public record OrderRq (
     @NotNull Long restaurantId,

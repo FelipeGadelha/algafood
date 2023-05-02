@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.domain.service;
 
-import br.com.portfolio.algafood.domain.entity.Group;
+import br.com.portfolio.algafood.domain.model.Group;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.repository.GroupRepository;

@@ -1,17 +1,15 @@
 package br.com.portfolio.algafood.domain.service;
 
 import java.util.List;
-import java.util.function.Supplier;
 
-import br.com.portfolio.algafood.domain.entity.Address;
-import br.com.portfolio.algafood.domain.entity.PaymentMethod;
+import br.com.portfolio.algafood.domain.model.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import br.com.portfolio.algafood.domain.entity.Kitchen;
-import br.com.portfolio.algafood.domain.entity.Restaurant;
+import br.com.portfolio.algafood.domain.model.Kitchen;
+import br.com.portfolio.algafood.domain.model.Restaurant;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.repository.RestaurantRepository;

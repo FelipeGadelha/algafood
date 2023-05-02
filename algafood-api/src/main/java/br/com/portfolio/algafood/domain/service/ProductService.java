@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.domain.service;
 
-import br.com.portfolio.algafood.domain.entity.Product;
+import br.com.portfolio.algafood.domain.model.Product;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;

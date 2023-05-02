@@ -1,7 +1,7 @@
 package br.com.portfolio.algafood.domain.repository;
 
-import br.com.portfolio.algafood.domain.entity.ProductImage;
-import br.com.portfolio.algafood.domain.entity.Product;
+import br.com.portfolio.algafood.domain.model.ProductImage;
+import br.com.portfolio.algafood.domain.model.Product;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

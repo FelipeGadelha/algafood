@@ -1,7 +1,7 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
 import br.com.portfolio.algafood.api.v1.dto.View;
-import br.com.portfolio.algafood.domain.entity.Permission;
+import br.com.portfolio.algafood.domain.model.Permission;
 import com.fasterxml.jackson.annotation.JsonView;
 
 public class PermissionRs {

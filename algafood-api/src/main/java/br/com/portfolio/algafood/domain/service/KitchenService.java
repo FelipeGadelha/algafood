@@ -1,12 +1,7 @@
 package br.com.portfolio.algafood.domain.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import br.com.portfolio.algafood.domain.entity.State;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import br.com.portfolio.algafood.domain.entity.Kitchen;
+import br.com.portfolio.algafood.domain.model.Kitchen;
 import br.com.portfolio.algafood.domain.repository.KitchenRepository;
 import org.springframework.transaction.annotation.Transactional;
 

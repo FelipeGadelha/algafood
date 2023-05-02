@@ -1,8 +1,7 @@
 package br.com.portfolio.algafood.domain.service;
 
-import br.com.portfolio.algafood.domain.entity.Kitchen;
+import br.com.portfolio.algafood.domain.model.Kitchen;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
-import br.com.portfolio.algafood.domain.service.KitchenService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

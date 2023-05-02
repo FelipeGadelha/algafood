@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.domain.repository;
 
-import br.com.portfolio.algafood.domain.entity.PaymentMethod;
+import br.com.portfolio.algafood.domain.model.PaymentMethod;
 import org.springframework.stereotype.Repository;
 
 @Repository

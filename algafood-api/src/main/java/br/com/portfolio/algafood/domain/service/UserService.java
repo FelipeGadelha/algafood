@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.domain.service;
 
-import br.com.portfolio.algafood.domain.entity.User;
+import br.com.portfolio.algafood.domain.model.User;
 import br.com.portfolio.algafood.domain.exception.BusinessException;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;

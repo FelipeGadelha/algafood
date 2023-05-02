@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.domain.repository;
 
-import br.com.portfolio.algafood.domain.entity.Order;
+import br.com.portfolio.algafood.domain.model.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

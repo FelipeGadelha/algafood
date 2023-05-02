@@ -1,21 +1,20 @@
-package br.com.portfolio.algafood.domain.entity;
+package br.com.portfolio.algafood.domain.model;
 
+import br.com.portfolio.algafood.domain.event.CanceledOrderEvent;
+import br.com.portfolio.algafood.domain.event.ConfirmedOrderEvent;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.UnaryOperator;
 
 @Entity
 @Table(name = "orders")
-public class Order implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+public class Order extends AbstractAggregateRoot<Order> {
+
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String code;
@@ -33,18 +32,18 @@ public class Order implements Serializable {
 	@JsonManagedReference
 	private List<OrderItem> ordersItens = new ArrayList<>();
 	@ElementCollection
-	@CollectionTable(name = "order_status",
-			joinColumns = @JoinColumn(name = "order_status_id"))
 	@OrderBy("moment asc")
+	@CollectionTable(name = "order_status", joinColumns = @JoinColumn(name = "order_status_id"))
 	private SortedSet<OrderStatus> orderStatus = new TreeSet<>();
+
 	@Deprecated public Order() { }
 
 	private Order(Builder builder) {
 		this.id = builder.id;
 		this.code = (Objects.isNull(builder.code)) ? UUID.randomUUID().toString() : builder.code;
 		this.subtotal = builder.ordersItens.stream()
-				.map(OrderItem::getTotalPrice)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+			.map(OrderItem::getTotalPrice)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 		this.taxFreight = (Objects.nonNull(builder.taxFreight)) ? builder.taxFreight : BigDecimal.ZERO;
 		this.totalValue = this.subtotal.add(this.taxFreight);
 		this.method = builder.method;
@@ -168,39 +167,41 @@ public class Order implements Serializable {
 
 	private void calculateTotalValue() {
 		this.subtotal = getOrdersItens().stream()
-				.map(OrderItem::getTotalPrice)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+			.map(OrderItem::getTotalPrice)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 	public void confirm() {
 		Assert.state(this.readyForConfirmation(),
-				String.format("Status do pedido %s não pode ser alterado de %s para %s",
-						this.getCode(), this.currentStatus().getDescription(), OrderStatusType.CONFIRMED.getDescription()));
+			String.format("Status do pedido %s não pode ser alterado de %s para %s",
+				this.getCode(), this.currentStatus().getDescription(), OrderStatusType.CONFIRMED.getDescription()));
 		this.orderStatus.add(new OrderStatus(OrderStatusType.CONFIRMED));
+		registerEvent(new ConfirmedOrderEvent(this));
 	}
 	public void deliver() {
 		Assert.state(this.readyForDeliver(),
-				String.format("Status do pedido %s não pode ser alterado de %s para %s",
-						this.getCode(), this.currentStatus().getDescription(), OrderStatusType.DELIVERED.getDescription()));
+			String.format("Status do pedido %s não pode ser alterado de %s para %s",
+				this.getCode(), this.currentStatus().getDescription(), OrderStatusType.DELIVERED.getDescription()));
 		this.orderStatus.add(new OrderStatus(OrderStatusType.DELIVERED));
 	}
 	public void cancel() {
 		Assert.state(this.readyForCancellation(),
-				String.format("Status do pedido %s não pode ser alterado de %s para %s",
-						this.getCode(), this.currentStatus().getDescription(), OrderStatusType.CANCELED.getDescription()));
+			String.format("Status do pedido %s não pode ser alterado de %s para %s",
+				this.getCode(), this.currentStatus().getDescription(), OrderStatusType.CANCELED.getDescription()));
 		this.orderStatus.add(new OrderStatus(OrderStatusType.CANCELED));
+		registerEvent(new CanceledOrderEvent(this));
 	}
 	public boolean readyForConfirmation() {
 		return !orderStatus.stream()
-				.anyMatch(s -> !s.getStatus().equals(OrderStatusType.CREATED));
+			.anyMatch(s -> !s.getStatus().equals(OrderStatusType.CREATED));
 	}
 	public boolean readyForDeliver() {
 		return orderStatus.stream()
-				.anyMatch(s -> s.getStatus().equals(OrderStatusType.CONFIRMED) &&
-						!s.getStatus().equals(OrderStatusType.CANCELED));
+			.anyMatch(s -> s.getStatus().equals(OrderStatusType.CONFIRMED) &&
+				!s.getStatus().equals(OrderStatusType.CANCELED));
 	}
 	public boolean readyForCancellation() {
 		return orderStatus.size() == 1 &&
-				orderStatus.stream().anyMatch(s -> s.getStatus().equals(OrderStatusType.CREATED));
+			orderStatus.stream().anyMatch(s -> s.getStatus().equals(OrderStatusType.CREATED));
 	}
 	public OrderStatusType currentStatus() { return orderStatus.last().getStatus(); }
 	@Override
