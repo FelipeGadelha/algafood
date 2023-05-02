@@ -14,18 +14,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
+
 
 @ActiveProfiles(value = "test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class KitchenControllerIT {
+class KitchenControllerIT {
 
-    @LocalServerPort
-    private int port;
+    @LocalServerPort private int port;
     private final String BASE_URL = "/api/algafood/v1/kitchens";
-    @Autowired
-    private Flyway flyway;
-
+    @Autowired private Flyway flyway;
 
     @BeforeEach
     public void setUp(){
@@ -54,13 +54,13 @@ public class KitchenControllerIT {
     @DisplayName("should save kitchen successfully")
     public void test3() {
         given()
-                .accept(ContentType.JSON)
-                .body(new Kitchen(null, "italiana", null))
-                .contentType(ContentType.JSON)
-                .when()
-                .post()
-                .then()
-                .statusCode(HttpStatus.CREATED.value())
+            .accept(ContentType.JSON)
+            .body(new Kitchen(null, "italiana", null))
+            .contentType(ContentType.JSON)
+            .when()
+            .post()
+            .then()
+            .statusCode(HttpStatus.CREATED.value())
         ;
     }
     @Test

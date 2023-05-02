@@ -3,7 +3,6 @@ package br.com.portfolio.algafood.api.v1.dto.response;
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.domain.entity.OrderItem;
 import com.fasterxml.jackson.annotation.JsonView;
-
 import java.math.BigDecimal;
 
 public class OrderItemRs {

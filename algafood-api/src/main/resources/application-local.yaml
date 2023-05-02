@@ -69,3 +69,5 @@ algafood:
       bucket: algafood
       region: us-east-1
       directory: catalog
+  email:
+    from: Algafood <naoresponser@algafood.com.br> #name email
