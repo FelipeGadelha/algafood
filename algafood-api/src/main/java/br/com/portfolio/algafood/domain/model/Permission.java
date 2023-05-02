@@ -1,4 +1,4 @@
-package br.com.portfolio.algafood.domain.entity;
+package br.com.portfolio.algafood.domain.model;
 
 import java.io.Serializable;
 import java.util.Objects;

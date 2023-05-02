@@ -7,7 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
 import br.com.portfolio.algafood.AlgafoodApiApplication;
-import br.com.portfolio.algafood.domain.entity.Kitchen;
+import br.com.portfolio.algafood.domain.model.Kitchen;
 import br.com.portfolio.algafood.domain.repository.KitchenRepository;
 
 public class FindKitchen {

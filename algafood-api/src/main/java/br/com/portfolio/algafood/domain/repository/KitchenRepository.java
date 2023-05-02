@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.portfolio.algafood.domain.entity.Kitchen;
+import br.com.portfolio.algafood.domain.model.Kitchen;
 
 @Repository
 public interface KitchenRepository extends CustomJpaRepository<Kitchen, Long>{

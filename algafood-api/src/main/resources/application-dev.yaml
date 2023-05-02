@@ -42,3 +42,13 @@ spring:
           lob:
             non_contextual_creation: true
     show-sql: true
+  mail:
+    host: smtp.sendgrid.net
+    port: 587
+    username: apiKey
+algafood:
+  mail:
+    impl: sandbox
+    sender: Algafood <felipe.dev.test@gmail.com>
+    sandbox:
+      to: felipe.dev.test@gmail.com

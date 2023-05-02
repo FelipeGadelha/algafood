@@ -30,7 +30,8 @@ spring:
     host: smtp.sendgrid.net
     port: 587
     username: apikey
-    password: 
+    password:
+  freemarker.settings.locale: pt_BR
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.infra.repository;
 
-import br.com.portfolio.algafood.domain.entity.ProductImage;
+import br.com.portfolio.algafood.domain.model.ProductImage;
 import br.com.portfolio.algafood.domain.repository.ProductRepositoryQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

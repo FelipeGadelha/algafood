@@ -58,6 +58,14 @@ spring:
 #  level:
 #    org.springframework.jdbc: DEBUG
 #    javax.persistence.criteria: DEBUG
+  mail:
+    host: smtp.sendgrid.net
+    port: 587
+    username: apikey
+    password: ${EMAIL_PASSWORD}
+#    properties.mail.smtp:
+#      auth: true
+#      starttls.enable: true
 algafood:
   storage:
     type: local
@@ -69,5 +77,8 @@ algafood:
       bucket: algafood
       region: us-east-1
       directory: catalog
-  email:
-    from: Algafood <naoresponser@algafood.com.br> #name email
+  mail:
+    impl: fake
+    sender: Algafood <felipe.dev.test@gmail.com>
+    sandbox:
+      to: felipe.dev.test@gmail.com

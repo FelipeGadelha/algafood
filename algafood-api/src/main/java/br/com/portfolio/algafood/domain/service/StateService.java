@@ -8,7 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import br.com.portfolio.algafood.domain.entity.State;
+import br.com.portfolio.algafood.domain.model.State;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.repository.StateRepository;
 import org.springframework.transaction.annotation.Transactional;

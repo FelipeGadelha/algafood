@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
-import br.com.portfolio.algafood.domain.entity.Kitchen;
+import br.com.portfolio.algafood.domain.model.Kitchen;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.flywaydb.core.Flyway;

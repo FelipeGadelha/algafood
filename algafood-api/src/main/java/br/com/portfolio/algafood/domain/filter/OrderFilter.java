@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.domain.filter;
 
-import br.com.portfolio.algafood.domain.entity.OrderStatusType;
+import br.com.portfolio.algafood.domain.model.OrderStatusType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;

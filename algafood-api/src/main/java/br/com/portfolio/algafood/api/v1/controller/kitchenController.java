@@ -2,7 +2,7 @@ package br.com.portfolio.algafood.api.v1.controller;
 
 import br.com.portfolio.algafood.api.v1.dto.request.KitchenRq;
 import br.com.portfolio.algafood.api.v1.dto.response.KitchenRs;
-import br.com.portfolio.algafood.domain.entity.Kitchen;
+import br.com.portfolio.algafood.domain.model.Kitchen;
 import br.com.portfolio.algafood.domain.service.KitchenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

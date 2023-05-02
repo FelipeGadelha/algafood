@@ -1,4 +1,4 @@
-package br.com.portfolio.algafood.domain.entity;
+package br.com.portfolio.algafood.domain.model;
 
 import br.com.portfolio.algafood.config.validation.Groups;
 

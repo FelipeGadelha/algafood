@@ -1,8 +1,8 @@
 package br.com.portfolio.algafood.infra.search;
 
-import br.com.portfolio.algafood.domain.entity.DailySale;
-import br.com.portfolio.algafood.domain.entity.Order;
-import br.com.portfolio.algafood.domain.entity.OrderStatusType;
+import br.com.portfolio.algafood.domain.model.DailySale;
+import br.com.portfolio.algafood.domain.model.Order;
+import br.com.portfolio.algafood.domain.model.OrderStatusType;
 import br.com.portfolio.algafood.domain.filter.DailySaleFilter;
 import br.com.portfolio.algafood.domain.search.SalesSearch;
 import org.springframework.beans.factory.annotation.Autowired;

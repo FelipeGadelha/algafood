@@ -1,9 +1,9 @@
 package br.com.portfolio.algafood.domain.service;
 
-import br.com.portfolio.algafood.domain.entity.Address;
-import br.com.portfolio.algafood.domain.entity.Order;
-import br.com.portfolio.algafood.domain.entity.OrderItem;
-import br.com.portfolio.algafood.domain.entity.OrderStatusType;
+import br.com.portfolio.algafood.domain.model.Address;
+import br.com.portfolio.algafood.domain.model.Order;
+import br.com.portfolio.algafood.domain.model.OrderItem;
+import br.com.portfolio.algafood.domain.model.OrderStatusType;
 import br.com.portfolio.algafood.domain.exception.BusinessException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.filter.OrderFilter;
@@ -49,7 +49,7 @@ public class OrderService {
     @Transactional
     public Order findByCode(String code) {
         return orderRepository.findByCode(code)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(MSG_ORDER_NOT_FOUND, code)));
+            .orElseThrow(() -> new EntityNotFoundException(String.format(MSG_ORDER_NOT_FOUND, code)));
     }
 
     @Transactional
@@ -64,28 +64,28 @@ public class OrderService {
         var client = userService.findById(clientId);
 
         var itens = order.getOrdersItens().stream()
-                .map(item -> {
-                    var product = productService.findById(restaurantId, item.getProduct().getId());
-                    return OrderItem.builder()
-                            .clone(item)
-                            .product(product)
-                            .order(order)
-                            .unitPrice(product.getPrice())
-                            .build();
-                }).toList();
+            .map(item -> {
+                var product = productService.findById(restaurantId, item.getProduct().getId());
+                return OrderItem.builder()
+                    .clone(item)
+                    .product(product)
+                    .order(order)
+                    .unitPrice(product.getPrice())
+                    .build();
+            }).toList();
 
         if (!restaurant.acceptPaymentMethod(method))
             throw new BusinessException(String
-                    .format("Forma de pagamento '%s' não é aceito por esse restaurante.", method.getDescription()));
+                .format("Forma de pagamento '%s' não é aceito por esse restaurante.", method.getDescription()));
 
         var result = Order.builder()
                 .clone(order)
                 .restaurant(restaurant)
                 .client(client)
                 .addressDelivery(a -> Address.builder()
-                        .clone(a)
-                        .city(city)
-                        .build()
+                    .clone(a)
+                    .city(city)
+                    .build()
                 ).paymentMethod(method)
                 .taxFreight(order.getRestaurant().getTaxFreight())
                 .ordersItens(itens)
@@ -99,11 +99,11 @@ public class OrderService {
                 .map(item -> {
                     var product = productService.findById(restaurantId, item.getProduct().getId());
                     return OrderItem.builder()
-                            .clone(item)
-                            .product(product)
-                            .order(order)
-                            .unitPrice(product.getPrice())
-                            .build();
+                        .clone(item)
+                        .product(product)
+                        .order(order)
+                        .unitPrice(product.getPrice())
+                        .build();
                 }).toList();
     }
 }

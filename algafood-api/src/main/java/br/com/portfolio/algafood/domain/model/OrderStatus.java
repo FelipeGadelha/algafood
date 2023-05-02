@@ -1,10 +1,9 @@
-package br.com.portfolio.algafood.domain.entity;
-
-import org.jetbrains.annotations.NotNull;
+package br.com.portfolio.algafood.domain.model;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 

@@ -1,6 +1,6 @@
 package br.com.portfolio.algafood.domain.repository;
 
-import br.com.portfolio.algafood.domain.entity.Group;
+import br.com.portfolio.algafood.domain.model.Group;
 import org.springframework.stereotype.Repository;
 
 @Repository

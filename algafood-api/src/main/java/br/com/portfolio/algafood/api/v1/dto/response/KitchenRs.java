@@ -1,8 +1,6 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
-import br.com.portfolio.algafood.api.v1.dto.View;
-import br.com.portfolio.algafood.domain.entity.Kitchen;
-import com.fasterxml.jackson.annotation.JsonView;
+import br.com.portfolio.algafood.domain.model.Kitchen;
 
 public class KitchenRs {
 

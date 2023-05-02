@@ -3,7 +3,7 @@ package br.com.portfolio.algafood.domain.repository;
 import java.math.BigDecimal;
 import java.util.List;
 
-import br.com.portfolio.algafood.domain.entity.Restaurant;
+import br.com.portfolio.algafood.domain.model.Restaurant;
 
 public interface RestaurantRepositoryQueries {
 
