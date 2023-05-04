@@ -41,21 +41,23 @@ public class SalesSearchImpl implements SalesSearch {
                 String.class,
                 functionConvertTzMoment,
                 builder.literal("yyyy-MM-dd")
+//                builder.literal("dd-MM-yyyy")
         ).as(String.class);
 
         var selection = builder.construct(DailySale.class,
-                functionDate,
-                builder.count(root.get("id")),
-                builder.sum(root.get("totalValue")));
+            functionDate,
+            builder.count(root.get("id")),
+            builder.sum(root.get("totalValue"))
+        );
 
         if (filter.getRestaurantId() != null)
             predicates.add(builder.equal(root.get("restaurant"), filter.getRestaurantId()));
 
         if (filter.getCreationDate() != null) predicates
-                .add((builder.greaterThanOrEqualTo(orderStatus.get("moment"), filter.getCreationDate())));
+            .add((builder.greaterThanOrEqualTo(orderStatus.get("moment"), filter.getCreationDate())));
 
         if (filter.getFinishDate() != null) predicates
-                .add((builder.lessThanOrEqualTo(orderStatus.get("moment"), filter.getFinishDate())));
+            .add((builder.lessThanOrEqualTo(orderStatus.get("moment"), filter.getFinishDate())));
 
         predicates.add(orderStatus.get("status").in(OrderStatusType.DELIVERED));
 

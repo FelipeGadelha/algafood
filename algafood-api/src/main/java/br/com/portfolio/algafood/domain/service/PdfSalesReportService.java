@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.domain.service;
 
+import br.com.portfolio.algafood.domain.exception.ReportException;
 import br.com.portfolio.algafood.domain.filter.DailySaleFilter;
 import br.com.portfolio.algafood.domain.search.SalesSearch;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -22,30 +23,19 @@ public class PdfSalesReportService implements SalesReportService {
     @Override
     public byte[] emitDailySales(DailySaleFilter filter, String offset) {
         try {
+            var locale = new Locale.Builder().setLanguage("pt").setRegion("BR").build();
             var inputStream = this.getClass()
                 .getResourceAsStream("/reports/daily-sales.jasper");
 
             var params = new HashMap<String, Object>();
-            params.put(
-                "REPORT_LOCALE",
-                new Locale.Builder().setLanguage("pt").setRegion("BR").build()
-            );
+            params.put("REPORT_LOCALE", locale);
 
             var dailySales = salesSearch.findDailySale(filter, offset);
-
             var dataSource = new JRBeanCollectionDataSource(dailySales);
-
-//            JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
-//            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-//            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanColDataSource);
-//            JasperExportManager.exportReportToPdfFile(jasperPrint, "reports/thermochart.pdf");
-
             var jasperPrint = JasperFillManager.fillReport(inputStream, params, dataSource);
-            var result = JasperExportManager.exportReportToPdf(jasperPrint);
-            return result;
+            return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (Exception e) {
-            throw new RuntimeException("Teste: " + e.getMessage());
-//            throw new RuntimeException(e);
+            throw new ReportException("Não foi possível emitir relatório de vendas diárias " + e.getMessage());
         }
     }
 }

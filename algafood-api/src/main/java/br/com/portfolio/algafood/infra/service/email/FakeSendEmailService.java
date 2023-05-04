@@ -1,4 +1,4 @@
-package br.com.portfolio.algafood.infra.service;
+package br.com.portfolio.algafood.infra.service.email;
 
 import br.com.portfolio.algafood.domain.model.Email;
 import br.com.portfolio.algafood.domain.service.SendEmailService;

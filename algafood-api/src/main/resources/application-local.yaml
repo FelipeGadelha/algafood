@@ -78,7 +78,7 @@ algafood:
       region: us-east-1
       directory: catalog
   mail:
-    impl: fake
+    impl: sandbox
     sender: Algafood <felipe.dev.test@gmail.com>
     sandbox:
       to: felipe.dev.test@gmail.com

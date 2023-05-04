@@ -1,9 +1,9 @@
 package br.com.portfolio.algafood.config.email;
 
 import br.com.portfolio.algafood.domain.service.SendEmailService;
-import br.com.portfolio.algafood.infra.service.FakeSendEmailService;
-import br.com.portfolio.algafood.infra.service.SandboxSendEmailService;
-import br.com.portfolio.algafood.infra.service.SmtpSendEmailService;
+import br.com.portfolio.algafood.infra.service.email.FakeSendEmailService;
+import br.com.portfolio.algafood.infra.service.email.SandboxSendEmailService;
+import br.com.portfolio.algafood.infra.service.email.SmtpSendEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +32,7 @@ public class EmailConfig {
     public SendEmailService sendEmailService() {
         return switch (emailProperties.getImpl()) {
             case FAKE -> new FakeSendEmailService(freeMarkerConfig);
-            case SMTP -> new SmtpSendEmailService(mailSender, emailProperties, freeMarkerConfig);
+            case SMTP -> new SmtpSendEmailService(mailSender, freeMarkerConfig, emailProperties);
             case SANDBOX
                 -> new SandboxSendEmailService(mailSender, emailProperties, freeMarkerConfig);
         };

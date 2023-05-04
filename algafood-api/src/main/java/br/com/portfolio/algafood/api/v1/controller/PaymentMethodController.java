@@ -5,7 +5,9 @@ import br.com.portfolio.algafood.api.v1.dto.request.PaymentMethodRq;
 import br.com.portfolio.algafood.api.v1.dto.response.PaymentMethodRs;
 import br.com.portfolio.algafood.domain.service.PaymentMethodService;
 import com.fasterxml.jackson.annotation.JsonView;
+import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,16 +29,25 @@ public class PaymentMethodController {
 
 	@GetMapping()
 	public ResponseEntity<List<PaymentMethodRs>> findAll() {
-		return ResponseEntity.ok(paymentMethodService.findAll()
-				.stream()
-				.map(PaymentMethodRs::new)
-				.toList());
+		var paymentMethodRs = paymentMethodService.findAll()
+			.stream()
+			.map(PaymentMethodRs::new)
+			.toList();
+		return ResponseEntity.ok()
+//			.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+			.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+//			.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())  // validação para cache local
+//			.cacheControl(CacheControl.noCache()) // sempre faz a validação de cache
+//			.cacheControl(CacheControl.noStore()) // nunca faz validação de cache
+			.body(paymentMethodRs);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<PaymentMethodRs> findById(@PathVariable Long id) {
 		var paymentMethod = paymentMethodService.findById(id);
-		return ResponseEntity.ok(new PaymentMethodRs(paymentMethod));
+		return ResponseEntity.ok()
+			.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+			.body(new PaymentMethodRs(paymentMethod));
 	}
 	
 	@PostMapping

@@ -1,8 +1,8 @@
 package br.com.portfolio.algafood.config.storage;
 
 import br.com.portfolio.algafood.domain.service.ImageStorageService;
-import br.com.portfolio.algafood.infra.service.LocalImageStorageService;
-import br.com.portfolio.algafood.infra.service.S3ImageStorageService;
+import br.com.portfolio.algafood.infra.service.storage.LocalImageStorageService;
+import br.com.portfolio.algafood.infra.service.storage.S3ImageStorageService;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
