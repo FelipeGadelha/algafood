@@ -4,6 +4,8 @@ import br.com.portfolio.algafood.domain.model.PaymentMethod;
 import br.com.portfolio.algafood.domain.exception.EntityInUseException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.repository.PaymentMethodRepository;
+import java.time.Instant;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,6 +27,9 @@ public class PaymentMethodService {
 
     @Transactional
     public List<PaymentMethod> findAll() { return paymentMethodRepository.findAll(); }
+
+    @Transactional
+    public Instant getDateLastUpdate() { return paymentMethodRepository.getDateLastUpdate(); }
 
     @Transactional
     public PaymentMethod findById(Long id) {
@@ -53,4 +58,5 @@ public class PaymentMethodService {
             throw new EntityInUseException(String.format("Forma de Pagamento com o ID  %d não pode ser removida, pois esta em uso", id));
         }
     }
+
 }

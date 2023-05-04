@@ -79,9 +79,9 @@ SELECT nextval ('restaurant_id_seq');
 SELECT nextval ('restaurant_id_seq');
 SELECT nextval ('restaurant_id_seq');
 
-INSERT INTO payment_method (id, description) VALUES (1, 'cartão de credito');
-INSERT INTO payment_method (id, description) VALUES (2, 'cartão de debito');
-INSERT INTO payment_method (id, description) VALUES (3, 'boleto');
+INSERT INTO payment_method (id, description, updated_at) VALUES (1, 'cartão de credito', now());
+INSERT INTO payment_method (id, description, updated_at) VALUES (2, 'cartão de debito', now());
+INSERT INTO payment_method (id, description, updated_at) VALUES (3, 'boleto', now());
 
 SELECT nextval ('payment_method_id_seq');
 SELECT nextval ('payment_method_id_seq');

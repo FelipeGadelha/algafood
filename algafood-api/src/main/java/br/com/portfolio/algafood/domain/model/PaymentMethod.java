@@ -2,7 +2,9 @@ package br.com.portfolio.algafood.domain.model;
 
 import java.io.Serializable;
 
+import java.time.Instant;
 import javax.persistence.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "payment_method")
@@ -14,6 +16,9 @@ public class PaymentMethod implements Serializable{
 	private Long id;
 	
 	private String description;
+	@UpdateTimestamp
+	@Column(name = "updated_at", nullable = false)
+	private Instant updatedAt;
 	
 	@Deprecated
 	public PaymentMethod() { }
@@ -23,17 +28,14 @@ public class PaymentMethod implements Serializable{
 		this.description = description;
 	}
 
-	public Long getId() {
-		return id;
-	}
+	public Long getId() { return id; }
+	public String getDescription() { return description; }
+	public Instant getUpdatedAt() { return updatedAt; }
 
-	public String getDescription() {
-		return description;
-	}
-	
-	public void setDescription(String description) {
-		this.description = description;
-	}
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
+
 
 	@Override
 	public int hashCode() {
@@ -62,7 +64,10 @@ public class PaymentMethod implements Serializable{
 
 	@Override
 	public String toString() {
-		return "PaymentMethod [id=" + id + ", description=" + description + "]";
+		return "PaymentMethod{" +
+			"id=" + id +
+			", description='" + description + '\'' +
+			", updatedAt=" + updatedAt +
+			'}';
 	}
-	
 }

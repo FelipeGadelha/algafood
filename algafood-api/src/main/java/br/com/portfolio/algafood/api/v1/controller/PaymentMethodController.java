@@ -1,10 +1,8 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
-import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.PaymentMethodRq;
 import br.com.portfolio.algafood.api.v1.dto.response.PaymentMethodRs;
 import br.com.portfolio.algafood.domain.service.PaymentMethodService;
-import com.fasterxml.jackson.annotation.JsonView;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
@@ -14,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 @RestController
 @RequestMapping("/v1/payment-methods")
@@ -28,25 +27,36 @@ public class PaymentMethodController {
 	}
 
 	@GetMapping()
-	public ResponseEntity<List<PaymentMethodRs>> findAll() {
+	public ResponseEntity<List<PaymentMethodRs>> findAll(ServletWebRequest request) {
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+		String eTag = "0";
+		var dateLastUpdate = paymentMethodService.getDateLastUpdate();
+		if (dateLastUpdate != null) eTag = String.valueOf(dateLastUpdate.getEpochSecond());
+		if (request.checkNotModified(eTag)) return null;
+
 		var paymentMethodRs = paymentMethodService.findAll()
 			.stream()
 			.map(PaymentMethodRs::new)
 			.toList();
 		return ResponseEntity.ok()
-//			.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
 			.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
-//			.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())  // validação para cache local
-//			.cacheControl(CacheControl.noCache()) // sempre faz a validação de cache
-//			.cacheControl(CacheControl.noStore()) // nunca faz validação de cache
+//			.header("ETag", eTag)
+			.eTag(eTag)
 			.body(paymentMethodRs);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PaymentMethodRs> findById(@PathVariable Long id) {
+	public ResponseEntity<PaymentMethodRs> findById(@PathVariable Long id, ServletWebRequest request) {
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+		String eTag = "0";
+		var dateLastUpdate = paymentMethodService.getDateLastUpdate();
+		if (dateLastUpdate != null) eTag = String.valueOf(dateLastUpdate.getEpochSecond());
+		if (request.checkNotModified(eTag)) return null;
+
 		var paymentMethod = paymentMethodService.findById(id);
 		return ResponseEntity.ok()
 			.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+			.eTag(eTag)
 			.body(new PaymentMethodRs(paymentMethod));
 	}
 	
