@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
+import br.com.portfolio.algafood.api.v1.controller.doc.CityControllerOpenApi;
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.CityRq;
 import br.com.portfolio.algafood.api.v1.dto.response.CityRs;
@@ -24,46 +25,44 @@ import br.com.portfolio.algafood.domain.service.CityService;
 import javax.validation.Valid;
 import java.util.List;
 
+
 @RestController
 @RequestMapping(value = "/v1/cities")
-public class CityController {
+public class CityController implements CityControllerOpenApi {
 	
 	private final CityService cityService;
 
 	@Autowired
-	public CityController(CityService cityService) {
-		this.cityService = cityService;
-	}
+	public CityController(CityService cityService) { this.cityService = cityService; }
+
 
 	@JsonView(View.Basic.class)
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<CityRs>> findAll() {
+	@Override public ResponseEntity<List<CityRs>> findAll() {
 		return ResponseEntity.ok(cityService.findAll().stream()
 				.map(CityRs::new)
 				.toList());
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CityRs> findById(@PathVariable Long id) {
+	@Override public ResponseEntity<CityRs> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(new CityRs(cityService.findById(id)));
 	}
 
 	@PostMapping
-	public ResponseEntity<CityRs> save(@RequestBody @Valid CityRq cityRq) {
+	@Override public ResponseEntity<CityRs> save(@RequestBody @Valid CityRq cityRq) {
 		City saved = cityService.save(cityRq.convert());
 		return new ResponseEntity<>(new CityRs(saved), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<CityRs> update(@PathVariable Long id, @RequestBody @Valid CityRq cityRq) {
+	@Override public ResponseEntity<CityRs> update(@PathVariable Long id, @RequestBody @Valid CityRq cityRq) {
 		City city = cityService.update(id, cityRq.convert());
 		return ResponseEntity.ok(new CityRs(city));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable Long id) {
-		cityService.deleteById(id);
-	}
+	@Override public void deleteById(@PathVariable Long id) { cityService.deleteById(id); }
 
 }

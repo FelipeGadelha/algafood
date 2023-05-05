@@ -64,8 +64,8 @@ public class PaymentMethodController {
 	public ResponseEntity<PaymentMethodRs> save(@RequestBody @Valid PaymentMethodRq paymentMethodRq) {
 		final var saved = paymentMethodService.save(paymentMethodRq.convert());
 		return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(new PaymentMethodRs(saved));
+			.status(HttpStatus.CREATED)
+			.body(new PaymentMethodRs(saved));
 	}
 
 	@PutMapping
