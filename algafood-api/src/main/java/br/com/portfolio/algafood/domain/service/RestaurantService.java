@@ -25,10 +25,12 @@ public class RestaurantService {
 	private final PaymentMethodService paymentMethodService;
 	
 	@Autowired
-	public RestaurantService(RestaurantRepository restaurantRepository,
-							 KitchenService kitchenService,
-							 CityService cityService,
-							 PaymentMethodService paymentMethodService) {
+	public RestaurantService(
+		RestaurantRepository restaurantRepository,
+	 	KitchenService kitchenService,
+	 	CityService cityService,
+	 	PaymentMethodService paymentMethodService
+	) {
 		this.restaurantRepository = restaurantRepository;
 		this.kitchenService = kitchenService;
 		this.cityService = cityService;
@@ -43,7 +45,7 @@ public class RestaurantService {
 	@Transactional
 	public Restaurant findById(Long id) {
 		return restaurantRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_RESTAURANT_NOT_FOUND, id)));
+			.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_RESTAURANT_NOT_FOUND, id)));
 	}
 
 	@Transactional
@@ -52,13 +54,13 @@ public class RestaurantService {
 		Kitchen kitchen = kitchenService.findById(KitchenId);
 		final var city = cityService.findById(restaurant.getCityId());
 		restaurant = Restaurant.builder()
-				.clone(restaurant)
-				.kitchen(kitchen)
-				.address(a -> Address.builder()
-						.clone(a)
-						.city(city)
-						.build()
-				).build();
+			.clone(restaurant)
+			.kitchen(kitchen)
+			.address(a -> Address.builder()
+				.clone(a)
+				.city(city)
+				.build()
+			).build();
 		return restaurantRepository.save(restaurant);
 	}
 
@@ -66,9 +68,9 @@ public class RestaurantService {
 	public Restaurant update(Long id, Restaurant updated) {
 		var restaurant = this.findById(id);
 		restaurant = Restaurant.builder()
-				.clone(restaurant)
-				.copy(updated)
-				.build();
+			.clone(restaurant)
+			.copy(updated)
+			.build();
 		return this.save(restaurant);
 	}
 
