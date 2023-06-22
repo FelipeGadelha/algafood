@@ -5,10 +5,19 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.tags.Tag;
+import java.util.Arrays;
 import java.util.List;
+import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.method.HandlerMethod;
 
 
 @Configuration
@@ -38,4 +47,34 @@ public class OpenApiConfig {
 				.url("https://github.com/FelipeGadelha/algafood"));
 
 	}
+
+//	@Bean
+//	public OpenApiCustomiser customerGlobalHeaderOpenApiCustomiser() {
+//		HandlerMethod handlerMethod;
+//		return openApi -> {
+//			openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation -> {
+//				// Change only paths with GET Méthods
+//				if (pathItem.getPost() != null) {
+//					ApiResponses apiResponses = operation.getResponses();
+//					ApiResponse apiResponse = new ApiResponse().description("Custom Error")
+//						.content(new Content()
+//							.addMediaType(org.springframework.http.MediaType.APPLICATION_JSON_VALUE, new MediaType()));
+//					apiResponses.addApiResponse("400", apiResponse);
+//				}
+//			}));
+//		};
+//	}
+
+//	private List<Response> globalGetResponseMessages() {
+//		return Arrays.asList(
+//			new ResponseBuilder()
+//				.code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+//				.description("Erro interno do Servidor")
+//				.build(),
+//			new ResponseBuilder()
+//				.code(String.valueOf(HttpStatus.NOT_ACCEPTABLE.value()))
+//				.description("Recurso não possui representação que pode ser aceita pelo consumidor")
+//				.build()
+//		);
+//	}
 }

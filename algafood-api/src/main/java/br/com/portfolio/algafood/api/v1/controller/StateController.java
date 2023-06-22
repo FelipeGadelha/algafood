@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
+import br.com.portfolio.algafood.api.v1.controller.doc.StateControllerOpenApi;
 import br.com.portfolio.algafood.api.v1.dto.request.StateRq;
 import br.com.portfolio.algafood.api.v1.dto.response.StateRs;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/states")
-public class StateController {
+public class StateController implements StateControllerOpenApi {
 	
 	@Autowired
 	private StateService stateService;
@@ -35,7 +36,7 @@ public class StateController {
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<StateRs>> findAll() {
+	@Override public ResponseEntity<List<StateRs>> findAll() {
 		return ResponseEntity.ok(stateService.findAll()
 				.stream()
 				.map(StateRs::new)
@@ -43,25 +44,25 @@ public class StateController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<StateRs> findById(@PathVariable Long id) {
+	@Override public ResponseEntity<StateRs> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(new StateRs(stateService.findById(id)));
 	}
 
 	@PostMapping
-	public ResponseEntity<StateRs> save(@RequestBody @Valid StateRq stateRq) {
+	@Override public ResponseEntity<StateRs> save(@RequestBody @Valid StateRq stateRq) {
 		State saved = stateService.save(stateRq.convert());
 		return new ResponseEntity<>(new StateRs(saved), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<StateRs> update(@PathVariable Long id, @RequestBody @Valid StateRq stateRq) {
+	@Override public ResponseEntity<StateRs> update(@PathVariable Long id, @RequestBody @Valid StateRq stateRq) {
 		State state = stateService.update(id, stateRq.convert());
 		return ResponseEntity.ok(new StateRs(state));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable Long id) {
+	@Override public void deleteById(@PathVariable Long id) {
 		stateService.deleteById(id);
 	}
 }

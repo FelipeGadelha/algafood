@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
+import br.com.portfolio.algafood.api.v1.controller.doc.OrderControllerOpenApi;
 import br.com.portfolio.algafood.api.v1.dto.request.OrderRq;
 import br.com.portfolio.algafood.api.v1.dto.response.OrderDetailRs;
 import br.com.portfolio.algafood.api.v1.dto.response.OrderRs;
@@ -19,29 +20,27 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/orders")
-public class OrderController {
+public class OrderController implements OrderControllerOpenApi {
 
     private final OrderService orderService;
 
     @Autowired
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    public OrderController(OrderService orderService) { this.orderService = orderService; }
 
     @GetMapping
 //    @JsonView(View.Basic.class)
-    public ResponseEntity<Page<OrderRs>> search(OrderFilter filter, Pageable pageable) {
+    @Override public ResponseEntity<Page<OrderRs>> search(OrderFilter filter, Pageable pageable) {
         pageable = interpretPageable(pageable);
         return ResponseEntity.ok(orderService.findAll(filter, pageable).map(OrderRs::new));
     }
     @GetMapping("/{code}")
-    public ResponseEntity<OrderDetailRs> findById(@PathVariable String code) {
+    @Override public ResponseEntity<OrderDetailRs> findById(@PathVariable String code) {
         var order = orderService.findByCode(code);
         return ResponseEntity.ok(new OrderDetailRs(order));
     }
     @PostMapping
-    public ResponseEntity<OrderDetailRs> save(@RequestBody @Valid OrderRq orderRq) {
-        var user = User.builder().id(1L).build();
+    @Override public ResponseEntity<OrderDetailRs> save(@RequestBody @Valid OrderRq orderRq) {
+        var user = User.builder().id(2L).build();
         var order = orderService.save(orderRq.convert(user));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new OrderDetailRs(order));

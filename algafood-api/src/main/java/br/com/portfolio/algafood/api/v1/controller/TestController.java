@@ -66,18 +66,17 @@ public class TestController {
 	}
 
 	@GetMapping("/restaurant/free-freight")
-	public  List<Restaurant> findFreeFreight(String name) {
+	public List<Restaurant> findFreeFreight(String name) {
 		return restaurantRepository.findWithFreeTax(name);
 	}
 	
 	@GetMapping("/restaurant/first-register")
-	public  Optional<Restaurant> firstRegister() {
+	public Optional<Restaurant> firstRegister() {
 		return restaurantRepository.findFirstRegister();
 	}
 	
 	@GetMapping("/kitchen/first-register")
-	public  Optional<Kitchen> kitchenFirstRegister() {
+	public Optional<Kitchen> kitchenFirstRegister() {
 		return kitchenRepository.findFirstRegister();
 	}
-	
 }

@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
+import br.com.portfolio.algafood.api.v1.controller.doc.PaymentMethodControllerOpenApi;
 import br.com.portfolio.algafood.api.v1.dto.request.PaymentMethodRq;
 import br.com.portfolio.algafood.api.v1.dto.response.PaymentMethodRs;
 import br.com.portfolio.algafood.domain.service.PaymentMethodService;
@@ -17,7 +18,7 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 @RestController
 @RequestMapping("/v1/payment-methods")
-public class PaymentMethodController {
+public class PaymentMethodController implements PaymentMethodControllerOpenApi {
 	
 	private final PaymentMethodService paymentMethodService;
 
@@ -27,7 +28,7 @@ public class PaymentMethodController {
 	}
 
 	@GetMapping()
-	public ResponseEntity<List<PaymentMethodRs>> findAll(ServletWebRequest request) {
+	@Override public ResponseEntity<List<PaymentMethodRs>> findAll(ServletWebRequest request) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		String eTag = "0";
 		var dateLastUpdate = paymentMethodService.getDateLastUpdate();
@@ -46,7 +47,7 @@ public class PaymentMethodController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PaymentMethodRs> findById(@PathVariable Long id, ServletWebRequest request) {
+	@Override public ResponseEntity<PaymentMethodRs> findById(@PathVariable Long id, ServletWebRequest request) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		String eTag = "0";
 		var dateLastUpdate = paymentMethodService.getDateLastUpdate();
@@ -61,7 +62,7 @@ public class PaymentMethodController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<PaymentMethodRs> save(@RequestBody @Valid PaymentMethodRq paymentMethodRq) {
+	@Override public ResponseEntity<PaymentMethodRs> save(@RequestBody @Valid PaymentMethodRq paymentMethodRq) {
 		final var saved = paymentMethodService.save(paymentMethodRq.convert());
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
@@ -69,13 +70,12 @@ public class PaymentMethodController {
 	}
 
 	@PutMapping
-	public ResponseEntity<PaymentMethodRs> update(@PathVariable Long id, @RequestBody @Valid PaymentMethodRq paymentMethodRq) {
+	@Override public ResponseEntity<PaymentMethodRs> update(@PathVariable Long id, @RequestBody @Valid PaymentMethodRq paymentMethodRq) {
 		final var saved = paymentMethodService.update(id, paymentMethodRq.convert());
 		return ResponseEntity.ok(new PaymentMethodRs(saved));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable Long id) { paymentMethodService.deleteById(id); }
-
+	@Override public void deleteById(@PathVariable Long id) { paymentMethodService.deleteById(id); }
 }

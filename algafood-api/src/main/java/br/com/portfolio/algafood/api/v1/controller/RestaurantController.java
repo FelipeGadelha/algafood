@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
+import br.com.portfolio.algafood.api.v1.controller.doc.RestaurantControllerOpenApi;
 import br.com.portfolio.algafood.api.v1.dto.request.RestaurantRq;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantDetailRs;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantRs;
@@ -10,6 +11,7 @@ import br.com.portfolio.algafood.domain.exception.ValidationException;
 import br.com.portfolio.algafood.domain.service.RestaurantService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Objects;
 import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +31,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/restaurants")
-public class RestaurantController {
+public class RestaurantController implements RestaurantControllerOpenApi {
 
 	private final RestaurantService restaurantService;
 	private final SmartValidator smartValidator;
@@ -41,7 +43,7 @@ public class RestaurantController {
 	}
 
 	@GetMapping()
-	public ResponseEntity<List<RestaurantRs>> findAll() {
+	@Override public ResponseEntity<List<RestaurantRs>> findAll() {
 		return ResponseEntity.ok(restaurantService.findAll()
 				.stream()
 				.map(RestaurantRs::new)
@@ -49,13 +51,13 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<RestaurantDetailRs> findById(@PathVariable Long id) {
+	@Override public ResponseEntity<RestaurantDetailRs> findById(@PathVariable Long id) {
 		var restaurant = restaurantService.findById(id);
 		return ResponseEntity.ok(new RestaurantDetailRs(restaurant));
 	}
 
 	@PostMapping
-	public ResponseEntity<RestaurantDetailRs> save(@RequestBody @Valid RestaurantRq restaurantRq) {
+	@Override public ResponseEntity<RestaurantDetailRs> save(@RequestBody @Valid RestaurantRq restaurantRq) {
 		var saved = restaurantService.save(restaurantRq.convert());
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
@@ -63,13 +65,13 @@ public class RestaurantController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<RestaurantDetailRs> update(@PathVariable @Valid Long id, @RequestBody @Valid RestaurantRq restaurantRq) {
+	@Override public ResponseEntity<RestaurantDetailRs> update(@PathVariable @Valid Long id, @RequestBody @Valid RestaurantRq restaurantRq) {
 		var updated = restaurantService.update(id, restaurantRq.convert());
 		return ResponseEntity.ok(new RestaurantDetailRs(updated));
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<RestaurantDetailRs> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
+	@Override public ResponseEntity<RestaurantDetailRs> patch(@PathVariable Long id, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 		Restaurant restaurant = restaurantService.findById(id);
 		this.merge(fields, restaurant, request);
 		this.validate(restaurant, "restaurant");
@@ -79,38 +81,37 @@ public class RestaurantController {
 
 	@PutMapping("/{id}/activate")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void activate(@PathVariable Long id) { restaurantService.activate(id); }
+	@Override public void activate(@PathVariable Long id) { restaurantService.activate(id); }
 
 	@PutMapping("/activations")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void massActivations(@RequestBody List<Long> ids) {
+	@Override public void massActivations(@RequestBody List<Long> ids) {
 		try { restaurantService.activate(ids); }
 			catch (EntityNotFoundException ex) { throw new BusinessException(ex.getMessage(), ex); }
 	}
 
 	@DeleteMapping("/{id}/inactivate")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void inactivate(@PathVariable Long id) { restaurantService.inactivate(id); }
+	@Override public void inactivate(@PathVariable Long id) { restaurantService.inactivate(id); }
 
 	@DeleteMapping("/inactivations")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void massInactivations(@RequestBody List<Long> ids) {
+	@Override public void massInactivations(@RequestBody List<Long> ids) {
 		try { restaurantService.inactivate(ids); }
 			catch (EntityNotFoundException ex) { throw new BusinessException(ex.getMessage(), ex); }
 	}
 
 	@PutMapping("/{id}/open")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void open(@PathVariable Long id) { restaurantService.open(id); }
+	@Override public void open(@PathVariable Long id) { restaurantService.open(id); }
 
 	@PutMapping("/{id}/close")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void close(@PathVariable Long id) { restaurantService.close(id); }
+	@Override public void close(@PathVariable Long id) { restaurantService.close(id); }
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable Long id) { restaurantService.deleteById(id); }
-
+	@Override public void deleteById(@PathVariable Long id) { restaurantService.deleteById(id); }
 
 	private void validate(Restaurant restaurant, String objectName) {
 		var bindingResult = new BeanPropertyBindingResult(restaurant, objectName);
@@ -129,7 +130,7 @@ public class RestaurantController {
 			
 			fields.forEach((propName, propValue) -> {
 				Field field = ReflectionUtils.findField(Restaurant.class, propName);
-				field.setAccessible(true);
+				Objects.requireNonNull(field).setAccessible(true);
 				Object newValue = ReflectionUtils.getField(field, converted);
 				ReflectionUtils.setField(field, restaurant, newValue);
 			});
@@ -138,5 +139,4 @@ public class RestaurantController {
 			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serHttpRequest);
 		}
 	}
-
 }

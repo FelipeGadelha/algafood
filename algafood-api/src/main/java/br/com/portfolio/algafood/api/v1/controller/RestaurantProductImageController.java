@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
+import br.com.portfolio.algafood.api.v1.controller.doc.RestaurantProductImageControllerOpenApi;
 import br.com.portfolio.algafood.api.v1.dto.request.ProductImageRq;
 import br.com.portfolio.algafood.api.v1.dto.response.ProductImageRs;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/restaurants/{restaurantId}/products/{productId}/image")
-public class RestaurantProductImageController {
+public class RestaurantProductImageController implements RestaurantProductImageControllerOpenApi {
 
     private final ProductImageService productImageService;
     private final ProductService productService;
@@ -39,12 +40,12 @@ public class RestaurantProductImageController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductImageRs> find(@PathVariable Long restaurantId, @PathVariable Long productId) {
+    @Override public ResponseEntity<ProductImageRs> find(@PathVariable Long restaurantId, @PathVariable Long productId) {
         final var image = productImageService.find(restaurantId, productId);
         return ResponseEntity.ok(new ProductImageRs(image));
     }
     @GetMapping
-    public ResponseEntity<?> findImage(
+    @Override public ResponseEntity<?> findImage(
         @PathVariable Long restaurantId,
         @PathVariable Long productId,
         @RequestHeader String accept
@@ -74,7 +75,7 @@ public class RestaurantProductImageController {
     }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProductImageRs> update(
+    @Override public ResponseEntity<ProductImageRs> update(
         @PathVariable Long restaurantId,
         @PathVariable Long productId,
         @Valid ProductImageRq imageRq
@@ -94,7 +95,7 @@ public class RestaurantProductImageController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long restaurantId, @PathVariable Long productId) {
+    @Override public void deleteById(@PathVariable Long restaurantId, @PathVariable Long productId) {
         productImageService.deleteByIds(restaurantId, productId);
     }
 }

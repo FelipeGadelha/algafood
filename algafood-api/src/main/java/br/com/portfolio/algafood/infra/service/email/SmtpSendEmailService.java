@@ -36,8 +36,6 @@ public class SmtpSendEmailService extends ManagerEmailTemplate implements SendEm
                 helper.setTo(email.getTo().toArray(new String[0]));
                 helper.setFrom(emailProperties.getSender());
                 helper.setText(message, true);
-                var mime = helper.getMimeMessage();
-                mailSender.send(mime);
             });
         } catch (Exception ex) {
             throw new EmailException("Não foi possível enviar o e-mail " + ex.getMessage(), ex);

@@ -10,22 +10,14 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import javax.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Tag(name = "cidade")
+@Tag(name = "Cidade")
 public interface CityControllerOpenApi {
 
     @Operation(summary = "Lista as cidades", responses = {
-        @ApiResponse(responseCode = "200", description = "Lista de raças"),
-        @ApiResponse(responseCode = "404", description = "Raça não encontrada",
+        @ApiResponse(responseCode = "200", description = "Lista de cidades"),
+        @ApiResponse(responseCode = "404", description = "Cidade não encontrada",
             content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(responseCode = "401", description = "Falha de autenticação",
             content = @Content(schema = @Schema(hidden = true)))

@@ -29,12 +29,14 @@ public class OrderService {
     private static final String MSG_ORDER_NOT_FOUND = "Não existe um pedido com código %s";
 
     @Autowired
-    public OrderService(OrderRepository orderRepository,
-                        RestaurantService restaurantService,
-                        PaymentMethodService paymentMethodService,
-                        ProductService productService,
-                        UserService userService,
-                        CityService cityService) {
+    public OrderService(
+        OrderRepository orderRepository,
+        RestaurantService restaurantService,
+        PaymentMethodService paymentMethodService,
+        ProductService productService,
+        UserService userService,
+        CityService cityService
+    ) {
         this.orderRepository = orderRepository;
         this.restaurantService = restaurantService;
         this.paymentMethodService = paymentMethodService;

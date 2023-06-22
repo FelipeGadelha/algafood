@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
+import br.com.portfolio.algafood.api.v1.controller.doc.StatisticsControllerOpenApi;
 import br.com.portfolio.algafood.api.validator.annotation.Offset;
 import br.com.portfolio.algafood.domain.model.DailySale;
 import br.com.portfolio.algafood.domain.filter.DailySaleFilter;
@@ -20,7 +21,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/v1/statistics")
-public class StatisticsController {
+public class StatisticsController implements StatisticsControllerOpenApi {
 
     private final SalesSearch salesSearch;
     private final SalesReportService salesReportService;
@@ -32,17 +33,17 @@ public class StatisticsController {
     }
 
     @GetMapping(path = "/daily-sale", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<DailySale> findDailySale(
-            DailySaleFilter filter,
-            @RequestParam(required = false, defaultValue = "+00:00") @Offset String offset
+    @Override public List<DailySale> findDailySale(
+        DailySaleFilter filter,
+        @RequestParam(required = false, defaultValue = "+00:00") @Offset String offset
     ) {
         return salesSearch.findDailySale(filter, offset);
     }
 
     @GetMapping(path = "/daily-sale", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> findDailySalePdf(
-            DailySaleFilter filter,
-            @RequestParam(required = false, defaultValue = "+00:00") @Offset String offset
+    @Override public ResponseEntity<byte[]> findDailySalePdf(
+        DailySaleFilter filter,
+        @RequestParam(required = false, defaultValue = "+00:00") @Offset String offset
     ) {
         var bytesPdf = salesReportService.emitDailySales(filter, offset);
 
@@ -50,9 +51,9 @@ public class StatisticsController {
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=daily-sales.pdf");
         headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(bytesPdf.length));
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .headers(headers)
-                .body(bytesPdf);
+            .contentType(MediaType.APPLICATION_PDF)
+            .headers(headers)
+            .body(bytesPdf);
     }
 }
 

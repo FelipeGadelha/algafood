@@ -1,5 +1,6 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
+import br.com.portfolio.algafood.api.v1.controller.doc.UserControllerOpenApi;
 import br.com.portfolio.algafood.api.v1.dto.request.UserRq;
 import br.com.portfolio.algafood.api.v1.dto.request.UserUpdateRq;
 import br.com.portfolio.algafood.api.v1.dto.response.UserDetailRs;
@@ -12,11 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/users")
-public class UserController {
+public class UserController implements UserControllerOpenApi {
 
     private final UserService userService;
 
@@ -24,7 +24,7 @@ public class UserController {
     public UserController(UserService userService) { this.userService = userService; }
 
     @GetMapping
-    public ResponseEntity<List<UserRs>> findAll() {
+    @Override public ResponseEntity<List<UserRs>> findAll() {
         return ResponseEntity.ok(userService.findAll()
                 .stream()
                 .map(UserRs::new)
@@ -32,13 +32,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDetailRs> findById(@PathVariable Long id) {
+    @Override public ResponseEntity<UserDetailRs> findById(@PathVariable Long id) {
         var user = userService.findById(id);
         return ResponseEntity.ok(new UserDetailRs(user));
     }
 
     @PostMapping
-    public ResponseEntity<UserDetailRs> save(@Valid @RequestBody UserRq userRq) {
+    @Override public ResponseEntity<UserDetailRs> save(@Valid @RequestBody UserRq userRq) {
         var saved = userService.save(userRq.convert());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -46,15 +46,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDetailRs> update(@PathVariable Long id, @Valid @RequestBody UserUpdateRq userUpdateRq) {
+    @Override public ResponseEntity<UserDetailRs> update(@PathVariable Long id, @Valid @RequestBody UserUpdateRq userUpdateRq) {
         var update = userService.update(id, userUpdateRq.convert());
         return ResponseEntity.ok(new UserDetailRs(update));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long id) {
+    @Override public void deleteById(@PathVariable Long id) {
         userService.deleteById(id);
     }
-
 }

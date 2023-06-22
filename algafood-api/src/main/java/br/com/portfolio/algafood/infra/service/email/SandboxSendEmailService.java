@@ -34,8 +34,6 @@ public class SandboxSendEmailService extends SmtpSendEmailService {
                 helper.setTo(emailProperties.getSandbox().getTo());
                 helper.setFrom(emailProperties.getSender());
                 helper.setText(message, true);
-                var mime = helper.getMimeMessage();
-                mailSender.send(mime);
             });
         } catch (Exception ex) {
             throw new EmailException("Não foi possível enviar o e-mail " + ex.getMessage(), ex);
