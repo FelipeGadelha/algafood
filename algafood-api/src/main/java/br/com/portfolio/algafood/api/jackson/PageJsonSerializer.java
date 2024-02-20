@@ -1,6 +1,10 @@
 package br.com.portfolio.algafood.api.jackson;
 
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.boot.jackson.JsonComponent;
@@ -11,9 +15,12 @@ import java.io.IOException;
 @JsonComponent
 public class PageJsonSerializer extends JsonSerializer<Page<?>> {
     @Override
-    public void serialize(Page<?> page,
-                          JsonGenerator gen,
-                          SerializerProvider serializerProvider) throws IOException {
+    public void serialize(
+        Page<?> page,
+        JsonGenerator gen,
+        SerializerProvider serializerProvider
+    ) throws IOException {
+
         gen.writeStartObject();
 
         gen.writeObjectField("content", page.getContent());

@@ -14,11 +14,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/restaurants/{restaurantId}/products/{productId}/image")
@@ -44,7 +51,7 @@ public class RestaurantProductImageController implements RestaurantProductImageC
         final var image = productImageService.find(restaurantId, productId);
         return ResponseEntity.ok(new ProductImageRs(image));
     }
-    @GetMapping
+    @GetMapping(produces = MediaType.ALL_VALUE)
     @Override public ResponseEntity<?> findImage(
         @PathVariable Long restaurantId,
         @PathVariable Long productId,

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +55,7 @@ public class KitchenControllerTest {
 	public void test() {
 		ResponseEntity<String> entity = restTemplate.getForEntity(BASE_PATH, String.class);
 		System.err.println("--------------TESTE ---------------- " + entity);
-		assertThat(entity.getStatusCodeValue()).isEqualTo(200);
+		assertThat(entity.getStatusCode()).isEqualTo(200);
 	}
 	
 	@DisplayName("should return a kitchen successfully")
@@ -63,7 +63,7 @@ public class KitchenControllerTest {
 	public void test1() {
 		ResponseEntity<Kitchen> entity = restTemplate.getForEntity(BASE_PATH + "{id}", Kitchen.class, 1L);
 		System.err.println("--------------TESTE 1 ---------------- " + entity);
-		assertThat(entity.getStatusCodeValue()).isEqualTo(200);
+		assertThat(entity.getStatusCode()).isEqualTo(200);
 		assertThat(entity.getBody().getName()).isEqualTo("Tailandesa");
 	}
 	
@@ -73,7 +73,7 @@ public class KitchenControllerTest {
 		var kitchen = new Kitchen(null, "Italiano", null);
 		ResponseEntity<Kitchen> entity = restTemplate.postForEntity(BASE_PATH, kitchen, Kitchen.class);
 		System.err.println("--------------TESTE 2 ---------------- " + entity.getBody());
-		assertThat(entity.getStatusCodeValue()).isEqualTo(201);
+		assertThat(entity.getStatusCode()).isEqualTo(201);
 		assertThat(entity.getBody().getName()).isEqualTo("Italiano");
 		assertThat(entity.getBody().getId()).isNotNull();
 	}
@@ -84,7 +84,7 @@ public class KitchenControllerTest {
 		HttpEntity<Kitchen> request = new HttpEntity<>(new Kitchen(null, "Italian", null));
 		ResponseEntity<Kitchen> entity = restTemplate.exchange(BASE_PATH + "{id}", HttpMethod.PUT, request, Kitchen.class, 1L);
 		System.err.println("--------------TESTE 3 ---------------- " + entity.getBody());
-		assertThat(entity.getStatusCodeValue()).isEqualTo(200);
+		assertThat(entity.getStatusCode()).isEqualTo(200);
 		assertThat(entity.getBody().getId()).isEqualTo(1L);
 		assertThat(entity.getBody().getName()).isEqualTo("Italian");
 	}
@@ -94,7 +94,7 @@ public class KitchenControllerTest {
 	public void test4() {
 		ResponseEntity<Kitchen> entity = restTemplate.exchange(BASE_PATH + "{id}", HttpMethod.DELETE, null, Kitchen.class, 1L);
 		System.err.println("--------------TESTE 4 ---------------- " + entity.getBody());
-		assertThat(entity.getStatusCodeValue()).isEqualTo(204);
+		assertThat(entity.getStatusCode()).isEqualTo(204);
 		assertThat(entity.getBody()).isNull();
 	}
 }

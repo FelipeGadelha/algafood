@@ -5,8 +5,9 @@ import br.com.portfolio.algafood.domain.model.Product;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import java.math.BigDecimal;
+import org.springframework.hateoas.RepresentationModel;
 
-public class ProductRs {
+public class ProductRs extends RepresentationModel<GroupRs> {
 
     @JsonView(View.Basic.class) private final Long id;
     @JsonView(View.Basic.class) private final String name;

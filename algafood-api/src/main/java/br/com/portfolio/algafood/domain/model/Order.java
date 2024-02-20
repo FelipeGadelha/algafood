@@ -3,12 +3,30 @@ package br.com.portfolio.algafood.domain.model;
 import br.com.portfolio.algafood.domain.event.CanceledOrderEvent;
 import br.com.portfolio.algafood.domain.event.ConfirmedOrderEvent;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.UUID;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.util.Assert;
 
-import javax.persistence.*;
+import jakarta.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
-import java.util.*;
+
 import java.util.function.UnaryOperator;
 
 @Entity
@@ -32,7 +50,7 @@ public class Order extends AbstractAggregateRoot<Order> {
 	@JsonManagedReference
 	private List<OrderItem> ordersItens = new ArrayList<>();
 	@ElementCollection
-	@OrderBy("moment asc")
+//	@OrderBy("moment asc")
 	@CollectionTable(name = "order_status", joinColumns = @JoinColumn(name = "order_status_id"))
 	private SortedSet<OrderStatus> orderStatus = new TreeSet<>();
 

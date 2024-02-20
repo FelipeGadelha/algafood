@@ -5,7 +5,10 @@ import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.CityRq;
 import br.com.portfolio.algafood.api.v1.dto.response.CityRs;
 import com.fasterxml.jackson.annotation.JsonView;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.portfolio.algafood.domain.model.City;
 import br.com.portfolio.algafood.domain.service.CityService;
 
-import javax.validation.Valid;
-import java.util.List;
+import jakarta.validation.Valid;
+import org.springframework.hateoas.LinkRelation;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @RestController
@@ -36,17 +42,26 @@ public class CityController implements CityControllerOpenApi {
 	public CityController(CityService cityService) { this.cityService = cityService; }
 
 
-	@JsonView(View.Basic.class)
+//	@JsonView(View.Basic.class)
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@Override public ResponseEntity<List<CityRs>> findAll() {
-		return ResponseEntity.ok(cityService.findAll().stream()
-				.map(CityRs::new)
-				.toList());
+	@Override public ResponseEntity<CollectionModel<CityRs>> findAll() {
+		var list = cityService.findAll().stream()
+			.map(CityRs::new)
+			.toList();
+//			.collect(Collectors.toCollection(TreeSet::new));
+		list.forEach(this::addLinks);
+		var result = CollectionModel.of(list);
+		result.add(
+			linkTo(methodOn(this.getClass()).findAll()).withSelfRel()
+		);
+		return ResponseEntity.ok(result);
 	}
 
 	@GetMapping("/{id}")
 	@Override public ResponseEntity<CityRs> findById(@PathVariable Long id) {
-		return ResponseEntity.ok(new CityRs(cityService.findById(id)));
+		var cityRs = new CityRs(cityService.findById(id));
+		this.addLinks(cityRs);
+		return ResponseEntity.ok(cityRs);
 	}
 
 	@PostMapping
@@ -65,4 +80,16 @@ public class CityController implements CityControllerOpenApi {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Override public void deleteById(@PathVariable Long id) { cityService.deleteById(id); }
 
+	private void addLinks(CityRs cityRs) {
+		cityRs.add(
+			linkTo(methodOn(this.getClass()).findAll()).withRel(LinkRelation.of("findAll")),
+			linkTo(methodOn(this.getClass()).findById(cityRs.getId())).withSelfRel()
+		);
+		cityRs.getState().add(
+			linkTo(methodOn(StateController.class).findAll()).withRel(LinkRelation.of("findAll")),
+//			linkTo(methodOn(StateController.class).save(null)).withRel(LinkRelation.of("save")),
+//			linkTo(methodOn(StateController.class).update(cityRs.getId(), null)).withRel(LinkRelation.of("update")),
+			linkTo(methodOn(StateController.class).findById(cityRs.getId())).withSelfRel()
+		);
+	}
 }

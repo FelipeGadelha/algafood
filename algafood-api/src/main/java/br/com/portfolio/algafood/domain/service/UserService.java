@@ -67,4 +67,17 @@ public class UserService {
             throw new EntityInUseException(String.format("Usuário com o ID %d não pode ser removido, pois esta em uso", id));
         }
     }
+
+    @Transactional
+    public void passwordUpdate(Long id, String password, String newPassword) {
+        var user = findById(id);
+        if (user.isValidPassword(password)) {
+            throw new BusinessException("password invalid");
+        }
+        User.builder()
+            .clone(user)
+            .password(newPassword)
+            .build();
+
+    }
 }

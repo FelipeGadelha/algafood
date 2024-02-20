@@ -1,11 +1,14 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
+import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.domain.model.Order;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import java.math.BigDecimal;
+import org.springframework.hateoas.RepresentationModel;
 
 //@JsonFilter("orderFilter")
-public class OrderRs {
+public class OrderRs extends RepresentationModel<OrderRs> {
 
     private String code;
     private BigDecimal subtotal;

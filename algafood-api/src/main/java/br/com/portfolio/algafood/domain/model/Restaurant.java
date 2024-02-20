@@ -1,15 +1,31 @@
 package br.com.portfolio.algafood.domain.model;
 
+import jakarta.persistence.Embedded;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.OneToMany;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import br.com.portfolio.algafood.api.validator.annotation.TaxFreight;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -38,7 +54,8 @@ public class Restaurant implements Serializable {
 	@TaxFreight @Column(name = "tax_freight", nullable = false)
 	private BigDecimal taxFreight;
 	
-	@Embedded private Address address;
+	@Embedded
+	private Address address;
 
 	@NotNull @ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = { CascadeType.MERGE, CascadeType.ALL })
 	@JoinColumn(name = "kitchen_id", nullable = false)
@@ -46,7 +63,7 @@ public class Restaurant implements Serializable {
 	private Kitchen kitchen;
 
 	@ManyToMany//(fetch = FetchType.EAGER)
-	@JoinTable(name = "restaurant_payment_method", 
+	@JoinTable(name = "restaurant_payment_method",
 		joinColumns = 
 			@JoinColumn(name = "restaurant_id"),
 			inverseJoinColumns = @JoinColumn(name = "payment_method_id")

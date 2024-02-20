@@ -4,6 +4,8 @@ import br.com.portfolio.algafood.api.v1.controller.doc.StateControllerOpenApi;
 import br.com.portfolio.algafood.api.v1.dto.request.StateRq;
 import br.com.portfolio.algafood.api.v1.dto.response.StateRs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,32 +22,40 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.portfolio.algafood.domain.model.State;
 import br.com.portfolio.algafood.domain.service.StateService;
 
-import javax.validation.Valid;
-import java.util.List;
+import jakarta.validation.Valid;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/v1/states")
 public class StateController implements StateControllerOpenApi {
 	
-	@Autowired
-	private StateService stateService;
+	private final StateService stateService;
 	
 	@Autowired
 	public StateController(StateService stateService) {
 		this.stateService = stateService;
 	}
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@Override public ResponseEntity<List<StateRs>> findAll() {
-		return ResponseEntity.ok(stateService.findAll()
-				.stream()
-				.map(StateRs::new)
-				.toList());
+	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE}) //, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+	@Override public ResponseEntity<CollectionModel<StateRs>> findAll() {
+		var states = stateService.findAll()
+			.stream()
+			.map(StateRs::new)
+			.toList();
+		states.forEach(this::addLinks);
+		var result = CollectionModel.of(states);
+		result.add(linkTo(methodOn(this.getClass()).findAll()).withSelfRel());
+
+		return ResponseEntity.ok(result);
 	}
 
 	@GetMapping("/{id}")
 	@Override public ResponseEntity<StateRs> findById(@PathVariable Long id) {
-		return ResponseEntity.ok(new StateRs(stateService.findById(id)));
+		var state = stateService.findById(id);
+		var stateRs = new StateRs(state);
+		this.addLinks(stateRs);
+		return ResponseEntity.ok(stateRs);
 	}
 
 	@PostMapping
@@ -64,5 +74,12 @@ public class StateController implements StateControllerOpenApi {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Override public void deleteById(@PathVariable Long id) {
 		stateService.deleteById(id);
+	}
+
+	private void addLinks(StateRs stateRs) {
+		stateRs.add(
+			linkTo(methodOn(this.getClass()).findAll()).withRel(LinkRelation.of("findAll")),
+			linkTo(methodOn(this.getClass()).findById(stateRs.getId())).withSelfRel()
+		);
 	}
 }

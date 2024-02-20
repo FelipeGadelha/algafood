@@ -3,7 +3,7 @@ package br.com.portfolio.algafood.api.v1.dto.request;
 import br.com.portfolio.algafood.domain.model.PaymentMethod;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 public record PaymentMethodRq(
         @JsonProperty("description") @NotBlank String description

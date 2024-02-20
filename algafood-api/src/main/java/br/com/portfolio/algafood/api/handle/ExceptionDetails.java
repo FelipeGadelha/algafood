@@ -1,13 +1,15 @@
 package br.com.portfolio.algafood.api.handle;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
+//@Schema(implementation = ExceptionDetails.class)
 public class ExceptionDetails{
-	
 	protected String title;
 	protected int status;
 	protected String type;

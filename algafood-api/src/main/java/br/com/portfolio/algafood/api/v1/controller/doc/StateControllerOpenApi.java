@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Estado")
@@ -22,7 +22,7 @@ public interface StateControllerOpenApi {
         @ApiResponse(responseCode = "401", description = "Falha de autenticação",
             content = @Content(schema = @Schema(hidden = true)))
     })
-    ResponseEntity<List<StateRs>> findAll();
+    ResponseEntity<CollectionModel<StateRs>> findAll();
 
     @Operation(summary = "Lista Estado por id")
     ResponseEntity<StateRs> findById(

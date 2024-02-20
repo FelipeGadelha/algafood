@@ -1,8 +1,16 @@
 package br.com.portfolio.algafood.domain.model;
 
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -24,7 +32,7 @@ public class User implements Serializable {
 	private String password;
 	
 	@ManyToMany
-	@JoinTable(name = "users_groups", 
+	@JoinTable(name = "users_groups",
 	joinColumns = @JoinColumn(name = "users_id"),
 		inverseJoinColumns = @JoinColumn(name = "groups_id")
 		)
@@ -50,7 +58,15 @@ public class User implements Serializable {
 		return new Builder();
 	}
 
-	public static class Builder {
+    public boolean isValidPassword(String password) {
+    	return getPassword().equals(password);
+	}
+
+	public boolean isNotValidPassword(String password) {
+		return !isValidPassword(password);
+	}
+
+    public static class Builder {
 		private Long id;
 		private String name;
 		private String email;

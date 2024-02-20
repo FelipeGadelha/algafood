@@ -3,10 +3,10 @@ package br.com.portfolio.algafood.api.validator.validation;
 import br.com.portfolio.algafood.api.validator.annotation.IsExists;
 import org.springframework.util.Assert;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.List;
 
 public class IsExistsValidator implements ConstraintValidator<IsExists, Object> {

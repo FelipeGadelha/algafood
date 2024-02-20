@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Cidade")
@@ -22,7 +23,7 @@ public interface CityControllerOpenApi {
         @ApiResponse(responseCode = "401", description = "Falha de autenticação",
             content = @Content(schema = @Schema(hidden = true)))
     })
-    ResponseEntity<List<CityRs>> findAll();
+    ResponseEntity<CollectionModel<CityRs>> findAll();
 
     @Operation(summary = "Busca uma cidade por ID")
     ResponseEntity<CityRs> findById(@Parameter(description = "ID de uma cidade", example = "1", required = true) Long id);

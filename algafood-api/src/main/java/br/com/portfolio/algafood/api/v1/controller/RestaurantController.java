@@ -1,6 +1,7 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
 import br.com.portfolio.algafood.api.v1.controller.doc.RestaurantControllerOpenApi;
+import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.RestaurantRq;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantDetailRs;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantRs;
@@ -9,8 +10,11 @@ import br.com.portfolio.algafood.domain.exception.BusinessException;
 import br.com.portfolio.algafood.domain.exception.EntityNotFoundException;
 import br.com.portfolio.algafood.domain.exception.ValidationException;
 import br.com.portfolio.algafood.domain.service.RestaurantService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.util.Objects;
 import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +27,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,13 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 				.map(RestaurantRs::new)
 				.toList());
 	}
+
+	@JsonView(View.Basic.class)
+	@GetMapping(params = "projection=name-only")
+	@Override public ResponseEntity<List<RestaurantRs>> listJustName() {
+		return findAll();
+	}
+
 
 	@GetMapping("/{id}")
 	@Override public ResponseEntity<RestaurantDetailRs> findById(@PathVariable Long id) {

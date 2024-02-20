@@ -1,8 +1,11 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
 import br.com.portfolio.algafood.domain.model.State;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
-public class StateRs {
+@Relation(collectionRelation = "states")
+public class StateRs extends RepresentationModel<StateRs> {
 
     private final Long id;
     private final String name;

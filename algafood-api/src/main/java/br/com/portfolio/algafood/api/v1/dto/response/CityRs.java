@@ -3,8 +3,11 @@ package br.com.portfolio.algafood.api.v1.dto.response;
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.domain.model.City;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
-public class CityRs {
+@Relation(collectionRelation = "cities")
+public class CityRs extends RepresentationModel<CityRs> {
 
     @JsonView(View.Basic.class)
     private final Long id;

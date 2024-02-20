@@ -2,9 +2,9 @@ package br.com.portfolio.algafood.api.v1.dto.request;
 
 import br.com.portfolio.algafood.domain.model.Product;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 public record ProductRq(

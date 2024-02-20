@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -23,7 +23,8 @@ import static org.hamcrest.Matchers.hasSize;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class KitchenControllerIT {
 
-    @LocalServerPort private int port;
+    @LocalServerPort
+    private int port;
     private final String BASE_URL = "/api/algafood/v1/kitchens";
     @Autowired private Flyway flyway;
 

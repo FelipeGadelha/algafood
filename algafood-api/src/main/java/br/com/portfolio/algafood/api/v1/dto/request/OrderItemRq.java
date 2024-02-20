@@ -3,8 +3,8 @@ package br.com.portfolio.algafood.api.v1.dto.request;
 import br.com.portfolio.algafood.domain.model.OrderItem;
 import br.com.portfolio.algafood.domain.model.Product;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public record OrderItemRq(
     @NotNull Long productId,

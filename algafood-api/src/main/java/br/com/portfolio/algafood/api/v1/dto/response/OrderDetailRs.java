@@ -10,9 +10,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.hateoas.RepresentationModel;
 
 //@JsonFilter("orderFilter")
-public class OrderDetailRs {
+public class OrderDetailRs extends RepresentationModel<OrderDetailRs> {
 
     @JsonView(View.Basic.class) private String code;
     @JsonView(View.Basic.class) private BigDecimal subtotal;

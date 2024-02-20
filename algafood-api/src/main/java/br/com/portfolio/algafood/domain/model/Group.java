@@ -1,6 +1,13 @@
 package br.com.portfolio.algafood.domain.model;
 
-import javax.persistence.*;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;

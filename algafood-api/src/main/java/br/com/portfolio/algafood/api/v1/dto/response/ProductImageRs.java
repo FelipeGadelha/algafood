@@ -1,8 +1,9 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
 import br.com.portfolio.algafood.domain.model.ProductImage;
+import org.springframework.hateoas.RepresentationModel;
 
-public class ProductImageRs {
+public class ProductImageRs extends RepresentationModel<ProductImageRs> {
     private String fileName;
     private String description;
     private String contentType;

@@ -1,8 +1,9 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
 import br.com.portfolio.algafood.domain.model.PaymentMethod;
+import org.springframework.hateoas.RepresentationModel;
 
-public class PaymentMethodRs {
+public class PaymentMethodRs extends RepresentationModel<PaymentMethodRs> {
 
     private final Long id;
     private final String description;

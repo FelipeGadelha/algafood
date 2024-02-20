@@ -5,20 +5,32 @@ import br.com.portfolio.algafood.api.v1.dto.response.RestaurantDetailRs;
 import br.com.portfolio.algafood.api.v1.dto.response.RestaurantRs;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Restaurante")
 public interface RestaurantControllerOpenApi {
 
-    @Operation(summary = "Lista restaurantes", responses = {
+    @Operation(summary = "Lista restaurantes",
+        parameters = {
+            @Parameter(name = "projection", description = "Nome da projeção de pedidos",
+                in = ParameterIn.QUERY,
+                examples = {
+                    @ExampleObject(name = "name-only", value = "name-only", description = "apenas nome"),
+                    @ExampleObject(name = "--", value = "")
+                }
+            )
+        },
+        responses = {
         @ApiResponse(responseCode = "200", description = "Lista de restaurantes"),
         @ApiResponse(responseCode = "404", description = "restaurante não encontrada",
             content = @Content(schema = @Schema(hidden = true))),
@@ -26,6 +38,9 @@ public interface RestaurantControllerOpenApi {
             content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<List<RestaurantRs>> findAll();
+
+    @Operation(summary = "Lista restaurantes", hidden = true)
+    ResponseEntity<List<RestaurantRs>> listJustName();
 
     @Operation(summary = "Busca um restaurante por ID")
     ResponseEntity<RestaurantDetailRs> findById(@Parameter(description = "ID de um restaurante", example = "1", required = true) Long id);

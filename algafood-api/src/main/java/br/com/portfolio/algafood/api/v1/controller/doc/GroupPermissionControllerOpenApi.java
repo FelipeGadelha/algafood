@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Set;
 import org.springframework.http.ResponseEntity;
 
-@Tag(name = "Grupos e Permissões")
+@Tag(name = "Grupo")
 public interface GroupPermissionControllerOpenApi {
 
     @Operation(summary = "Lista as permissões de um grupo", responses = {

@@ -3,8 +3,9 @@ package br.com.portfolio.algafood.api.v1.dto.response;
 import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.domain.model.Permission;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.hateoas.RepresentationModel;
 
-public class PermissionRs {
+public class PermissionRs extends RepresentationModel<PermissionRs> {
 
     @JsonView(View.Basic.class) private final Long id;
     @JsonView(View.Basic.class) private final String name;

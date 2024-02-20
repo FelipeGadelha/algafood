@@ -19,23 +19,24 @@ spring:
   flyway:
     locations: classpath:db/migration,classpath:db/data
   datasource:
-    name: AlgafoodDataSource
+#    name: AlgafoodDataSource
     driver-class-name: org.postgresql.Driver    
-    url: jdbc:postgresql://localhost:5432/algafood-db
-    password: password
-    username: postgres
+    url: ${ALGAFOOD_DATASOURCE_URL:jdbc:postgresql://localhost:5432/algafood-db}
+    password: ${ALGAFOOD_DATASOURCE_PASSWORD:password}
+    username: ${ALGAFOOD_DATASOURCE_USERNAME:postgres}
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      pool-name: algafoodPool
+      pool-name: AlgafoodPool
       connection-test-query: select now()
       maximum-pool-size: 5
       minimum-idle: 1
       connection-timeout: 20000
       idle-timeout: 10000
+      max-lifetime: 60000 # 10 min
   jpa:
+    database: postgreSQl
     open-in-view: true
-#    generate-ddl: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
 #    hibernate:
 #      ddl-auto: create-drop
     properties:

@@ -8,9 +8,9 @@ import br.com.portfolio.algafood.domain.search.SalesSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +51,7 @@ public class SalesSearchImpl implements SalesSearch {
         );
 
         if (filter.getRestaurantId() != null)
-            predicates.add(builder.equal(root.get("restaurant"), filter.getRestaurantId()));
+            predicates.add(builder.equal(root.get("restaurant").get("id"), filter.getRestaurantId()));
 
         if (filter.getCreationDate() != null) predicates
             .add((builder.greaterThanOrEqualTo(orderStatus.get("moment"), filter.getCreationDate())));

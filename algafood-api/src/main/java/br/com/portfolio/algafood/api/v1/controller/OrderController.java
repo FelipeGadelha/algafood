@@ -1,21 +1,27 @@
 package br.com.portfolio.algafood.api.v1.controller;
 
+import br.com.portfolio.algafood.api.hateoas.OrderAssembler;
 import br.com.portfolio.algafood.api.v1.controller.doc.OrderControllerOpenApi;
+import br.com.portfolio.algafood.api.v1.dto.View;
 import br.com.portfolio.algafood.api.v1.dto.request.OrderRq;
 import br.com.portfolio.algafood.api.v1.dto.response.OrderDetailRs;
 import br.com.portfolio.algafood.api.v1.dto.response.OrderRs;
 import br.com.portfolio.algafood.config.PageableInterpreter;
+import br.com.portfolio.algafood.domain.model.Order;
 import br.com.portfolio.algafood.domain.model.User;
 import br.com.portfolio.algafood.domain.filter.OrderFilter;
 import br.com.portfolio.algafood.domain.service.OrderService;
+import ch.qos.logback.core.boolex.EvaluationException;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -23,15 +29,21 @@ import java.util.Map;
 public class OrderController implements OrderControllerOpenApi {
 
     private final OrderService orderService;
+    private final OrderAssembler assembler;
+    private final PagedResourcesAssembler<Order> pagedResourcesAssembler;
 
     @Autowired
-    public OrderController(OrderService orderService) { this.orderService = orderService; }
+    public OrderController(OrderService orderService, OrderAssembler assembler, PagedResourcesAssembler<Order> pagedResourcesAssembler) { this.orderService = orderService;
+        this.assembler = assembler;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
+    }
 
     @GetMapping
-//    @JsonView(View.Basic.class)
-    @Override public ResponseEntity<Page<OrderRs>> search(OrderFilter filter, Pageable pageable) {
+    @JsonView(View.Basic.class)
+    @Override public PagedModel<OrderRs> search(OrderFilter filter, Pageable pageable) {
         pageable = interpretPageable(pageable);
-        return ResponseEntity.ok(orderService.findAll(filter, pageable).map(OrderRs::new));
+        var orders = orderService.findAll(filter, pageable);
+        return pagedResourcesAssembler.toModel(orders, assembler);
     }
     @GetMapping("/{code}")
     @Override public ResponseEntity<OrderDetailRs> findById(@PathVariable String code) {

@@ -7,7 +7,7 @@ import br.com.portfolio.algafood.api.v1.dto.response.ProductRs;
 import br.com.portfolio.algafood.domain.service.ProductService;
 import com.fasterxml.jackson.annotation.JsonView;
 import java.util.List;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

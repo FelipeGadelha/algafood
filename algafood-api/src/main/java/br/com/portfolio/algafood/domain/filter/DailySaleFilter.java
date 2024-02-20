@@ -1,8 +1,7 @@
 package br.com.portfolio.algafood.domain.filter;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.OffsetDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class DailySaleFilter {
 

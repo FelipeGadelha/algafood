@@ -16,7 +16,7 @@
 
 spring:
   datasource:
-    name: AlgafoodDataSource
+#    name: AlgafoodDataSource
     driver-class-name: org.postgresql.Driver    
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/algafood-db}
     password: ${SPRING_DATASOURCE_USERNAME:postgres}
@@ -32,9 +32,9 @@ spring:
   jpa:
     open-in-view: true
     generate-ddl: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: PostgreSQL
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
 #        format_sql: true

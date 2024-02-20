@@ -3,8 +3,8 @@ package br.com.portfolio.algafood.api.validator.validation;
 import br.com.portfolio.algafood.api.validator.annotation.FileContentType;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
 

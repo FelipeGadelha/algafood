@@ -4,8 +4,8 @@ import br.com.portfolio.algafood.domain.model.Order;
 import br.com.portfolio.algafood.domain.filter.OrderFilter;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 
 public class OrderSpecs {

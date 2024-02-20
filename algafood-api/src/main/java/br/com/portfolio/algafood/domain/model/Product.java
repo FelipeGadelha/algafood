@@ -4,7 +4,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import javax.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 

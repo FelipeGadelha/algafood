@@ -5,9 +5,9 @@ import br.com.portfolio.algafood.domain.model.PaymentMethod;
 import br.com.portfolio.algafood.domain.model.Restaurant;
 import br.com.portfolio.algafood.domain.model.User;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 
 public record OrderRq (

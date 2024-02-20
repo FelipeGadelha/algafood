@@ -1,7 +1,13 @@
 package br.com.portfolio.algafood.domain.model;
 
 
-import javax.persistence.*;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
 import java.util.Objects;
 
 @Entity

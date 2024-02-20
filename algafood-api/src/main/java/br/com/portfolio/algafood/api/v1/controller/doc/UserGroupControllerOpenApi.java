@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 
-@Tag(name = "Grupo de usuários")
+@Tag(name = "Usuário")
 public interface UserGroupControllerOpenApi {
     @Operation(summary = "Lista grupos de usuários", responses = {
         @ApiResponse(responseCode = "200", description = "Lista de grupos de usuários"),

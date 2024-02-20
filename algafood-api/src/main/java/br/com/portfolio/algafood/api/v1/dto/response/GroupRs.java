@@ -1,8 +1,9 @@
 package br.com.portfolio.algafood.api.v1.dto.response;
 
 import br.com.portfolio.algafood.domain.model.Group;
+import org.springframework.hateoas.RepresentationModel;
 
-public class GroupRs {
+public class GroupRs extends RepresentationModel<GroupRs> {
 
     private final Long id;
     private final String name;
